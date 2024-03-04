@@ -1,15 +1,19 @@
+
+
 const express = require('express');
 const bodyParser = require('body-parser');
+const messageRoutes = require('./routes/messageRoutes.js'); 
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Middleware
 app.use(bodyParser.json());
 
-// Routes
-// Define your routes here for handling API requests
+// Use messageRoutes
+app.use('/api/message', messageRoutes);
 
 // Start the server
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+    console.log(`Server is running on port ${PORT}`);
 });
