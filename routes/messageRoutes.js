@@ -2,16 +2,10 @@
 
 const express = require('express');
 const router = express.Router();
+const messageController = require('../controllers/messageController.js'); // Import messageController
 
+// Define route for sending private message
+router.post('/compose', messageController.compose);
 
-router.post('/compose', (req, res) => {
-    const { recipient, message } = req.body;
-  
-    // Logic for sending the message
-    // This could involve saving the message to a database
-  
-    // test response
-    res.json({ success: true, message: 'Message sent successfully' });
-});
 
 module.exports = router;
