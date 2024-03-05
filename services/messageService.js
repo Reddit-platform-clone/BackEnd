@@ -28,7 +28,10 @@ const messageService = {
     reportMessage:async(messageId,userId)=>{
         // Logic to report a message by its IDs
         // Example: await Message.findById(messageId);
-    }
+    },
+    getSentMessages:async (userId) => {
+
+    },
 };
 
 module.exports = messageService;

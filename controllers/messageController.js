@@ -15,14 +15,14 @@ const messageController = {
                 {
                     messageId: '1',
                     sender: 'user1',
-                    title: 'Message 1',
+                    title: 'Message 1',recipient: 'user2',
                     content: 'This is the content of message 1',status:"unread",
                     createdAt: new Date()
                 },
                 {
                     messageId: '2',
                     sender: 'user2',
-                    title: 'Message 2',
+                    title: 'Message 2',recipient: 'user3',
                     content: 'This is the content of message 2',status:"read",
                     createdAt: new Date()
                 }
@@ -41,7 +41,7 @@ const messageController = {
                 {
                     messageId: '1',
                     sender: 'user1',
-                    title: 'Message 1',
+                    title: 'Message 1',recipient: 'user3',
                     content: 'This is the content of message 1',status:"unread",
                     createdAt: new Date()
                 },
@@ -61,6 +61,27 @@ const messageController = {
             res.json({ success: true, message: 'Message reported successfully' });
         
           
+    },
+    getSentMessages: async (req, res) => {
+        // Placeholder for retrieving sent messages
+         try {
+            // Placeholder response
+            const inboxMessages = [
+                {
+                    messageId: '1',
+                    sender: 'user1',
+                    title: 'Message 1',
+                    recipient: 'user2',
+                    content: 'This is the content of message 1',status:"unread",
+                    createdAt: new Date()
+                },
+              
+            ];
+            
+            res.json({ success: true, data: inboxMessages });
+        } catch (error) {
+            res.status(500).json({ success: false, message: 'Failed to retrieve inbox messages', error: error.message });
+        }
     }
 };
 
