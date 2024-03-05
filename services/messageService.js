@@ -34,7 +34,9 @@ const messageService = {
     },
     markMessageUnread: async (messageId, sentuserId) => {
 
-    },
+    },markAllMessagesRead: async (sentuserId) => {
+
+    }
 };
 
 module.exports = messageService;
