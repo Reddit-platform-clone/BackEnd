@@ -1,7 +1,7 @@
 swagger: '2.0'
 info:
   version: '1.0.0'
-  title: Messaging API
+  title: SERAKEL API
 paths:
   /api/read_all_messages:
     post:
