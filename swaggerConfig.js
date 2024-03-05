@@ -3,41 +3,56 @@ const swaggerUi = require('swagger-ui-express');
 const express = require('express');
 const YAML = require('yamljs');
 const router = express.Router();
+const fs = require('fs');
+const path = require('path');
 
-// Load Swagger YAML files
-const swaggerMessageAll = YAML.load('./swaggers/swaggerMessageAll.yaml');
-const swaggerSendMessage = YAML.load('./swaggers/swaggerSendMessage.yaml');
-const swaggerUnreadMessageAll=YAML.load('./swaggers/swaggerUnreadMessageAll.yaml');
+// Function to load Swagger YAML files
+function loadSwaggerFiles() {
+    const swaggerFiles = fs.readdirSync('./swaggers');
+    const mergedPaths = {};
 
-const swaggerMessageDelete=YAML.load('./swaggers/swaggerMessageDelete.yaml');
-const swaggerMessageReport=YAML.load('./swaggers/swaggerMessageReport.yaml');
-const swaggerBlockUser=YAML.load('./swaggers/swaggerBlockUser.yaml');
-const swaggerMessageSent=YAML.load('./swaggers/swaggerMessageSent.yaml');
-const swaggerMessageUnsent=YAML.load('./swaggers/swaggerMessageUnsent.yaml')
-// Combine the `paths` sections of the YAML files
-const mergedPaths = {
-    ...swaggerMessageAll.paths,
-    ...swaggerSendMessage.paths,
-    ...swaggerUnreadMessageAll.paths,
-    ...swaggerMessageDelete.paths,
-    ...swaggerMessageReport.paths ,
-    ...swaggerBlockUser.paths,
-    ...swaggerMessageSent.paths,
-    ...swaggerMessageUnsent.paths
-};
+    swaggerFiles.forEach(file => {
+        if (file.endsWith('.yaml')) {
+            const filePath = path.join(__dirname, 'swaggers', file);
+            const swaggerData = YAML.load(filePath);
+            Object.assign(mergedPaths, swaggerData.paths);
+        }
+    });
 
-// Merge into a single YAML object
-const mergedSwaggerYAML = {
-    ...swaggerMessageAll,
-    paths: mergedPaths
-};
+    const mergedSwaggerYAML = {
+        openapi: '3.0.0',
+        info: {
+            title: 'Messaging API',
+            version: '1.0.0',
+            description: 'API documentation for messaging service',
+        },
+        servers: [
+            {
+                url: 'http://localhost:3000',
+                description: 'Development server',
+            },
+        ],
+        paths: mergedPaths
+    };
+
+    return mergedSwaggerYAML;
+}
 
 // Serve Swagger UI at the root path
 router.use('/', swaggerUi.serve);
 
 // Set up route for the merged Swagger YAML file
 router.get('/', (req, res) => {
-    res.send(swaggerUi.generateHTML(mergedSwaggerYAML));
+    res.send(swaggerUi.generateHTML(loadSwaggerFiles()));
+});
+
+// Watch for changes in the swaggers folder
+fs.watch('./swaggers', (eventType, filename) => {
+    if (eventType === 'change' || eventType === 'rename') {
+        console.log(`File ${filename} was ${eventType}`);
+        // Reload Swagger YAML files
+        specs.swaggerDoc = loadSwaggerFiles();
+    }
 });
 
 const options = {
@@ -50,12 +65,12 @@ const options = {
         },
         servers: [
             {
-                url: 'http://localhost:3000', 
+                url: 'http://localhost:3000',
                 description: 'Development server',
             },
         ],
     },
-    apis: ['./routes/*.js'], 
+    apis: ['./routes/*.js'],
 };
 
 const specs = swaggerJsdoc(options);
@@ -63,5 +78,5 @@ const specs = swaggerJsdoc(options);
 module.exports = {
     swaggerUi,
     specs,
-    router, 
+    router,
 };
