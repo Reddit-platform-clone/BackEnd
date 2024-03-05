@@ -1,8 +1,6 @@
-
-
 const express = require('express');
 const bodyParser = require('body-parser');
-const { swaggerUi, specs } = require('./swaggerConfig');
+const { swaggerUi, specs, router } = require('./swaggerConfig');
 const messageRoutes = require('./routes/messageRoutes.js');
 
 const app = express();
@@ -12,7 +10,7 @@ const PORT = process.env.PORT || 3000;
 app.use(bodyParser.json());
 
 // Use Swagger middleware
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
+app.use('/api-docs', router); 
 
 // Use messageRoutes
 app.use('/api/message', messageRoutes);
