@@ -3,7 +3,7 @@ info:
   version: '1.0.0'
   title: SERAKEL API
 paths:
-  /api/message/unread:
+  /message/unread/:
     get:
       summary: Get unread messages
       description: Retrieves unread messages from the inbox

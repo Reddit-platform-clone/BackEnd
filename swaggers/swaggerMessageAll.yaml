@@ -3,7 +3,7 @@ info:
   version: '1.0.0'
   title:  SERAKEL API
 paths:
-  /api/message/inbox:
+   /message/inbox/:
     get:
       summary: Get inbox messages
       description: Retrieves messages from the inbox

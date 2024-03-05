@@ -3,7 +3,7 @@ info:
   version: '1.0.0'
   title: SERAKEL API
 paths:
-  /api/message/compose:
+   /message/compose/:
     post:
       summary: Send a private message
       description: Send a private message to a recipient
