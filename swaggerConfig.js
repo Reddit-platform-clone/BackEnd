@@ -7,11 +7,12 @@ const router = express.Router();
 // Load Swagger YAML files
 const swaggerMessageAll = YAML.load('./swaggers/swaggerMessageAll.yaml');
 const swaggerSentMessage = YAML.load('./swaggers/swaggerSentMessage.yaml');
-
+const swaggerUnreadMessage=YAML.load('./swaggers/swaggerUnreadMessage.yaml');
 // Combine the `paths` sections of the YAML files
 const mergedPaths = {
     ...swaggerMessageAll.paths,
-    ...swaggerSentMessage.paths
+    ...swaggerSentMessage.paths,
+    ...swaggerUnreadMessage.paths
 };
 
 // Merge into a single YAML object
