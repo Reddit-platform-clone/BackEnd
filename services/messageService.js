@@ -10,16 +10,20 @@ const messageService = {
     },
     
     getInboxMessages: async (sentuserId) => {
+
         // Logic to retrieve inbox messages for the specified user
         // Example: const inboxMessages = await Message.find({ recipient: userId });
         // return inboxMessages;
     },
     
+
     getUnreadMessages: async (sentuserId) => {
+
         // Logic to retrieve unread messages for the specified user
         // Example: const unreadMessages = await Message.find({ recipient: userId, status: 'unread' });
         // return unreadMessages;
     },
+
 
     deleteMessage: async (messageId,sentuserId) => {
         // Logic to delete a message by its IDs
@@ -35,6 +39,7 @@ const messageService = {
     markMessageUnread: async (messageId, sentuserId) => {
 
     },markAllMessagesRead: async (sentuserId) => {
+
 
     },getUserMentions: async (messageId, sentuserId) => {
 
