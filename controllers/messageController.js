@@ -1,7 +1,7 @@
 
+const messageService = require('../services/messageService');
 
-// Import the message model/schema
-const messageSchema = require('../models/messageModel.js');
+
 
 const messageController = {
     compose: async (req, res) => {
@@ -52,6 +52,9 @@ const messageController = {
         } catch (error) {
             res.status(500).json({ success: false, message: 'Failed to retrieve inbox messages', error: error.message });
         }
+    },
+    deleteMessage: async (req, res) => {
+        res.json({ success: true, message: 'Message sent successfully' });
     }
 };
 

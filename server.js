@@ -13,7 +13,7 @@ app.use(bodyParser.json());
 app.use('/api-docs', router); 
 
 // Use messageRoutes
-app.use('/api/message', messageRoutes);
+app.use('/', messageRoutes);
 
 // Start the server
 app.listen(PORT, () => {
