@@ -1,0 +1,48 @@
+swagger: '2.0'
+info:
+  version: '1.0.0'
+  title: SERAKEL API
+paths:
+  /message/del_msg:
+    delete:
+      summary: Delete a message
+      description: Deletes a message by its ID
+      parameters:
+        - in: query
+          name: userId
+          description: The ID of the user
+          required: true
+          type: string
+        - in: query
+          name: messageId
+          description: The ID of the message to delete
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Message deleted successfully
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Indicates whether the operation was successful
+              message:
+                type: string
+                description: Success message indicating that the message was deleted successfully
+        '500':
+          description: Failed to delete the message
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Indicates whether the operation was successful
+              message:
+                type: string
+                description: Error message
+      tags:
+        - Messages
+      operationId: deleteMessage
+      produces:
+        - application/json

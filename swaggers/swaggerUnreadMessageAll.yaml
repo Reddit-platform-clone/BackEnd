@@ -1,0 +1,61 @@
+swagger: '2.0'
+info:
+  version: '1.0.0'
+  title: SERAKEL API
+paths:
+  /message/unread/:
+    get:
+      summary: Get unread messages
+      description: Retrieves unread messages from the inbox
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Indicates whether the operation was successful
+              data:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    messageId:
+                      type: string
+                      description: Unique identifier for the message
+                    sender:
+                      type: string
+                      description: Sender of the message
+                    title:
+                      type: string
+                      description: Title of the message
+                    content:
+                      type: string
+                      description: Content of the message
+                    status:
+                      type: string
+                      description: Status of the message (e.g., "unread")
+                    createdAt:
+                      type: string
+                      format: date-time
+                      description: Date and time when the message was created
+        '500':
+          description: Failed to retrieve unread messages
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Indicates whether the operation was successful
+              message:
+                type: string
+                description: Error message
+              error:
+                type: string
+                description: Description of the error
+      tags:
+        - Messages
+      operationId: getUnreadMessages
+      produces:
+        - application/json
