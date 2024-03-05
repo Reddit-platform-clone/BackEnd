@@ -1,3 +1,4 @@
+
 const swaggerJsdoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
 const express = require('express');
@@ -80,3 +81,4 @@ module.exports = {
     specs,
     router,
 };
+
