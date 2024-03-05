@@ -11,13 +11,16 @@ const swaggerUnreadMessageAll=YAML.load('./swaggers/swaggerUnreadMessageAll.yaml
 
 const swaggerMessageDelete=YAML.load('./swaggers/swaggerMessageDelete.yaml');
 const swaggerMessageReport=YAML.load('./swaggers/swaggerMessageReport.yaml');
+
+const swaggerBlockUser=YAML.load('./swaggers/swaggerBlockUser.yaml');
 // Combine the `paths` sections of the YAML files
 const mergedPaths = {
     ...swaggerMessageAll.paths,
     ...swaggerSendMessage.paths,
     ...swaggerUnreadMessageAll.paths,
     ...swaggerMessageDelete.paths,
-    ...swaggerMessageReport.paths 
+    ...swaggerMessageReport.paths ,
+    ...swaggerBlockUser.paths
 };
 
 // Merge into a single YAML object
