@@ -82,6 +82,17 @@ const messageController = {
         } catch (error) {
             res.status(500).json({ success: false, message: 'Failed to retrieve inbox messages', error: error.message });
         }
+    },   
+     markMessageUnread: async (req, res) => {
+        // Placeholder for marking a specific message as unread
+        try {
+            // Placeholder logic to mark message as unread
+            const messageId = req.body.messageId; // Assuming message ID is sent in the request body
+            // Placeholder response
+            res.json({ success: true, message: `Message ${messageId} marked as unread successfully` });
+        } catch (error) {
+            res.status(500).json({ success: false, message: 'Failed to mark message as unread', error: error.message });
+        }
     }
 };
 
