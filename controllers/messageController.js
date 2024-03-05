@@ -55,6 +55,12 @@ const messageController = {
     },
     deleteMessage: async (req, res) => {
         res.json({ success: true, message: 'Message sent successfully' });
+    },
+    reportMessage: async (req, res) => {
+       
+            res.json({ success: true, message: 'Message reported successfully' });
+        
+          
     }
 };
 

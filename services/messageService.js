@@ -1,6 +1,6 @@
 // messageService.js
 
-const Message = require('../models/message'); // Assuming you have a Message model
+const Message = require('../models/messageModel'); // Assuming you have a Message model
 
 const messageService = {
     composeMessage: async (messageData) => {
@@ -21,9 +21,13 @@ const messageService = {
         // return unreadMessages;
     },
 
-    deleteMessage: async (messageId) => {
-        // Logic to delete a message by its ID
+    deleteMessage: async (messageId,userId) => {
+        // Logic to delete a message by its IDs
         // Example: await Message.findByIdAndDelete(messageId);
+    },
+    reportMessage:async(messageId,userId)=>{
+        // Logic to report a message by its IDs
+        // Example: await Message.findById(messageId);
     }
 };
 
