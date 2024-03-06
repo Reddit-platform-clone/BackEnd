@@ -2,27 +2,31 @@
 
 const express = require('express');
 const bodyParser = require('body-parser');
-
+const fs = require('fs');
+const path = require('path');
 const { swaggerUi, specs, router } = require('./swaggerConfig');
-const messageRoute = require('./routes/messageRoute.js');
-const userRoute = require('./routes/userRoute.js');
-const postRoute = require('./routes/postRoute.js');
-const commentRoute = require('./routes/commentRoute.js');
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Middleware
 app.use(bodyParser.json());
 
-
 // Use Swagger middleware
-app.use('/api-docs', router); 
+app.use('/api-docs', router);
 
+// Function to dynamically load routes from a directory
+function loadRoutes(directory) {
+    fs.readdirSync(directory).forEach(file => {
+        const filePath = path.join(directory, file);
+        const route = require(filePath);
+        app.use('/', route);
+    });
+}
 
-app.use('/', messageRoute);
-app.use('/', userRoute);
-app.use('/', postRoute);
-app.use('/', commentRoute);
+// Load routes from the 'routes' directory
+const routesDirectory = path.join(__dirname, 'routes');
+loadRoutes(routesDirectory);
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
