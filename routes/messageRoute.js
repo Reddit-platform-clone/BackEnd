@@ -1,8 +1,7 @@
-
 const express = require('express');
-const router = express.Router();
-const messageController = require('../controllers/messageController.js');
 
+const router = express.Router();
+const messageController = require('../controllers/messageController');
 
 router.post('/message/compose', messageController.compose);
 router.get('/message/inbox', messageController.getInboxMessages);

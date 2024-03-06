@@ -1,7 +1,7 @@
 const express = require('express');
-const router = express.Router();
-const userController = require('../controllers/userController.js'); 
 
+const router = express.Router();
+const userController = require('../controllers/userController');
 
 router.post('/api/block_user', userController.blockUser);
 
