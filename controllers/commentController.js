@@ -1,4 +1,14 @@
 const commentController = {
+  postComment: async (req, res) => {
+    
+    try {
+       
+        const comment = { commentId: 123, postId: req.body.postId, author: req.body.author, content: req.body.content };
+        res.json({ success: true, message: 'Comment posted successfully', data: comment });
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Failed to post comment', error: error.message });
+    }
+},
 
   getCommentReplies: async (req, res) => {
     try {
