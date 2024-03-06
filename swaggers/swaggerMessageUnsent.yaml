@@ -46,3 +46,12 @@ paths:
       operationId: markMessageUnread
       produces:
         - application/json
+      security:
+        - ClientCredentials: []
+securityDefinitions:
+  ClientCredentials:
+    type: oauth2
+    tokenUrl: "https://www.example.com/oauth2/token"
+    flow: clientCredentials
+    scopes:
+      mark_message_unread: Allow marking messages as unread

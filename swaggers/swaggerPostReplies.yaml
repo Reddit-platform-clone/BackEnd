@@ -56,3 +56,13 @@ paths:
       operationId: getPostReplies
       produces:
         - application/json
+      security:
+        - AuthorizationCode: []
+securityDefinitions:
+  AuthorizationCode:
+    type: oauth2
+    authorizationUrl: "https://www.example.com/oauth2/authorize"
+    tokenUrl: "https://www.example.com/oauth2/token"
+    flow: authorizationCode
+    scopes:
+      get_post_replies: Allow retrieving post replies

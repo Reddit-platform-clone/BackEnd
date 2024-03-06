@@ -59,3 +59,13 @@ paths:
       operationId: getUserMentions
       produces:
         - application/json
+      security:
+        - AuthorizationCode: []
+securityDefinitions:
+  AuthorizationCode:
+    type: oauth2
+    authorizationUrl: "https://www.example.com/oauth2/authorize"
+    tokenUrl: "https://www.example.com/oauth2/token"
+    flow: authorizationCode
+    scopes:
+      get_user_mentions: Allow retrieving user mentions
