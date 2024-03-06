@@ -9,13 +9,12 @@ const { swaggerUi, specs, router } = require('./swaggerConfig');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middleware
+
 app.use(bodyParser.json());
 
-// Use Swagger middleware
 app.use('/api-docs', router);
 
-// Function to dynamically load routes from a directory
+
 function loadRoutes(directory) {
     fs.readdirSync(directory).forEach(file => {
         const filePath = path.join(directory, file);
