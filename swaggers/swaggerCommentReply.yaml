@@ -3,19 +3,19 @@ info:
   version: '1.0.0'
   title: SERAKEL API
 paths:
-  /api/get_post_replies:
+  /api/get_comment_replies:
     post:
-      summary: Get post replies
-      description: Retrieves replies to the specified post
+      summary: Get comment replies
+      description: Retrieves replies to the specified comment
       parameters:
         - in: query
-          name: postId
-          description: The ID of the post to retrieve replies for
+          name: commentId
+          description: The ID of the comment to retrieve replies for
           required: true
           type: string
       responses:
         '200':
-          description: Post replies retrieved successfully
+          description: Comment replies retrieved successfully
           schema:
             type: object
             properties:
@@ -41,7 +41,7 @@ paths:
                       format: date-time
                       description: Date and time when the reply was created
         '500':
-          description: Failed to retrieve post replies
+          description: Failed to retrieve comment replies
           schema:
             type: object
             properties:
@@ -52,7 +52,7 @@ paths:
                 type: string
                 description: Error message
       tags:
-        - Posts
-      operationId: getPostReplies
+        - Comments
+      operationId: getCommentReplies
       produces:
         - application/json
