@@ -3,10 +3,10 @@ info:
   version: '1.0.0'
   title: SERAKEL API
 paths:
-  /api/comment:
-    post:
-      summary: Create a new comment
-      description: Creates a new comment on a post
+  /api/del_comment:
+    delete:
+      summary: Delete a comment
+      description: Deletes a comment based on the provided comment ID
       parameters:
         - in: body
           name: comment
@@ -15,32 +15,23 @@ paths:
           schema:
             type: object
             properties:
-              postId:
+              commentId:
                 type: string
-                description: The ID of the post to comment on
-              authorId:
-                type: string
-                description: The ID of the user creating the comment
-              content:
-                type: string
-                description: The content of the comment
+                description: The ID of the comment to delete
       responses:
         '200':
-          description: Comment created successfully
+          description: Comment deleted successfully
           schema:
             type: object
             properties:
               success:
                 type: boolean
                 description: Indicates whether the operation was successful
-              data:
-                type: object
-                properties:
-                  commentId:
-                    type: string
-                    description: Unique identifier for the comment
+              message:
+                type: string
+                description: Success message indicating that the comment was deleted successfully
         '500':
-          description: Failed to create comment
+          description: Failed to delete comment
           schema:
             type: object
             properties:
@@ -52,7 +43,7 @@ paths:
                 description: Error message
       tags:
         - Comments
-      operationId: createComment
+      operationId: deleteComment
       consumes:
         - application/json
       produces:
@@ -66,4 +57,4 @@ securityDefinitions:
     tokenUrl: "https://www.example.com/oauth2/token"
     flow: authorizationCode
     scopes:
-      create_comment: Allow creating new comments
+      delete_comment: Allow deleting comments
