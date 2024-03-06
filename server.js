@@ -6,7 +6,7 @@ const bodyParser = require('body-parser');
 const { swaggerUi, specs, router } = require('./swaggerConfig');
 const messageRoute = require('./routes/messageRoute.js');
 const userRoute = require('./routes/userRoute.js');
-
+const postRoute = require('./routes/postRoute.js');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -20,7 +20,8 @@ app.use('/api-docs', router);
 
 app.use('/', messageRoute);
 app.use('/', userRoute);
-// Start the server
+app.use('/', postRoute);
+
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });

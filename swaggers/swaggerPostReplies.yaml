@@ -1,0 +1,58 @@
+swagger: '2.0'
+info:
+  version: '1.0.0'
+  title: Post API
+paths:
+  /api/get_post_replies:
+    post:
+      summary: Get post replies
+      description: Retrieves replies to the specified post
+      parameters:
+        - in: query
+          name: postId
+          description: The ID of the post to retrieve replies for
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Post replies retrieved successfully
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Indicates whether the operation was successful
+              data:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    replyId:
+                      type: string
+                      description: Unique identifier for the reply
+                    author:
+                      type: string
+                      description: Author of the reply
+                    content:
+                      type: string
+                      description: Content of the reply
+                    createdAt:
+                      type: string
+                      format: date-time
+                      description: Date and time when the reply was created
+        '500':
+          description: Failed to retrieve post replies
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Indicates whether the operation was successful
+              message:
+                type: string
+                description: Error message
+      tags:
+        - Posts
+      operationId: getPostReplies
+      produces:
+        - application/json
