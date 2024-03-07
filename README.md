@@ -15,8 +15,12 @@ This is the backend for a Reddit-like application, providing APIs for managing p
    ```bash
    npm install
    ```
+   or
+   ```bash
+   npm i
+   ```
 
-3. Start the server:
+4. Start the server:
    ```bash
    npm start
    ```
