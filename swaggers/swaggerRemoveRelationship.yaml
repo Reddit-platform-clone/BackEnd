@@ -19,7 +19,7 @@ paths:
           required: true
           description: Subreddit where the relationship is being removed
         - in: body
-          name: body
+          name: relationship type
           description: type of relationship to be removed
           required: true
           schema:

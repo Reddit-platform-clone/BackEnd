@@ -1,0 +1,61 @@
+swagger: '2.0'
+info:
+  version: '1.0.0'
+  title: SARAKEL API
+paths:
+  /login/verify_email:
+    get:
+      summary: Verify email
+      description: This endpoint verifies the users email and resets their username. It is accessed when the user clicks the verification link in their email.'
+      operationId: resetUsername
+      produces:
+        - text/html
+      responses:
+        '200':
+          description: correct credentials, user logged in
+          schema:
+            type: object
+            properties:
+              successs:
+                type: boolean
+                description: opearation was successful
+              message:
+                type: string
+                description: success message
+        '400':
+          description: Bad request, username and password required
+          schema:
+            type: object
+            properties:
+              successs:
+                type: boolean
+                description: opearation failed
+              message:
+                type: string
+                description: missing parameter/s
+          
+        '401':
+          description: invalid authentication token
+          schema:
+            type: object
+            properties:
+              successs:
+                type: boolean
+                description: opearation failed
+              message:
+                type: string
+                description: message with error details
+
+        '500':
+          description: Internal server error
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Indicates whether the operation failed
+              message:
+                type: string
+                description: Error message
+      tags:
+        - Users

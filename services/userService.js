@@ -1,25 +1,49 @@
 const user = require('../models/userModel.js');
 
 const userService = {
-    removeFriend: async (username) => {
-        // logic to remove friend
-    },
+  logIn: async (username) => {
+    // logic to login registered users
+  },
 
-    reportUser: async (username) => {
-        // logic to report a user
-    },
+  singUp: async (credentials) => {
+    // logic to register new users
+  },
 
-    blockUser: async (username) => {
-        // logic to report a user
-    },
+  logInForgetPassword: async (username) => {
+    // logic to reset password
+  },
 
-    createRelationship: async (username) => {
-        // logic to create relationships
-    },
+  logInForgetUsername: async (email) => {
+    // logic to reset username
+  },
 
-    removeRelationship: async (username) => {
-        // logic to create relationships
-    }
+  verifyEmail: async (email) => {
+    // logic to verify email
+  },
+
+  resetPassword: async (password) => {
+    // logic to reset password
+  },
+
+  removeFriend: async (username) => {
+    // logic to remove friend
+  },
+
+  reportUser: async (username) => {
+    // logic to report a user
+  },
+
+  blockUser: async (username) => {
+    // logic to report a user
+  },
+
+  createRelationship: async (username) => {
+    // logic to create relationships
+  },
+
+  removeRelationship: async (username) => {
+    // logic to create relationships
+  },
 };
 
 module.exports = userService;

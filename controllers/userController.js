@@ -1,26 +1,49 @@
-
 const userService = require('../services/userService');
 
 const userController = {
-    removeFriend: async (req, res) => {
-        res.json({ message: 'friend removed' })
-    },
+  logIn: async (req, res) => {
+    res.json({ message: 'welcome back' });
+  },
 
-    reportUser: async (req, res) => {
-        res.json({ message: 'report sent'})
-    },
+  singUp: async (req, res) => {
+    res.json({ message: 'welcome to sarakel' });
+  },
 
-    blockUser: async (req, res) => {
-        res.json({message: 'user blocked '})
-    },
+  logInForgetPassword: async (req, res) => {
+    res.json({ message: 'enter username and email' });
+  },
 
-    createRelationship: async (req, res) => {
-        res.json({ message: 'relationship created' })
-    },
+  logInForgetUsername: async (req, res) => {
+    res.json({ message: 'enter email' });
+  },
 
-    removeRelationship: async (req, res) => {
-        res.json({ message: 'relationsship removed' })
-    }
+  verifyEmail: async (req, res) => {
+    res.json({ message: 'username reset' })
+  },
+
+  resetPassword: async (req, res) => {
+    res.json({ message: 'password reset' })
+  },
+
+  removeFriend: async (req, res) => {
+    res.json({ message: 'friend removed' });
+  },
+
+  reportUser: async (req, res) => {
+    res.json({ message: 'report sent' });
+  },
+
+  blockUser: async (req, res) => {
+    res.json({ message: 'user blocked ' });
+  },
+
+  createRelationship: async (req, res) => {
+    res.json({ message: 'relationship created' });
+  },
+
+  removeRelationship: async (req, res) => {
+    res.json({ message: 'relationsship removed' });
+  },
 };
 
-module.exports = userController
+module.exports = userController;

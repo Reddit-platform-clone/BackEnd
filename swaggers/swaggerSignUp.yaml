@@ -1,39 +1,45 @@
 swagger: '2.0'
 info:
   version: '1.0.0'
-  title: SERAKEL API
+  title: SARAKEL API
 paths:
-  /r/{subreddit}/api/friend:
+  /signup:
     post:
-      summary: Create a relationship between a user and another user or subreddit
-      description: This endpoint creates a relationship between a user and another user or subreddit. The type of relationship is determined by the type parameter in the request.'
-      operationId: createRelationship
+      summary: User registration
+      description: This endpoint registers a new user.
+      operationId: signUp
       consumes:
         - application/json
       produces:
         - application/json
       parameters:
-        - in: path
-          name: subreddit
-          type: string
-          required: true
-          description: Subreddit where the relationship is being created
         - in: body
-          name: relationship type
-          description: type of relationship to be created
+          name: userData
+          description: User registration details
           required: true
           schema:
             type: object
             properties:
-              type:
+              email:
                 type: string
-                description: Type of the relationship
-              name:
+                description: Email of the user
+              password:
                 type: string
-                description: Username of the user with whom the relationship is being created
+                description: Password of the user
+              username:
+                type: string
+                description: Username of the user
+              gender:
+                type: string
+                description: Gender of the user
+              interests:
+                type: array
+                items:
+                  type: string
+                description: Interests of the user
       responses:
         '200':
-          description: Relationship created successfully
+          description: correct credentials, user logged in
           schema:
             type: object
             properties:
@@ -44,7 +50,7 @@ paths:
                 type: string
                 description: success message
         '400':
-          description: Bad request, type and name required
+          description: Bad request, username and password required
           schema:
             type: object
             properties:
@@ -55,8 +61,8 @@ paths:
                 type: string
                 description: missing parameter/s
           
-        '401':
-          description: Unauthorized, valid OAuth2 token required
+        '409':
+          description: username or password already exist
           schema:
             type: object
             properties:
@@ -65,7 +71,7 @@ paths:
                 description: opearation failed
               message:
                 type: string
-                description: message indicating missing OAuth2 token
+                description: message prompting the user to change email or username, or to change password
 
         '500':
           description: Internal server error
@@ -80,14 +86,3 @@ paths:
                 description: Error message
       tags:
         - Users
-
-      security:
-        - AuthorizationCode: []
-securityDefinitions:
-  AuthorizationCode:
-    type: oauth2
-    authorizationUrl: "https://www.example.com/oauth2/authorize"
-    tokenUrl: "https://www.example.com/oauth2/token"
-    flow: authorizationCode
-    scopes:
-      friend: Allow creating relationships between users on a subreddit
