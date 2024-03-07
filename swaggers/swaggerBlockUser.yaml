@@ -1,0 +1,67 @@
+swagger: '2.0'
+info:
+  version: '1.0.0'
+  title: SERAKEL API
+paths:
+  /api/block_user:
+    post:
+      summary: Block a user
+      description: Blocks a user by their username
+      parameters:
+        - in: query
+          name: username
+          description: The username of the user performing the blocking action
+          required: true
+          type: string
+        - in: body
+          name: blockDetails
+          description: Additional details about the blocking action
+          required: true
+          schema:
+            type: object
+            properties:
+              blockedUserName:
+                type: string
+                description: The username of the user to be blocked
+              reason:
+                type: string
+                description: The reason for blocking the user
+      responses:
+        '200':
+          description: User blocked successfully
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Indicates whether the operation was successful
+              message:
+                type: string
+                description: Success message indicating that the user was blocked successfully
+        '500':
+          description: Failed to block the user
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Indicates whether the operation was successful
+              message:
+                type: string
+                description: Error message
+      tags:
+        - Users
+
+      operationId: blockUser
+      produces:
+        - application/json
+      security:
+        - AuthorizationCode: []
+securityDefinitions:
+  AuthorizationCode:
+    type: oauth2
+    authorizationUrl: "https://www.example.com/oauth2/authorize"
+    tokenUrl: "https://www.example.com/oauth2/token"
+    flow: authorizationCode
+    scopes:
+      block_user: Allow blocking users
