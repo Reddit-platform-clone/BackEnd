@@ -7,4 +7,7 @@ router.post('/api/block_user', userController.blockUser);
 router.post('/api/report_user', userController.reportUser);
 router.delete('/api/v1/me/friends/:username', userController.removeFriend);
 
+router.post('/r/:subreddit/api/friend', userController.createRelationship);
+router.post('/r/:subreddit/api/unfriend', userController.removeRelationship);
+
 module.exports = router;

@@ -1,0 +1,93 @@
+swagger: '2.0'
+info:
+  version: '1.0.0'
+  title: SERAKEL API
+paths:
+  /r/{subreddit}/api/unfriend:
+    post:
+      summary: remove a relationship between a user and another user or subreddit
+      description: This endpoint creates a relationship between a user and another user or subreddit. The type of relationship is determined by the type parameter in the request.'
+      operationId: removeRelationship
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: subreddit
+          type: string
+          required: true
+          description: Subreddit where the relationship is being removed
+        - in: body
+          name: body
+          description: type of relationship to be removed
+          required: true
+          schema:
+            type: object
+            properties:
+              type:
+                type: string
+                description: Type of the relationship
+              name:
+                type: string
+                description: Username of the user with whom the relationship is being removed
+      responses:
+        '200':
+          description: Relationship removed successfully
+          schema:
+            type: object
+            properties:
+              successs:
+                type: boolean
+                description: opearation was successful
+              message:
+                type: string
+                description: success message
+        '400':
+          description: Bad request, type and name required
+          schema:
+            type: object
+            properties:
+              successs:
+                type: boolean
+                description: opearation failed
+              message:
+                type: string
+                description: missing parameter/s
+          
+        '401':
+          description: Unauthorized, valid OAuth2 token required
+          schema:
+            type: object
+            properties:
+              successs:
+                type: boolean
+                description: opearation failed
+              message:
+                type: string
+                description: message indicating missing OAuth2 token
+
+        '500':
+          description: Internal server error
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Indicates whether the operation failed
+              message:
+                type: string
+                description: Error message
+      tags:
+        - Users
+
+      security:
+        - AuthorizationCode: []
+securityDefinitions:
+  AuthorizationCode:
+    type: oauth2
+    authorizationUrl: "https://www.example.com/oauth2/authorize"
+    tokenUrl: "https://www.example.com/oauth2/token"
+    flow: authorizationCode
+    scopes:
+      unfriend: Allow creating relationships between users on a subreddit

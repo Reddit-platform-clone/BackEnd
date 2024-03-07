@@ -12,6 +12,14 @@ const userController = {
 
     blockUser: async (req, res) => {
         res.json({message: 'user blocked '})
+    },
+
+    createRelationship: async (req, res) => {
+        res.json({ message: 'relationship created' })
+    },
+
+    removeRelationship: async (req, res) => {
+        res.json({ message: 'relationsship removed' })
     }
 };
 

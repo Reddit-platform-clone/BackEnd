@@ -45,7 +45,7 @@ paths:
             properties:
               success:
                 type: boolean
-                description: Indicates whether the operation was successful
+                description: Indicates whether the operation failed
               message:
                 type: string
                 description: Error message
