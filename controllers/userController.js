@@ -44,6 +44,14 @@ const userController = {
   removeRelationship: async (req, res) => {
     res.json({ message: 'relationsship removed' });
   },
+
+  getFriendInfo: async (req, res) => {
+    res.json({ message: 'user info' })
+  },
+
+  checkUsernameAvailability: async (req, res) => {
+    res.json({ message: 'check username availability' })
+  },
 };
 
 module.exports = userController;

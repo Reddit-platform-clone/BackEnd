@@ -17,4 +17,7 @@ router.delete('/api/v1/me/friends/:username', userController.removeFriend);
 router.post('/r/:subreddit/api/friend', userController.createRelationship);
 router.post('/r/:subreddit/api/unfriend', userController.removeRelationship);
 
+router.get('/api/v1/me/friends/:username', userController.getFriendInfo);
+router.get('/api/username_available', userController.checkUsernameAvailability);
+
 module.exports = router;

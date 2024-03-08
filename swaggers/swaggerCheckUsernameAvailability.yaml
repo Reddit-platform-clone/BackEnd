@@ -1,30 +1,30 @@
 swagger: '2.0'
 info:
   version: '1.0.0'
-  title: Reddit Clone API
+  title: SARAKEL API
 paths:
-  /api/v1/me/friends/{username}:
-    delete:
-      summary: Remove a friend
-      description: Removes a friend from the authenticated user's friend list
+  /api/username_available:
+    get:
+      summary: Check username availability
+      description: This endpoint checks if a username is available.
+      operationId: checkUsernameAvailability
+      produces:
+        - application/json
       parameters:
-        - in: path
+        - in: query
           name: username
-          description: The username of the friend to be removed
-          required: true
           type: string
+          required: true
+          description: Username to check
       responses:
         '200':
-          description: Friend removed successfully
+          description: Username checked successfully
           schema:
             type: object
             properties:
-              success:
+              available:
                 type: boolean
-                description: Indicates whether the operation was successful
-              message:
-                type: string
-                description: Success message indicating that the friend was removed successfully
+                description: Indicates whether the username is available
         '400':
           description: Bad request, e.g., the friend does not exist
           schema:
@@ -49,6 +49,3 @@ paths:
                 description: Error message
       tags:
         - Users
-      operationId: removeFriend
-      produces:
-        - application/json

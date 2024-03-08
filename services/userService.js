@@ -44,6 +44,14 @@ const userService = {
   removeRelationship: async (username) => {
     // logic to create relationships
   },
+
+  getFriendInfo: async (username) => {
+    // logic to get user info
+  },
+
+  checkUsernameAvailability: async (username) => {
+    // logic to check username validity
+  },
 };
 
 module.exports = userService;
