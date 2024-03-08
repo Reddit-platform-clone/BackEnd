@@ -1,0 +1,48 @@
+swagger: '2.0'
+info:
+  version: '1.0.0'
+  title: SERAKEL API
+paths:
+  /api/unread_message:
+    post:
+      summary: Mark a message as unread
+      description: Marks a message as unread for the specified user
+      parameters:
+        - in: query
+          name: sentUserId
+          description: The ID of the user who sent the message
+          required: true
+          type: string
+        - in: query
+          name: messageId
+          description: The ID of the message to mark as unread
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Message marked as unread successfully
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Indicates whether the operation was successful
+              message:
+                type: string
+                description: Success message indicating that the message was marked as unread successfully
+        '500':
+          description: Failed to mark the message as unread
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Indicates whether the operation was successful
+              message:
+                type: string
+                description: Error message
+      tags:
+        - Messages
+      operationId: markMessageUnread
+      produces:
+        - application/json
