@@ -29,7 +29,7 @@ paths:
           schema:
             type: object
             properties:
-              successs:
+              success:
                 type: boolean
                 description: opearation was successful
               message:
@@ -40,7 +40,7 @@ paths:
           schema:
             type: object
             properties:
-              successs:
+              success:
                 type: boolean
                 description: opearation failed
               message:
@@ -52,7 +52,7 @@ paths:
           schema:
             type: object
             properties:
-              successs:
+              success:
                 type: boolean
                 description: opearation failed
               message:
