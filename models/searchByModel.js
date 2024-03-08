@@ -1,7 +1,6 @@
-
 // Define the message schema or model
-const messageSchema = {
+const searchBySchema = {
     // Define schema fields here
 };
 
-module.exports = messageSchema;
+module.exports = searchBySchema;

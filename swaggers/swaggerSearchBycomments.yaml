@@ -1,0 +1,36 @@
+swagger: "2.0"
+info:
+  version: "1.0.0"
+  title: SERAKEL API
+paths:
+  /api/searchBy/comments:
+    get:
+      summary: Search by Comments
+      description: Search for comments.
+      parameters:
+        - name: query
+          in: query
+          description: The search query to find comments
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Successful response
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Comment"
+        "400":
+          description: Invalid request
+        "500":
+          description: Internal server error
+definitions:
+  Comment:
+    type: object
+    properties:
+      commentId:
+        type: string
+      text:
+        type: string
+      userId:
+        type: string
