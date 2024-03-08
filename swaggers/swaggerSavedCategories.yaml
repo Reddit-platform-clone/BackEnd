@@ -1,0 +1,47 @@
+swagger: '2.0'
+info:
+  version: '1.0.0'
+  title: SERAKEL API
+paths:
+  /api/saved_categories:
+    get:
+      summary: Retrieve saved categories
+      description: Retrieves the list of saved categories for a user
+      parameters:
+        - in: query
+          name: userId
+          description: The ID of the user whose saved categories are to be retrieved
+          required: true
+          type: string
+      responses:
+        '200':
+          description: List of saved categories retrieved successfully
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Indicates whether the operation was successful
+              categories:
+                type: array
+                items:
+                  type: string
+                description: List of saved categories
+        '500':
+          description: Failed to retrieve saved categories
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Indicates whether the operation was successful
+              message:
+                type: string
+                description: Error message
+      tags:
+        - Saved Categories
+      operationId: getSavedCategories
+      consumes:
+        - application/json
+      produces:
+        - application/json
