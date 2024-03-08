@@ -5,8 +5,8 @@ info:
 paths:
   /api/notifications/getCloseThread:
     post:
-      summary: Get closeThread notification
-      description: Gets closeThread notification
+      summary: Get close thread notification
+      description: Gets close thread notification
       parameters:
         - in: query
           name: post
@@ -25,7 +25,7 @@ paths:
                 description: notification number
       responses:
         '200':
-          description: closeThread notification sent successfully
+          description: close thread notification sent successfully
           schema:
             type: object
             properties:
