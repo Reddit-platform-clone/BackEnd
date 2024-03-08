@@ -88,6 +88,6 @@ securityDefinitions:
     type: oauth2
     authorizationUrl: "https://www.example.com/oauth2/authorize"
     tokenUrl: "https://www.example.com/oauth2/token"
-    flow: authorizationCode
+    flow: accessCode
     scopes:
       friend: Allow creating relationships between users on a subreddit

@@ -52,6 +52,30 @@ const userService = {
   checkUsernameAvailability: async (username) => {
     // logic to check username validity
   },
+
+  getUserAbout: async (username) => {
+    // logic to get user details
+  },
+
+  getUserOverview: async (username) => {
+    // logic to get user details
+  },
+
+  getUserSubmitted: async (username) => {
+    // logic to get user details
+  },
+
+  getUserComments: async (username) => {
+    // logic to get user details
+  },
+
+  getUserUpvoted: async (username) => {
+    // logic to get user details
+  },
+
+  getUserDownvoted: async (username) => {
+    // logic to get user details
+  },  
 };
 
 module.exports = userService;

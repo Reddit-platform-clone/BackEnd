@@ -52,6 +52,30 @@ const userController = {
   checkUsernameAvailability: async (req, res) => {
     res.json({ message: 'check username availability' })
   },
+
+  getUserAbout: async (req, res) => {
+    res.json({ message: 'user about'})
+  },
+  
+  getUserOverview: async (req, res) => {
+    res.json({ message: 'user overview'})
+  },
+  
+  getUserSubmitted: async (req, res) => {
+    res.json({ message: 'user submitted'})
+  },
+  
+  getUserComments: async (req, res) => {
+    res.json({ message: 'user comments'})
+  },
+  
+  getUserUpvoted: async (req, res) => {
+    res.json({ message: 'user upvoted'})
+  },
+  
+  getUserDownvoted: async (req, res) => {
+    res.json({ message: 'user downvoted'})
+  },
 };
 
 module.exports = userController;
