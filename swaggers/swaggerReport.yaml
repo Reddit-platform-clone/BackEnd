@@ -1,0 +1,69 @@
+swagger: '2.0'
+info:
+  version: '1.0.0'
+  title: Report API
+securityDefinitions:
+  OAuth2:
+    type: oauth2
+    flow: implicit
+    authorizationUrl: https://example.com/oauth2/authorize
+    scopes:
+      report: Allow reporting actions
+paths:
+  /api/report:
+    post:
+      summary: Report a link, comment, or message
+      description: |
+        Reports a link, comment, or message. Reporting a thing brings it to the attention of the subreddit's moderators. Reporting a message sends it to a system for admin review. For links and comments, the thing is implicitly hidden as well (see /api/hide for details).
+      parameters:
+        - in: body
+          name: reportDetails
+          description: Details for reporting a link, comment, or message
+          required: true
+          schema:
+            type: object
+            properties:
+              thingType:
+                type: string
+                description: The type of thing to report (e.g., 'link', 'comment', 'message')
+              thingId:
+                type: string
+                description: The ID of the thing to report
+              reportReason:
+                type: string
+                description: The reason for reporting the thing
+              reporterId:
+                type: string
+                description: The ID of the user reporting the thing
+      responses:
+        '200':
+          description: Thing reported successfully
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Indicates whether the operation was successful
+              message:
+                type: string
+                description: Success message indicating that the thing was reported successfully
+        '500':
+          description: Failed to report thing
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Indicates whether the operation was successful
+              message:
+                type: string
+                description: Error message
+      tags:
+        - Reporting
+      operationId: reportThing
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      security:
+        - OAuth2: [report]
