@@ -1,7 +1,7 @@
 swagger: '2.0'
 info:
   version: '1.0.0'
-  title: Report API
+  title: SERAKEL API
 securityDefinitions:
   OAuth2:
     type: oauth2

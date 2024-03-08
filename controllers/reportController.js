@@ -17,13 +17,10 @@ const reportController = {
     //       break;
     //     default:
     //       return res.status(400).json({ success: false, message: 'Invalid report type' });
-    const message = 'Thank you for reporting message 4. We will review it soon.';
+      const message = 'Thank you for reporting message 4. We will review it soon.';
 
-    res.json({ success: true, message });      
-}
-
-     
-     catch (error) {
+      res.json({ success: true, message });
+    } catch (error) {
       res.status(500).json({ success: false, message: 'Failed to report thing', error: error.message });
     }
   },
