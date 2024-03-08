@@ -75,7 +75,15 @@ const userService = {
 
   getUserDownvoted: async (username) => {
     // logic to get user details
-  },  
+  },
+  
+  getIdentity: async () => {
+    // logic to get user identity
+  },
+
+  getPreferences: async () => {
+    // logic to get user preferences
+  }
 };
 
 module.exports = userService;

@@ -6,6 +6,7 @@ info:
 paths:
   /user/{username}/about:
     get:
+      summary: get user's about
       parameters:
         - name: username
           in: path

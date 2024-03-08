@@ -6,6 +6,7 @@ info:
 paths:
   /user/{username}/comments:
     get:
+      summary: get user's comments 
       parameters:
         - name: username
           in: path

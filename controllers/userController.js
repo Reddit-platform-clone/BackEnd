@@ -76,6 +76,14 @@ const userController = {
   getUserDownvoted: async (req, res) => {
     res.json({ message: 'user downvoted'})
   },
+
+  getIdentity: async (req, res) => {
+    res.json({ message: 'user identity'})
+  },
+
+  getPreferences: async (req, res) => {
+    res.json({ message: 'user preferences'})
+  }
 };
 
 module.exports = userController;

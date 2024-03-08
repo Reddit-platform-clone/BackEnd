@@ -6,6 +6,7 @@ info:
 paths:
   /user/{username}/upvotes:
     get:
+      summary: get user's downvotes
       parameters:
         - name: username
           in: path

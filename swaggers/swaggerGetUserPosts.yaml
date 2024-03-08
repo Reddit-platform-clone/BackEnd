@@ -6,6 +6,7 @@ info:
 paths:
   /user/{username}/submitted:
     get:
+      summary: get user's submitted posts
       parameters:
         - name: username
           in: path
