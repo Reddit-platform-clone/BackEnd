@@ -1,0 +1,63 @@
+swagger: '2.0'
+info:
+  version: '1.0.0'
+  title: SERAKEL API
+paths:
+  /api/hide:
+    post:
+      summary: Hide a link
+      description: Allows a user to hide a specific link
+      parameters:
+        - in: body
+          name: hideDetails
+          description: Details for hiding a link
+          required: true
+          schema:
+            type: object
+            properties:
+              link:
+                type: string
+                description: The link to be hidden
+              userID:
+                type: string
+                description: The ID of the user who wants to hide the link
+      responses:
+        '200':
+          description: Link hidden successfully
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Indicates whether the operation was successful
+              message:
+                type: string
+                description: Success message indicating that the link was hidden successfully
+        '500':
+          description: Failed to hide link
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Indicates whether the operation was successful
+              message:
+                type: string
+                description: Error message
+      tags:
+        - Hide
+      operationId: hideLink
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      security:
+        - AuthorizationCode: []
+securityDefinitions:
+  AuthorizationCode:
+    type: oauth2
+    # authorizationUrl: "https://www.example.com/oauth2/authorize"
+    # tokenUrl: "https://www.example.com/oauth2/token"
+    flow: authorizationCode
+    scopes:
+      hide_link: Allow hiding links

@@ -51,7 +51,7 @@ paths:
                 description: Error message
       tags:
         - Users
-
+        - Messages
       operationId: blockUser
       produces:
         - application/json
@@ -60,8 +60,8 @@ paths:
 securityDefinitions:
   AuthorizationCode:
     type: oauth2
-    authorizationUrl: "https://www.example.com/oauth2/authorize"
-    tokenUrl: "https://www.example.com/oauth2/token"
-    flow: accessCode
+    # authorizationUrl: "https://www.example.com/oauth2/authorize"
+    # tokenUrl: "https://www.example.com/oauth2/token"
+    flow: authorizationCode
     scopes:
       block_user: Allow blocking users

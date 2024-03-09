@@ -1,7 +1,7 @@
 swagger: '2.0'
 info:
   version: '1.0.0'
-  title: Messaging API
+  title: SERAKEL API
 paths:
   /api/read_all_messages:
     post:
@@ -41,3 +41,12 @@ paths:
       operationId: markAllMessagesRead
       produces:
         - application/json
+      security:
+        - ClientCredentials: []
+securityDefinitions:
+  ClientCredentials:
+    type: oauth2
+    # tokenUrl: "https://www.example.com/oauth2/token"
+    flow: clientCredentials
+    scopes:
+      read_all_messages: Allow reading all messages

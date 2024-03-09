@@ -1,0 +1,128 @@
+swagger: '2.0'
+info:
+  version: '1.0.0'
+  title: SERAKEL API
+paths:
+  /api/submit:
+    post:
+      summary: Submit a link to a subreddit
+      description: Submit a link or self-post to a subreddit
+      parameters:
+        - in: body
+          name: submissionDetails
+          description: Details for submitting a link or self-post
+          required: true
+          schema:
+            type: object
+            properties:
+              ad:
+                type: boolean
+                description: Boolean value indicating if the submission is an ad
+              api_type:
+                type: string
+                description: The string 'json'
+              app:
+                type: string
+              collection_id:
+                type: string
+                description: The UUID of a collection (beta)
+              extension:
+                type: string
+                description: Extension used for redirects
+              flair_id:
+                type: string
+                maxLength: 36
+                description: A string no longer than 36 characters
+              flair_text:
+                type: string
+                maxLength: 64
+                description: A string no longer than 64 characters
+              g-recaptcha-response:
+                type: string
+              kind:
+                type: string
+                enum:
+                  - link
+                  - self
+                  - image
+                  - video
+                  - videogif
+                description: One of (link, self, image, video, videogif)
+              nsfw:
+                type: boolean
+                description: Boolean value indicating if the submission is NSFW
+              post_set_default_post_id:
+                type: string
+              post_set_id:
+                type: string
+              recaptcha_token:
+                type: string
+              resubmit:
+                type: boolean
+                description: Boolean value indicating if the submission is a resubmission
+              richtext_json:
+                type: object
+                description: JSON data for the self-post body
+              sendreplies:
+                type: boolean
+                description: Boolean value indicating if replies should be sent to the user
+              spoiler:
+                type: boolean
+                description: Boolean value indicating if the submission is a spoiler
+              sr:
+                type: string
+                description: Subreddit name
+              text:
+                type: string
+                description: Raw markdown text for the self-post body
+              title:
+                type: string
+                maxLength: 300
+                description: Title of the submission
+              uh:
+                type: string
+                description: The modhash provided by the X-Modhash header
+              url:
+                type: string
+                description: A valid URL for the link submission
+              video_poster_url:
+                type: string
+                description: A valid URL for the video poster image
+      responses:
+        '200':
+          description: Submission successful
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Indicates whether the submission was successful
+              message:
+                type: string
+                description: Success message indicating that the submission was successful
+        '500':
+          description: Submission failed
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Indicates whether the submission failed
+              message:
+                type: string
+                description: Error message
+      tags:
+        - Submit
+      operationId: submitLink
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      security:
+        - UserAuthentication: []
+
+securityDefinitions:
+  UserAuthentication:
+    type: apiKey
+    name: Authorization
+    in: header

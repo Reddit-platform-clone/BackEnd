@@ -1,7 +1,7 @@
 const express = require('express');
 
 const router = express.Router();
-const messageController = require('../controllers/messageController.js');
+const messageController = require('../controllers/messageController');
 
 router.post('/message/compose', messageController.compose);
 router.get('/message/inbox', messageController.getInboxMessages);
@@ -11,4 +11,5 @@ router.post('/api/report_msg', messageController.reportMessage);
 router.get('/message/sent', messageController.getSentMessages);
 router.post('/api/unread_message', messageController.markMessageUnread);
 router.post('/api/read_all_messages', messageController.markAllMessagesRead);
+router.get('/api/get_user_mentions', messageController.getUserMentions);
 module.exports = router;
