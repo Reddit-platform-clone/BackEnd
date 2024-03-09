@@ -3,7 +3,7 @@ info:
   version: '1.0.0'
   title: SERAKEL API
 paths:
-  /api/marknsfwmodposts:
+  /api/marknsfw:
     post:
       summary: Mark a link as NSFW for moderator posts
       description: Marks a link as NSFW (Not Safe For Work) for moderator posts

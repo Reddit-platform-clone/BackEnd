@@ -5,25 +5,25 @@ info:
 paths:
   /api/unmarknsfw:
     post:
-      summary: Mark a link as not safe for work (NSFW)
-      description: Marks a link as not safe for work (NSFW)
+      summary: Unmarks a link as NSFW for moderator posts
+      description: Unmarks a link as NSFW (Not Safe For Work) for moderator posts
       parameters:
         - in: body
-          name: unmarkNSFWDetails
-          description: Details for marking a link as not safe for work (NSFW)
+          name: markNsfwDetails
+          description: Details for unmarking a link as NSFW
           required: true
           schema:
             type: object
             properties:
-              id:
+              link:
                 type: string
-                description: The fullname of the link to mark as not safe for work (NSFW)
-              uh:
+                description: The link to be unmarked as NSFW
+              moderatorId:
                 type: string
-                description: The modhash provided by the X-Modhash header
+                description: The ID of the moderator unmarks the link as NSFW
       responses:
         '200':
-          description: Link marked as not safe for work (NSFW) successfully
+          description: Link unmarked as NSFW successfully
           schema:
             type: object
             properties:
@@ -32,9 +32,9 @@ paths:
                 description: Indicates whether the operation was successful
               message:
                 type: string
-                description: Success message indicating that the link was marked as not safe for work (NSFW) successfully
+                description: Success message indicating that the link was unmarked as NSFW successfully
         '500':
-          description: Failed to mark link as not safe for work (NSFW)
+          description: Failed to mark link as NSFW
           schema:
             type: object
             properties:
@@ -46,7 +46,7 @@ paths:
                 description: Error message
       tags:
         - NSFW
-      operationId: unmarkNSFWLink
+      operationId: unMarkNsfwModPosts
       consumes:
         - application/json
       produces:
