@@ -52,4 +52,10 @@ paths:
       produces:
         - application/json
       security:
-        - ModeratorAuth: []
+        - UserAuthentication: []
+
+securityDefinitions:
+  UserAuthentication:
+    type: apiKey
+    name: Authorization
+    in: header

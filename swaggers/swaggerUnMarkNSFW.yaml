@@ -1,0 +1,61 @@
+swagger: '2.0'
+info:
+  version: '1.0.0'
+  title: SERAKEL API
+paths:
+  /api/unmarknsfw:
+    post:
+      summary: Mark a link as not safe for work (NSFW)
+      description: Marks a link as not safe for work (NSFW)
+      parameters:
+        - in: body
+          name: unmarkNSFWDetails
+          description: Details for marking a link as not safe for work (NSFW)
+          required: true
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+                description: The fullname of the link to mark as not safe for work (NSFW)
+              uh:
+                type: string
+                description: The modhash provided by the X-Modhash header
+      responses:
+        '200':
+          description: Link marked as not safe for work (NSFW) successfully
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Indicates whether the operation was successful
+              message:
+                type: string
+                description: Success message indicating that the link was marked as not safe for work (NSFW) successfully
+        '500':
+          description: Failed to mark link as not safe for work (NSFW)
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Indicates whether the operation was successful
+              message:
+                type: string
+                description: Error message
+      tags:
+        - NSFW
+      operationId: unmarkNSFWLink
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      security:
+        - UserAuthentication: []
+
+securityDefinitions:
+  UserAuthentication:
+    type: apiKey
+    name: Authorization
+    in: header
