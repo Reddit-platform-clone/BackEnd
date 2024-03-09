@@ -1,0 +1,55 @@
+swagger: '2.0'
+info:
+  version: '1.0.0'
+  title: SERAKEL API
+paths:
+  /api/set_suggested_sort:
+    post:
+      summary: Set a suggested sort for a modpost
+      description: Sets a suggested sort for a modpost, which is useful to display comments in a certain preferred way for posts
+      parameters:
+        - in: body
+          name: suggestedSortDetails
+          description: Details for setting a suggested sort for a modpost
+          required: true
+          schema:
+            type: object
+            properties:
+              postId:
+                type: string
+                description: The ID of the modpost to set the suggested sort for
+              suggestedSort:
+                type: string
+                description: The suggested sort to set for the modpost (e.g., 'new', 'qa', '')
+      responses:
+        '200':
+          description: Suggested sort set successfully for modpost
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Indicates whether the operation was successful
+              message:
+                type: string
+                description: Success message indicating that the suggested sort was set successfully
+        '500':
+          description: Failed to set suggested sort for modpost
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Indicates whether the operation was successful
+              message:
+                type: string
+                description: Error message
+      tags:
+        - Suggested Sort
+      operationId: setSuggestedSort
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      security:
+        - ClientCredentials: []

@@ -1,0 +1,48 @@
+swagger: "2.0"
+info:
+  version: "1.0.0"
+  title: SERAKEL API
+paths:
+  /api/searchBy/posts:
+    get:
+      summary: Search Posts
+      description: Search for posts with optional trending today and sorting.
+      parameters:
+        - name: query
+          in: query
+          description: The search query to find posts
+          required: true
+          type: string
+        - name: trendingToday
+          in: query
+          description: Include only posts created today
+          type: boolean
+        - name: sortBy
+          in: query
+          description: Sort posts by date or relevance
+          type: string
+          enum: [date, relevance]
+      responses:
+        "200":
+          description: Successful response
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Post"
+        "400":
+          description: Invalid request
+        "500":
+          description: Internal server error
+      tags:
+        - Search
+definitions:
+  Post:
+    type: object
+    properties:
+      postId:
+        type: string
+      title:
+        type: string
+      createdAt:
+        type: string
+        format: date-time

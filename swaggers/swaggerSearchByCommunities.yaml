@@ -1,0 +1,38 @@
+swagger: "2.0"
+info:
+  version: "1.0.0"
+  title: SERAKEL API
+paths:
+  /api/searchBy/communities:
+    get:
+      summary: Search by Communities
+      description: Search for communities.
+      parameters:
+        - name: query
+          in: query
+          description: The search query to find communities
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Successful response
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Community"
+        "400":
+          description: Invalid request
+        "500":
+          description: Internal server error
+      tags:
+        - Search
+definitions:
+  Community:
+    type: object
+    properties:
+      communityId:
+        type: string
+      name:
+        type: string
+      description:
+        type: string

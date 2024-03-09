@@ -1,0 +1,52 @@
+swagger: '2.0'
+info:
+  version: '1.0.0'
+  title: SERAKEL API
+paths:
+  /api/read_all_messages:
+    post:
+      summary: Mark all messages as read
+      description: Marks all messages as read for the specified user
+      parameters:
+        - in: query
+          name: userId
+          description: The ID of the user to mark all messages as read
+          required: true
+          type: string
+      responses:
+        '200':
+          description: All messages marked as read successfully
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Indicates whether the operation was successful
+              message:
+                type: string
+                description: Success message indicating that all messages were marked as read successfully
+        '500':
+          description: Failed to mark all messages as read
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Indicates whether the operation was successful
+              message:
+                type: string
+                description: Error message
+      tags:
+        - Messages
+      operationId: markAllMessagesRead
+      produces:
+        - application/json
+      security:
+        - ClientCredentials: []
+securityDefinitions:
+  ClientCredentials:
+    type: oauth2
+    # tokenUrl: "https://www.example.com/oauth2/token"
+    flow: clientCredentials
+    scopes:
+      read_all_messages: Allow reading all messages
