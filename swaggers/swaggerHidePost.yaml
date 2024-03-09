@@ -1,0 +1,43 @@
+swagger: '2.0'
+info:
+  version: '1.0.0'
+  title: SERAKEL API
+paths:
+  /api/hidePost/{postId}/:
+    put:
+      summary: Hide Post
+      description: Hide a post by its ID.
+      parameters:
+        - name: postId
+          in: path
+          description: The ID of the post to hide
+          required: true
+          type: string
+        - name: Authorization
+          in: header
+          description: JWT token for user authentication
+          required: true
+          type: string
+          format: jwt
+      responses:
+        '200':
+          description: Post hidden successfully
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Indicates if the post hiding was successful
+              postId:
+                type: string
+                description: The ID of the post that was hidden
+        '400':
+          description: Invalid request
+        '401':
+          description: Unauthorized - Missing or invalid JWT token
+        '404':
+          description: Post not found
+        '500':
+          description: Internal server error
+      tags:
+      - Homepage

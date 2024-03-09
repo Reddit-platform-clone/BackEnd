@@ -1,4 +1,4 @@
-const searchByService = require('../services/searchByService'); 
+const searchByService = require('../services/searchByServices.js'); 
 
 const searchByController = {
     users: async (req, res) => {

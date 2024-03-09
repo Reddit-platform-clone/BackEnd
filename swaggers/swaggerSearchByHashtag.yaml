@@ -24,7 +24,8 @@ paths:
           description: Invalid request
         "500":
           description: Internal server error
-      tags:
+
+      tags: 
         - Search
 definitions:
   Hashtag:
