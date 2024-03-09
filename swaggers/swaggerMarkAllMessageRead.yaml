@@ -46,7 +46,7 @@ paths:
 securityDefinitions:
   ClientCredentials:
     type: oauth2
-    tokenUrl: "https://www.example.com/oauth2/token"
+    # tokenUrl: "https://www.example.com/oauth2/token"
     flow: clientCredentials
     scopes:
       read_all_messages: Allow reading all messages

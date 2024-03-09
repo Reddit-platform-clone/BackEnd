@@ -1,8 +1,8 @@
 const spoilerController = {
-  markLinkAsSpoiler: async (req, res) => {
+  markAsSpoiler: async (req, res) => {
     try {
       const { id } = req.body;
-      const message = `Link with ID ${id} marked as spoiler and hidden successfully`;
+      const message = ` ID ${id} marked as spoiler and hidden successfully`;
 
       res.json({ success: true, message });
     } catch (error) {

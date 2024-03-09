@@ -45,3 +45,5 @@ paths:
         - application/json
       produces:
         - application/json
+      security:
+        - AuthorizationCode: []

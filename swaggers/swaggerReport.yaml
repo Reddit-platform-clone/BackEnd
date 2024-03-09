@@ -6,7 +6,7 @@ securityDefinitions:
   OAuth2:
     type: oauth2
     flow: implicit
-    authorizationUrl: https://example.com/oauth2/authorize
+    # authorizationUrl: https://example.com/oauth2/authorize
     scopes:
       report: Allow reporting actions
 paths:

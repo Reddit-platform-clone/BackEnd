@@ -3,24 +3,27 @@ info:
   version: '1.0.0'
   title: SERAKEL API
 paths:
-  /api/del_comment:
-    delete:
-      summary: Delete a comment
-      description: Deletes a comment based on the provided comment ID
+  /api/unhide:
+    post:
+      summary: Unhide a hidden item
+      description: Unhides a previously hidden item
       parameters:
         - in: body
-          name: comment
-          description: Comment details
+          name: unhideDetails
+          description: Details for unhiding a hidden item
           required: true
           schema:
             type: object
             properties:
-              commentId:
+              id:
                 type: string
-                description: The ID of the comment to delete
+                description: The fullname of the item to unhide
+              uh:
+                type: string
+                description: The modhash provided by the X-Modhash header
       responses:
         '200':
-          description: Comment deleted successfully
+          description: Item unhidden successfully
           schema:
             type: object
             properties:
@@ -29,9 +32,9 @@ paths:
                 description: Indicates whether the operation was successful
               message:
                 type: string
-                description: Success message indicating that the comment was deleted successfully
+                description: Success message indicating that the item was unhidden successfully
         '500':
-          description: Failed to delete comment
+          description: Failed to unhide item
           schema:
             type: object
             properties:
@@ -42,19 +45,11 @@ paths:
                 type: string
                 description: Error message
       tags:
-        - Comments
-      operationId: deleteComment
+        - Unhide
+      operationId: unhideItem
       consumes:
         - application/json
       produces:
         - application/json
       security:
         - AuthorizationCode: []
-securityDefinitions:
-  AuthorizationCode:
-    type: oauth2
-    # authorizationUrl: "https://www.example.com/oauth2/authorize"
-    # tokenUrl: "https://www.example.com/oauth2/token"
-    flow: authorizationCode
-    scopes:
-      delete_comment: Allow deleting comments

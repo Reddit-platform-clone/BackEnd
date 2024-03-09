@@ -1,7 +1,7 @@
 swagger: '2.0'
 info:
   version: '1.0.0'
-  title: SERAKEL API
+  title: Spoiler API
 paths:
   /api/spoiler:
     post:
@@ -51,3 +51,5 @@ paths:
         - application/json
       produces:
         - application/json
+      security:
+        - AuthorizationCode: []

@@ -1,7 +1,7 @@
 swagger: '2.0'
 info:
   version: '1.0.0'
-  title: SERAKEL API
+  title: SAVEAPI
 paths:
   /api/save:
     post:
@@ -54,3 +54,5 @@ paths:
         - application/json
       produces:
         - application/json
+      security:
+        - UserAuth: []

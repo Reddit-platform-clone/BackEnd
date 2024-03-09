@@ -56,8 +56,8 @@ paths:
 securityDefinitions:
   AuthorizationCode:
     type: oauth2
-    authorizationUrl: "https://www.example.com/oauth2/authorize"
-    tokenUrl: "https://www.example.com/oauth2/token"
+    # authorizationUrl: "https://www.example.com/oauth2/authorize"
+    # tokenUrl: "https://www.example.com/oauth2/token"
     flow: authorizationCode
     scopes:
       follow_post: Allow following a post
