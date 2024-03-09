@@ -6,7 +6,7 @@ paths:
   /api/searchBy/users:
     get:
       summary: Search Users
-      description: Search for users based on specified criteria.
+      description: Search for users
       parameters:
         - name: query
           in: query
