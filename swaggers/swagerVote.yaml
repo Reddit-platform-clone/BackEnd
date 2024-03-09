@@ -1,0 +1,67 @@
+swagger: '2.0'
+info:
+  version: '1.0.0'
+  title: SERAKEL API
+paths:
+  /api/vote:
+    post:
+      summary: Cast a vote on a thing
+      description: Casts a vote on a thing (link or comment)
+      parameters:
+        - in: body
+          name: voteDetails
+          description: Details for casting a vote on a thing
+          required: true
+          schema:
+            type: object
+            properties:
+              dir:
+                type: integer
+                description: Vote direction. 1 for upvote, -1 for downvote, 0 for un-voting
+              id:
+                type: string
+                description: Fullname of the link or comment to vote on
+              rank:
+                type: integer
+                description: An integer greater than 1
+              uh:
+                type: string
+                description: The modhash provided by the X-Modhash header
+      responses:
+        '200':
+          description: Vote cast successfully
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Indicates whether the operation was successful
+              message:
+                type: string
+                description: Success message indicating that the vote was cast successfully
+        '500':
+          description: Failed to cast vote
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Indicates whether the operation was successful
+              message:
+                type: string
+                description: Error message
+      tags:
+        - Vote
+      operationId: castVote
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      security:
+        - UserAuthentication: []
+
+securityDefinitions:
+  UserAuthentication:
+    type: apiKey
+    name: Authorization
+    in: header
