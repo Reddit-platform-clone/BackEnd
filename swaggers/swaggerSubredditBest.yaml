@@ -1,0 +1,60 @@
+swagger: '2.0'
+info:
+  version: '1.0.0'
+  title: SARAKEL API
+paths:
+  /api/subreddit/best:
+    get:
+      summary: Get best subreddit
+      description: Gets the best subreddit by Id
+      parameters:
+        - in: query
+          name: postId
+          description: Subreddit Id
+          required: true
+          type: number
+        - in: body
+          name: subreddit details
+          description: Additional details about the subreddit
+          required: true
+          schema:
+            type: object
+            properties:
+              getBestId:
+                type: number
+                description: Id of subreddit
+      responses:
+        '200':
+          description: Best subreddit sent successfully
+          schema:
+            type: object
+            properties:
+              success: 
+                type: boolean
+                description: Indicates whether the operation was successful
+              message:
+                type: string
+                description: Success message indicating that best subreddit sent successfully
+        '500':
+          description: Failed to get best subreddit
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Indicates whether the operation was unsuccessful
+              message:
+                type: string
+                description: Error message
+      tags:
+        - Subreddit
+        
+      operationId: bestSubreddit
+      produces:
+        - application/json
+                
+                
+                
+                
+                
+                

@@ -1,0 +1,69 @@
+swagger: '2.0'
+info:
+  version: '1.0.0'
+  title: SERAKEL API
+paths:
+  /api/editusertext:
+    post:
+      summary: Edit user text
+      description: Allows users to edit their text (e.g., post content or comment content)
+      parameters:
+        - in: body
+          name: editText
+          description: Edit text details
+          required: true
+          schema:
+            type: object
+            properties:
+              type:
+                type: string
+                description: The type of entity to edit (e.g., 'post' or 'comment')
+              entityId:
+                type: string
+                description: The ID of the entity to edit (e.g., post ID or comment ID)
+              userId:
+                type: string
+                description: The ID of the user editing the text
+              newText:
+                type: string
+                description: The new text content to replace the existing text
+      responses:
+        '200':
+          description: Text edited successfully
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Indicates whether the operation was successful
+              message:
+                type: string
+                description: Success message indicating that the text was edited successfully
+        '500':
+          description: Failed to edit text
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Indicates whether the operation was successful
+              message:
+                type: string
+                description: Error message
+      tags:
+        - Edits
+      operationId: editUserText
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      security:
+        - AuthorizationCode: []
+securityDefinitions:
+  AuthorizationCode:
+    type: oauth2
+    # authorizationUrl: "https://www.example.com/oauth2/authorize"
+    # tokenUrl: "https://www.example.com/oauth2/token"
+    flow: authorizationCode
+    scopes:
+      edit_user_text: Allow editing user text

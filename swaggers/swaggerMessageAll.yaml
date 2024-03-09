@@ -1,7 +1,7 @@
 swagger: '2.0'
 info:
   version: '1.0.0'
-  title:  SERAKEL API
+  title: SERAKEL API
 paths:
    /message/inbox/:
     get:
@@ -56,3 +56,13 @@ paths:
       operationId: getInboxMessages
       produces:
         - application/json
+      security:
+        - AuthorizationCode: []
+securityDefinitions:
+  AuthorizationCode:
+    type: oauth2
+    # authorizationUrl: "https://www.example.com/oauth2/authorize"
+    # tokenUrl: "https://www.example.com/oauth2/token"
+    flow: authorizationCode
+    scopes:
+      read_inbox_messages: Allow reading inbox messages
