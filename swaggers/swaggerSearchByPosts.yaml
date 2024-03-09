@@ -15,11 +15,11 @@ paths:
           type: string
         - name: trendingToday
           in: query
-          description: Include only posts created today
+          description: Include only posts that are recently relevant
           type: boolean
         - name: sortBy
           in: query
-          description: Sort posts by date or relevance
+          description: Sort posts by relevance, trending, date
           type: string
           enum: [date, relevance]
       responses:
@@ -33,6 +33,8 @@ paths:
           description: Invalid request
         "500":
           description: Internal server error
+      tags:
+        - Search
 definitions:
   Post:
     type: object
