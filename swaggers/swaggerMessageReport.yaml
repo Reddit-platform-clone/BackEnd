@@ -1,0 +1,68 @@
+swagger: '2.0'
+info:
+  version: '1.0.0'
+  title: SERAKEL API
+paths:
+  /api/report_msg:
+    post:
+      summary: Report a message
+      description: Reports a message by its ID
+      parameters:
+        - in: query
+          name: userId
+          description: The ID of the user reporting the message
+          required: true
+          type: string
+        - in: query
+          name: messageId
+          description: The ID of the message to report
+          required: true
+          type: string
+        - in: body
+          name: reportDetails
+          description: Additional details about the report
+          required: true
+          schema:
+            type: object
+            properties:
+              reason:
+                type: string
+                description: The reason for reporting the message
+      responses:
+        '200':
+          description: Message reported successfully
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Indicates whether the operation was successful
+              message:
+                type: string
+                description: Success message indicating that the message was reported successfully
+        '500':
+          description: Failed to report the message
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Indicates whether the operation was successful
+              message:
+                type: string
+                description: Error message
+      tags:
+        - Messages
+      operationId: reportMessage
+      produces:
+        - application/json
+      security:
+        - AuthorizationCode: []
+securityDefinitions:
+  AuthorizationCode:
+    type: oauth2
+    # authorizationUrl: "https://www.example.com/oauth2/authorize"
+    # tokenUrl: "https://www.example.com/oauth2/token"
+    flow: authorizationCode
+    scopes:
+      report_message: Allow reporting messages

@@ -1,0 +1,71 @@
+swagger: '2.0'
+info:
+  version: '1.0.0'
+  title: SERAKEL API
+paths:
+  /api/message/sent:
+    get:
+      summary: Get sent messages
+      description: Retrieves messages sent by the user
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Indicates whether the operation was successful
+              data:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    messageId:
+                      type: string
+                      description: Unique identifier for the message
+                    sender:
+                      type: string
+                      description: Sender of the message
+                    title:
+                      type: string
+                      description: Title of the message
+                    recipient:
+                      type: string
+                      description: Recipient of the message
+                    content:
+                      type: string
+                      description: Content of the message
+                    createdAt:
+                      type: string
+                      format: date-time
+                      description: Date and time when the message was created
+        '500':
+          description: Failed to retrieve sent messages
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Indicates whether the operation was successful
+              message:
+                type: string
+                description: Error message
+              error:
+                type: string
+                description: Description of the error
+      tags:
+        - Messages
+      operationId: getSentMessages
+      produces:
+        - application/json
+      security:
+        - AuthorizationCode: []
+securityDefinitions:
+  AuthorizationCode:
+    type: oauth2
+    # authorizationUrl: "https://www.example.com/oauth2/authorize"
+    # tokenUrl: "https://www.example.com/oauth2/token"
+    flow: authorizationCode
+    scopes:
+      get_sent_messages: Allow retrieving sent messages

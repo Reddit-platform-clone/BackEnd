@@ -41,8 +41,29 @@ paths:
                 type: string
                 description: A success message indicating the status of the operation.
                 example: Message sent successfully
+        '500':
+          description: Failed to send message
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Indicates whether the operation was successful
+              message:
+                type: string
+                description: Error message
       tags:
         - Messages
       operationId: postMessage
       produces:
         - application/json
+      security:
+        - AuthorizationCode: []
+securityDefinitions:
+  AuthorizationCode:
+    type: oauth2
+    # authorizationUrl: "https://www.example.com/oauth2/authorize"
+    # tokenUrl: "https://www.example.com/oauth2/token"
+    flow: authorizationCode
+    scopes:
+      send_message: Allow sending private messages

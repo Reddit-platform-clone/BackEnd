@@ -1,0 +1,61 @@
+swagger: '2.0'
+info:
+  version: '1.0.0'
+  title: SERAKEL API
+paths:
+  /api/marknsfw:
+    post:
+      summary: Mark a link as NSFW for moderator posts
+      description: Marks a link as NSFW (Not Safe For Work) for moderator posts
+      parameters:
+        - in: body
+          name: markNsfwDetails
+          description: Details for marking a link as NSFW
+          required: true
+          schema:
+            type: object
+            properties:
+              link:
+                type: string
+                description: The link to be marked as NSFW
+              moderatorId:
+                type: string
+                description: The ID of the moderator marking the link as NSFW
+      responses:
+        '200':
+          description: Link marked as NSFW successfully
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Indicates whether the operation was successful
+              message:
+                type: string
+                description: Success message indicating that the link was marked as NSFW successfully
+        '500':
+          description: Failed to mark link as NSFW
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Indicates whether the operation was successful
+              message:
+                type: string
+                description: Error message
+      tags:
+        - NSFW
+      operationId: markNsfwModPosts
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      security:
+        - UserAuthentication: []
+
+securityDefinitions:
+  UserAuthentication:
+    type: apiKey
+    name: Authorization
+    in: header

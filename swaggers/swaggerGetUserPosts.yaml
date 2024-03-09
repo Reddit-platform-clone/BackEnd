@@ -1,0 +1,121 @@
+swagger: "2.0"
+info:
+  version: "1.0.0"
+  title: "Reddit API"
+
+paths:
+  /user/{username}/submitted:
+    get:
+      summary: get user's submitted posts
+      parameters:
+        - name: username
+          in: path
+          description: The username of the user.
+          required: true
+          type: string
+
+        - name: after
+          in: query
+          description: The fullname of an item in the listing to use as the anchor point of the slice.
+          required: false
+          type: string
+        
+        - name: before
+          in: query
+          description: The fullname of an item in the listing to use as the anchor point of the slice.
+          required: false
+          type: string
+
+        - name: limit
+          in: query
+          description: The maximum number of items to return in this slice of the listing.
+          required: false 
+          type: integer
+
+        - name: count 
+          in : query 
+          description : The number of items already seen in this listing. Used to determine when to give values for before and after in response.
+          required : false 
+          type : integer 
+          minimum : 0
+
+        - name : show 
+          in : query 
+          description : Optional parameter; if all is passed, filters such as "hide links that I have voted on" will be disabled.
+          required : false 
+          type : string 
+
+        - name: context
+          in: query
+          description: An integer between 2 and 10.
+          required: false
+          type: integer
+
+        - name: sort
+          in: query
+          description: The sort order of the items.
+          required: false
+          type: string
+
+        - name: t
+          in: query
+          description: The time filter of the items.
+          required: false
+          type: string
+
+        - name: type
+          in: query
+          description: The type of the items to return.
+          required: false
+          type: string
+
+      responses :
+        '200':
+          description: Relationship removed successfully
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: opearation was successful
+              message:
+                type: string
+                description: success message
+          
+        '400':
+          description: Bad request
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: opearation failed
+              message:
+                type: string
+                description: missing parameter/s
+          
+        '404':
+          description: user not found
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: opearation failed
+              message:
+                type: string
+                description: message indicating no username found
+          
+        '500':
+          description: Internal server error
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Indicates whether the operation failed
+              message:
+                type: string
+                description: Error message
+      tags: 
+        - Users

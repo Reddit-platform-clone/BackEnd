@@ -1,0 +1,88 @@
+swagger: '2.0'
+info:
+  version: '1.0.0'
+  title: SARAKEL API
+paths:
+  /signup:
+    post:
+      summary: User registration
+      description: This endpoint registers a new user.
+      operationId: signUp
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: userData
+          description: User registration details
+          required: true
+          schema:
+            type: object
+            properties:
+              email:
+                type: string
+                description: Email of the user
+              password:
+                type: string
+                description: Password of the user
+              username:
+                type: string
+                description: Username of the user
+              gender:
+                type: string
+                description: Gender of the user
+              interests:
+                type: array
+                items:
+                  type: string
+                description: Interests of the user
+      responses:
+        '200':
+          description: correct credentials, user logged in
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: opearation was successful
+              message:
+                type: string
+                description: success message
+        '400':
+          description: Bad request, username and password required
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: opearation failed
+              message:
+                type: string
+                description: missing parameter/s
+          
+        '409':
+          description: username or password already exist
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: opearation failed
+              message:
+                type: string
+                description: message prompting the user to change email or username, or to change password
+
+        '500':
+          description: Internal server error
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Indicates whether the operation failed
+              message:
+                type: string
+                description: Error message
+      tags:
+        - Users

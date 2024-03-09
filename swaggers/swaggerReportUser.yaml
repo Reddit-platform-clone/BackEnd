@@ -1,0 +1,57 @@
+swagger: '2.0'
+info:
+  version: '1.0.0'
+  title: SERAKEL API
+paths:
+  /api/report_user:
+    post:
+      summary: Report a user
+      description: Reports a user by their ID
+      parameters:
+        - in: query
+          name: userId
+          description: The ID of the user performing the reporting action
+          required: true
+          type: string
+        - in: body
+          name: reportDetails
+          description: Additional details about the reporting action
+          required: true
+          schema:
+            type: object
+            properties:
+              reportedUserId:
+                type: string
+                description: The ID of the user to be reported
+              reason:
+                type: string
+                description: The reason for reporting the user
+      responses:
+        '200':
+          description: User reported successfully
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Indicates whether the operation was successful
+              message:
+                type: string
+                description: Success message indicating that the user was reported successfully
+        '500':
+          description: Failed to report the user
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Indicates whether the operation was successful
+              message:
+                type: string
+                description: Error message
+      tags:
+        - Users
+      
+      operationId: reportUser
+      produces:
+        - application/json

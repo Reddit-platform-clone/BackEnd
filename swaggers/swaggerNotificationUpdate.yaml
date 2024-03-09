@@ -1,0 +1,60 @@
+swagger: '2.0'
+info:
+  version: '1.0.0'
+  title: SARAKEL API
+paths:
+  /api/notifications/getUpdate:
+    post:
+      summary: Get update notification
+      description: Gets update notification
+      parameters:
+        - in: query
+          name: post
+          description: post to send notification
+          required: true
+          type: number
+        - in: body
+          name: notification details
+          description: Additional details about the notification
+          required: true
+          schema:
+            type: object
+            properties:
+              getBestId:
+                type: number
+                description: notification number
+      responses:
+        '200':
+          description: update notification sent successfully
+          schema:
+            type: object
+            properties:
+              success: 
+                type: boolean
+                description: Indicates whether the operation was successful
+              message:
+                type: string
+                description: Success message indicating that notification sent successfully
+        '500':
+          description: Failed to send notification
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Indicates whether the operation was unsuccessful
+              message:
+                type: string
+                description: Error message
+      tags:
+        - Notifications
+        
+      operationId: updateNotification
+      produces:
+        - application/json
+                
+                
+                
+                
+                
+                
