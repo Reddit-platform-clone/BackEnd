@@ -41,14 +41,6 @@ paths:
               success:
                 type: boolean
                 description: Operation blocked
-        404:
-          description: The ID passed does not exist
-          schema:
-            type: object
-            properties:
-              success:
-                type: boolean
-                description: Operation failed
         500:
           description: Server error
           schema:
