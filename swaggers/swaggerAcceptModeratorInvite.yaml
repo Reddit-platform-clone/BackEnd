@@ -14,7 +14,6 @@ paths:
           description: name of the subreddit
           required: true
           type: string
-          
         - name: api_type
           in: query
           description: The string json

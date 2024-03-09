@@ -34,8 +34,7 @@ paths:
                 
               description: 
                 type: string
-                description: description of the subreddit
-                
+                description: description of the subreddit    
         - name: Authorization
           in: header
           description: OAuth token

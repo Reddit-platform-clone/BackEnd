@@ -58,10 +58,8 @@ paths:
               success:
                 type: boolean
                 description: opearation failed
-          
       tags:
         - Moderation
-
       security:
         - AuthorizationCode: []
 securityDefinitions:
