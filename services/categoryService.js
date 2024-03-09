@@ -1,5 +1,5 @@
 
-const category = require('../models/categoryModel');
+const category = require('../models/postCategoryModel');
 
 const createPostService = {
     best: async (req, res) => {
@@ -20,5 +20,5 @@ const createPostService = {
     }
 };
 
-module.exports = createPostController;
+module.exports = createPostService;
 
