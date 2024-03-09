@@ -46,4 +46,4 @@ paths:
         '500':
           description: Internal server error
       tags:
-      - Create
+      - Homepage
