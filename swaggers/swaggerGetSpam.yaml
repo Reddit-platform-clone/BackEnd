@@ -1,0 +1,77 @@
+swagger: '2.0'
+info:
+  version: '1.0.0'
+  title: SERAKEL API
+
+paths:
+  /r/{subreddit}/about/spam:
+    get:
+      summary: Return a listing of posts relevant to moderators
+      description: return list of items caught by spam filter
+      parameters:
+        - name: subreddit
+          in: path
+          description: name of the subreddit
+          required: true
+          type: string
+        - name: after
+          in: query
+          description: Fullname of a thing
+          required: false
+          type: string
+        - name: before
+          in: query
+          description: Fullname of a thing
+          required: false
+          type: string
+        - name: count
+          in: query
+          description: A positive integer
+          required: false
+          type: integer
+          format: int32
+        - name: limit
+          in: query
+          description: The maximum number of items desired
+          required: false
+          type: integer
+          format: int32
+        - name: location
+          in: query
+          type: string
+        - name: only
+          in: query
+          description: One of links, comments, chat_comments
+          required: false
+          type: string
+        - name: show
+          in: query
+          description: Optional, the string all
+          required: false
+          type: string
+        - name: sr_detail
+          in: query
+          description: Optional, expand subreddits
+          required: false
+          type: boolean
+      responses:
+        200:
+          description: Successful operation
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Operation was successful
+        500:
+          description: Server error
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Operation failed
+      tags: 
+        - Moderation
+
+
