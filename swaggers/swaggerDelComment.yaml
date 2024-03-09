@@ -1,0 +1,60 @@
+swagger: '2.0'
+info:
+  version: '1.0.0'
+  title: SERAKEL API
+paths:
+  /api/del_comment:
+    delete:
+      summary: Delete a comment
+      description: Deletes a comment based on the provided comment ID
+      parameters:
+        - in: body
+          name: comment
+          description: Comment details
+          required: true
+          schema:
+            type: object
+            properties:
+              commentId:
+                type: string
+                description: The ID of the comment to delete
+      responses:
+        '200':
+          description: Comment deleted successfully
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Indicates whether the operation was successful
+              message:
+                type: string
+                description: Success message indicating that the comment was deleted successfully
+        '500':
+          description: Failed to delete comment
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Indicates whether the operation was successful
+              message:
+                type: string
+                description: Error message
+      tags:
+        - Comments
+      operationId: deleteComment
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      security:
+        - AuthorizationCode: []
+securityDefinitions:
+  AuthorizationCode:
+    type: oauth2
+    # authorizationUrl: "https://www.example.com/oauth2/authorize"
+    # tokenUrl: "https://www.example.com/oauth2/token"
+    flow: authorizationCode
+    scopes:
+      delete_comment: Allow deleting comments

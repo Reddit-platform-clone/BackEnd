@@ -1,0 +1,58 @@
+swagger: '2.0'
+info:
+  version: '1.0.0'
+  title: SERAKEL API
+paths:
+  /api/save:
+    post:
+      summary: Save a post or comment
+      description: Saves a post or comment to the user's saved items
+      parameters:
+        - in: body
+          name: saveDetails
+          description: Details for saving a post or comment
+          required: true
+          schema:
+            type: object
+            properties:
+              userId:
+                type: string
+                description: The ID of the user saving the post or comment
+              thingType:
+                type: string
+                description: The type of thing to save (e.g., 'post', 'comment')
+              thingId:
+                type: string
+                description: The ID of the post or comment to save
+      responses:
+        '200':
+          description: Post or comment saved successfully
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Indicates whether the operation was successful
+              message:
+                type: string
+                description: Success message indicating that the post or comment was saved successfully
+        '500':
+          description: Failed to save post or comment
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Indicates whether the operation was successful
+              message:
+                type: string
+                description: Error message
+      tags:
+        - Save
+      operationId: savePostOrComment
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      security:
+        - UserAuth: []

@@ -1,0 +1,60 @@
+swagger: '2.0'
+info:
+  version: '1.0.0'
+  title: SERAKEL API
+paths:
+  /api/lock:
+    post:
+      summary: Lock post from comments
+      description: Locks a post from any user commenting
+      parameters:
+        - in: body
+          name: lockDetails
+          description: Details for locking a post
+          required: true
+          schema:
+            type: object
+            properties:
+              userId:
+                type: string
+                description: The ID of the user who wants to lock the post
+              postId:
+                type: string
+                description: The ID of the post to be locked
+      responses:
+        '200':
+          description: Post locked successfully
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Indicates whether the operation was successful
+              message:
+                type: string
+                description: Success message indicating that the post was locked successfully
+        '500':
+          description: Failed to lock post
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Indicates whether the operation was successful
+              message:
+                type: string
+                description: Error message
+      tags:
+        - Lock
+      operationId: lockPost
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      security:
+        - UserAuthentication: []
+securityDefinitions:
+  UserAuthentication:
+    type: apiKey
+    name: Authorization
+    in: header

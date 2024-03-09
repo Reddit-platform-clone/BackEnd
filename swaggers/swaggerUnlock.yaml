@@ -1,0 +1,64 @@
+swagger: '2.0'
+info:
+  version: '1.0.0'
+  title: SERAKEL API
+paths:
+  /api/unlock:
+    post:
+      summary: Unlock a link or comment
+      description: Allows a post or comment to receive new comments
+      parameters:
+        - in: body
+          name: unlockDetails
+          description: Details for unlocking a link or comment
+          required: true
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+                description: The fullname of the link or comment to unlock
+              uh:
+                type: string
+                description: The modhash provided by the X-Modhash header
+              userId:
+                type: string
+                description: The ID of the user unlocking the link or comment
+      responses:
+        '200':
+          description: Link or comment unlocked successfully
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Indicates whether the operation was successful
+              message:
+                type: string
+                description: Success message indicating that the link or comment was unlocked successfully
+        '500':
+          description: Failed to unlock link or comment
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Indicates whether the operation was successful
+              message:
+                type: string
+                description: Error message
+      tags:
+        - Lock
+      operationId: unlockItem
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      security:
+        - UserAuthentication: []
+
+securityDefinitions:
+  UserAuthentication:
+    type: apiKey
+    name: Authorization
+    in: header

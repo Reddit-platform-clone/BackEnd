@@ -1,0 +1,58 @@
+swagger: '2.0'
+info:
+  version: '1.0.0'
+  title: SERAKEL API
+paths:
+  /api/sendreplies:
+    post:
+      summary: Enable or disable inbox replies for a link or comment
+      description: Enables or disables inbox replies for a link or comment
+      parameters:
+        - in: body
+          name: sendRepliesDetails
+          description: Details for enabling or disabling inbox replies
+          required: true
+          schema:
+            type: object
+            properties:
+              thingType:
+                type: string
+                description: The type of thing to enable or disable inbox replies for (e.g., 'link', 'comment')
+              thingId:
+                type: string
+                description: The ID of the link or comment
+              state:
+                type: boolean
+                description: The state to set for inbox replies (true to enable, false to disable)
+      responses:
+        '200':
+          description: Inbox replies state updated successfully
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Indicates whether the operation was successful
+              message:
+                type: string
+                description: Success message indicating that the inbox replies state was updated successfully
+        '500':
+          description: Failed to update inbox replies state
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Indicates whether the operation was successful
+              message:
+                type: string
+                description: Error message
+      tags:
+        - Inbox Replies
+      operationId: sendReplies
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      security:
+        - AuthorizationCode: []

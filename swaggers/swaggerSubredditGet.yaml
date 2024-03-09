@@ -1,0 +1,49 @@
+swagger: '2.0'
+info:
+  version: '1.0.0'
+  title: SERAKEL API
+paths:
+  /r/{subreddit}/api/info:
+    get:
+      summary: Get information for a subreddit
+      description: Returns a listing of links, comments, and subreddits for the specified subreddit
+      parameters:
+        - in: path
+          name: subreddit
+          description: The name of the subreddit to retrieve information for
+          required: true
+          type: string
+        - in: query
+          name: type
+          description: The type of information to retrieve (e.g., 'links', 'comments', 'subreddits')
+          required: true
+          type: string
+          enum: [links, comments, subreddits]
+      responses:
+        '200':
+          description: Information retrieved successfully
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Indicates whether the operation was successful
+              data:
+                type: array
+                description: Array containing information for the specified type
+        '500':
+          description: Failed to retrieve information
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Indicates whether the operation was successful
+              message:
+                type: string
+                description: Error message
+      tags:
+        - Subreddit
+      operationId: getSubredditInfo
+      produces:
+        - application/json

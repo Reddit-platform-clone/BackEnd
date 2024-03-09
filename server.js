@@ -11,6 +11,7 @@ app.use(bodyParser.json());
 
 app.use('/api-docs', router);
 
+
 function loadRoutes(directory) {
   fs.readdirSync(directory).forEach((file) => {
     const filePath = path.join(directory, file);
@@ -19,6 +20,7 @@ function loadRoutes(directory) {
   });
 }
 
+
 // Load routes from the 'routes' directory
 const routesDirectory = path.join(__dirname, 'routes');
 loadRoutes(routesDirectory);
@@ -26,3 +28,5 @@ loadRoutes(routesDirectory);
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
+/* eslint-enable import/no-dynamic-require, global-require */
+

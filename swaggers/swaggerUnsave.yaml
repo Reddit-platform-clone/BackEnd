@@ -1,0 +1,58 @@
+swagger: '2.0'
+info:
+  version: '1.0.0'
+  title: SERAKEL API
+paths:
+  /api/unsave:
+    post:
+      summary: unsave a post or comment
+      description: unsaves a post or comment to the user's unsaved items
+      parameters:
+        - in: body
+          name: unsaveDetails
+          description: Details for saving a post or comment
+          required: true
+          schema:
+            type: object
+            properties:
+              userId:
+                type: string
+                description: The ID of the user saving the post or comment
+              thingType:
+                type: string
+                description: The type of thing to unsave (e.g., 'post', 'comment')
+              thingId:
+                type: string
+                description: The ID of the post or comment to unsave
+      responses:
+        '200':
+          description: Post or comment unsaved successfully
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Indicates whether the operation was successful
+              message:
+                type: string
+                description: Success message indicating that the post or comment was unsaved successfully
+        '500':
+          description: Failed to unsave post or comment
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Indicates whether the operation was successful
+              message:
+                type: string
+                description: Error message
+      tags:
+        - Save
+      operationId: savePostOrComment
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      security:
+        - UserAuth: []

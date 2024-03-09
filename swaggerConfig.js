@@ -56,6 +56,7 @@ fs.watch('./swaggers', (eventType, filename) => {
   }
 });
 
+
 const options = {
   definition: {
     openapi: '3.0.0',
@@ -76,8 +77,26 @@ const options = {
 
 const specs = swaggerJsdoc(options);
 
+// Watch for changes in the swaggers folder
+fs.watch('./swaggers', (eventType, filename) => {
+  if (eventType === 'change' || eventType === 'rename') {
+    console.log(`File ${filename} was ${eventType}`);
+    // Reload Swagger YAML files
+    specs.swaggerDoc = loadSwaggerFiles();
+  }
+});
+
+// Serve Swagger UI at the root path
+router.use('/', swaggerUi.serve);
+
+// Set up route for the merged Swagger YAML file
+router.get('/', (req, res) => {
+  res.send(swaggerUi.generateHTML(loadSwaggerFiles()));
+});
+
 module.exports = {
   swaggerUi,
   specs,
   router,
 };
+

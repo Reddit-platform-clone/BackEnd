@@ -1,0 +1,51 @@
+swagger: '2.0'
+info:
+  version: '1.0.0'
+  title: SERAKEL API
+paths:
+  /api/insights_counts:
+    get:
+      summary: Get custom insights counts
+      description: Retrieves custom insights counts
+      parameters:
+        - in: query
+          name: custom
+          type: string
+          required: true
+          description: Custom parameter for insights counts
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Indicates whether the operation was successful
+              data:
+                type: object
+                description: Custom insights counts data
+        '500':
+          description: Failed to retrieve custom insights counts
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Indicates whether the operation was successful
+              message:
+                type: string
+                description: Error message
+      tags:
+        - Insights Counts
+      operationId: getInsightsCounts
+      produces:
+        - application/json
+      security:
+        - UserAuthentication: []
+
+securityDefinitions:
+  UserAuthentication:
+    type: apiKey
+    name: Authorization
+    in: header

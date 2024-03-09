@@ -1,0 +1,103 @@
+swagger: '2.0'
+info:
+  version: '1.0.0'
+  title: SARAKEL API
+paths:
+  /api/v1/me/friends/{username}:
+    delete:
+      summary: Remove a friend
+      description: Removes a friend from the authenticated user's friend list
+      operationId: removeFriend
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: username
+          description: The username of the friend to be removed
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Friend removed successfully
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Indicates whether the operation was successful
+              message:
+                type: string
+                description: Success message indicating that the friend was removed successfully
+        '400':
+          description: Bad request, e.g., the friend does not exist
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Indicates whether the operation was successful
+              message:
+                type: string
+                description: Error message
+        '500':
+          description: Server error
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Indicates whether the operation was successful
+              message:
+                type: string
+                description: Error message
+      tags:
+        - Users
+
+    get:
+      summary: Get friend information
+      description: This endpoint retrieves information about a specific friend, such as notes.
+      operationId: getFriendInfo
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: username
+          type: string
+          required: true
+          description: Username of the friend
+      responses:
+        '200':
+          description: Friend removed successfully
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Indicates whether the operation was successful
+              message:
+                type: string
+                description: Success message indicating that the friend was removed successfully
+        '400':
+          description: Bad request, e.g., the friend does not exist
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Indicates whether the operation was successful
+              message:
+                type: string
+                description: Error message
+        '500':
+          description: Server error
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Indicates whether the operation was successful
+              message:
+                type: string
+                description: Error message
+      tags:
+        - Users

@@ -1,0 +1,55 @@
+swagger: '2.0'
+info:
+  version: '1.0.0'
+  title: SERAKEL API
+paths:
+  /api/spoiler:
+    post:
+      summary: Hide a link as a spoiler
+      description: Hides a link as a spoiler
+      parameters:
+        - in: body
+          name: spoilerDetails
+          description: Details for hiding a link as a spoiler
+          required: true
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+                description: The fullname of the link to hide as a spoiler
+              modhash:
+                type: string
+                description: The modhash provided by the X-Modhash header
+      responses:
+        '200':
+          description: Link hidden as a spoiler successfully
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Indicates whether the operation was successful
+              message:
+                type: string
+                description: Success message indicating that the link was hidden as a spoiler successfully
+        '500':
+          description: Failed to hide link as a spoiler
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Indicates whether the operation was successful
+              message:
+                type: string
+                description: Error message
+      tags:
+        - Spoiler
+      operationId: markAsSpoiler
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      security:
+        - AuthorizationCode: []
