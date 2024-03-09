@@ -1,6 +1,7 @@
 /* eslint-disable import/no-dynamic-require, global-require */
 const express = require('express');
 const bodyParser = require('body-parser');
+
 const fs = require('fs');
 const path = require('path');
 const swaggerConfig = require('./swaggerConfig');
@@ -9,6 +10,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(bodyParser.json());
+
 
 app.use('/api-docs', swaggerConfig.router);
 

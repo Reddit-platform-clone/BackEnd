@@ -1,0 +1,44 @@
+swagger: '2.0'
+info:
+  version: '1.0.0'
+  title: SERAKEL API
+paths:
+  /api/searchBy/users:
+    get:
+      summary: Search Users
+      description: Search for users based on specified criteria.
+      parameters:
+        - name: query
+          in: query
+          description: The search query to find users
+          required: true
+          type: string
+        - name: sortBy
+          in: query
+          description: Sort users by username, number of followers, or join date
+          type: string
+          enum: [username, followers, joinDate]
+      responses:
+        '200':
+          description: Successful response
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/User'
+        '400':
+          description: Invalid request
+        '500':
+          description: Internal server error
+definitions:
+  User:
+    type: object
+    properties:
+      userId:
+        type: string
+      username:
+        type: string
+      followers:
+        type: integer
+      joinDate:
+        type: string
+        format: date-time
