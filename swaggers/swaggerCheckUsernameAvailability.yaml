@@ -1,0 +1,51 @@
+swagger: '2.0'
+info:
+  version: '1.0.0'
+  title: SARAKEL API
+paths:
+  /api/username_available:
+    get:
+      summary: Check username availability
+      description: This endpoint checks if a username is available.
+      operationId: checkUsernameAvailability
+      produces:
+        - application/json
+      parameters:
+        - in: query
+          name: username
+          type: string
+          required: true
+          description: Username to check
+      responses:
+        '200':
+          description: Username checked successfully
+          schema:
+            type: object
+            properties:
+              available:
+                type: boolean
+                description: Indicates whether the username is available
+        '400':
+          description: Bad request, e.g., the friend does not exist
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Indicates whether the operation was successful
+              message:
+                type: string
+                description: Error message
+        '500':
+          description: Server error
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Indicates whether the operation was successful
+              message:
+                type: string
+                description: Error message
+      tags:
+        - Users

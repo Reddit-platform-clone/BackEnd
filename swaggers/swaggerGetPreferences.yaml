@@ -1,0 +1,102 @@
+swagger: '2.0'
+info:
+  version: '1.0.0'
+  title: SARAKEL API
+paths:
+  /api/v1/me/prefs:
+    patch:
+      summary: Update user settings
+      description: Apply partial modifications to user settings
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: preferences
+          description: User settings to update
+          required: true
+          schema:
+            type: object
+            properties:
+              accept_pms:
+                type: string
+              activity_relevant_ads:
+                type: boolean
+              allow_clicktracking:
+                type: boolean
+              bad_comment_autocollapse: 
+                type: string
+              beta:
+                type: boolean
+              clickgadget: 
+                type: boolean
+              collapse_read_messages:
+                type: boolean
+              compress:
+                type: boolean
+              country_code: 
+                type: string
+              credit_autorenew:
+                type: boolean
+              default_comment_sort:
+                type: string
+              domain_details: 
+                type: boolean
+              email_chat_request: 
+                type: boolean
+              email_comment_reply: 
+                type: boolean
+              email_community_discovery:
+                type: boolean
+              email_digetst:
+                type: boolean
+              email_messages: 
+                type: boolean
+              email_new_user_welcome:
+                type: boolean
+              email_post_reply:
+                type: boolean
+              email_private_message:
+                type: boolean
+              email_unsubscribe_all:
+                type: boolean
+              email_upvote_comment: 
+                type: boolean
+              email_upvote_post:
+                type: boolean
+              email_user_new_follower:
+                type: boolean
+              email_username_mentions:
+                type: boolean
+              enable_default_themes:
+                type: boolean
+              enable_follower: 
+                type: boolean
+              feed_recommendations_enabled:
+                type: string
+      responses:
+        '200':
+          description: preferences changed
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: opearation was successful
+              message:
+                type: string
+                description: success message
+        '500':
+          description: Internal server error
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Indicates whether the operation failed
+              message:
+                type: string
+                description: Error message
+      tags: 
+        - Users

@@ -1,18 +1,24 @@
 {
-  "name": "backend",
-  "version": "1.0.0",
-  "description": "",
-  "main": "server.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node --watch server.js"
-  },
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "express": "^4.18.3",
-    "swagger-jsdoc": "^6.2.8",
-    "swagger-ui-express": "^5.0.0",
-    "yamljs": "^0.3.0"
-  }
+    "name": "backend",
+    "version": "1.0.0",
+    "description": "",
+    "main": "server.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "node --watch server.js",
+        "lint": "eslint ."
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "eslint-plugin-import": "^2.29.1",
+        "express": "^4.18.3",
+        "swagger-jsdoc": "^6.2.8",
+        "swagger-ui-express": "^5.0.0",
+        "yamljs": "^0.3.0"
+    },
+    "devDependencies": {
+        "eslint": "^8.57.0",
+        "eslint-config-airbnb-base": "^15.0.0"
+    }
 }

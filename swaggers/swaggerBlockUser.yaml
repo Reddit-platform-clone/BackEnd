@@ -6,11 +6,11 @@ paths:
   /api/block_user:
     post:
       summary: Block a user
-      description: Blocks a user by their ID
+      description: Blocks a user by their username
       parameters:
         - in: query
-          name: userId
-          description: The ID of the user performing the blocking action
+          name: username
+          description: The username of the user performing the blocking action
           required: true
           type: string
         - in: body
@@ -20,9 +20,9 @@ paths:
           schema:
             type: object
             properties:
-              blockedUserId:
+              blockedUserName:
                 type: string
-                description: The ID of the user to be blocked
+                description: The username of the user to be blocked
               reason:
                 type: string
                 description: The reason for blocking the user
@@ -45,15 +45,23 @@ paths:
             properties:
               success:
                 type: boolean
-                description: Indicates whether the operation was successful
+                description: Indicates whether the operation failed
               message:
                 type: string
                 description: Error message
       tags:
         - Users
-        - Messages
-      
+
       operationId: blockUser
       produces:
         - application/json
-
+      security:
+        - AuthorizationCode: []
+securityDefinitions:
+  AuthorizationCode:
+    type: oauth2
+    authorizationUrl: "https://www.example.com/oauth2/authorize"
+    tokenUrl: "https://www.example.com/oauth2/token"
+    flow: accessCode
+    scopes:
+      block_user: Allow blocking users
