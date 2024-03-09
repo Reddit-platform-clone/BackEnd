@@ -1,0 +1,49 @@
+swagger: '2.0'
+info:
+  version: '1.0.0'
+  title: SERAKEL API
+paths:
+  /api/createPost/create/:
+    post:
+      summary: Create Post
+      description: Create a new post.
+      parameters:
+        - name: Authorization
+          in: header
+          description: JWT token for user authentication
+          required: true
+          type: string
+          format: jwt
+        - name: postContent
+          in: body
+          description: The content of the post
+          required: true
+          schema:
+            type: object
+            properties:
+              title:
+                type: string
+                description: The title of the post
+              body:
+                type: string
+                description: The body/content of the post
+      responses:
+        '201':
+          description: Post created successfully
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Indicates if the post creation was successful
+              postId:
+                type: string
+                description: The ID of the newly created post
+        '400':
+          description: Invalid request
+        '401':
+          description: Unauthorized - Missing or invalid JWT token
+        '500':
+          description: Internal server error
+      tags:
+      - Create
