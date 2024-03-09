@@ -3,27 +3,30 @@ info:
   version: '1.0.0'
   title: SERAKEL API
 paths:
-  /api/unhide:
+  /api/unlock:
     post:
-      summary: Unhide a hidden item
-      description: Unhides a previously hidden item
+      summary: Unlock a link or comment
+      description: Allows a post or comment to receive new comments
       parameters:
         - in: body
-          name: unhideDetails
-          description: Details for unhiding a hidden item
+          name: unlockDetails
+          description: Details for unlocking a link or comment
           required: true
           schema:
             type: object
             properties:
               id:
                 type: string
-                description: The fullname of the item to unhide
+                description: The fullname of the link or comment to unlock
               uh:
                 type: string
                 description: The modhash provided by the X-Modhash header
+              userId:
+                type: string
+                description: The ID of the user unlocking the link or comment
       responses:
         '200':
-          description: Item unhidden successfully
+          description: Link or comment unlocked successfully
           schema:
             type: object
             properties:
@@ -32,9 +35,9 @@ paths:
                 description: Indicates whether the operation was successful
               message:
                 type: string
-                description: Success message indicating that the item was unhidden successfully
+                description: Success message indicating that the link or comment was unlocked successfully
         '500':
-          description: Failed to unhide item
+          description: Failed to unlock link or comment
           schema:
             type: object
             properties:
@@ -45,11 +48,17 @@ paths:
                 type: string
                 description: Error message
       tags:
-        - Hide
-      operationId: unhideItem
+        - Lock
+      operationId: unlockItem
       consumes:
         - application/json
       produces:
         - application/json
       security:
-        - AuthorizationCode: []
+        - UserAuthentication: []
+
+securityDefinitions:
+  UserAuthentication:
+    type: apiKey
+    name: Authorization
+    in: header
