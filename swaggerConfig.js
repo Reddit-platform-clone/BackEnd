@@ -23,9 +23,9 @@ function loadSwaggerFiles() {
   const mergedSwaggerYAML = {
     openapi: '3.0.0',
     info: {
-      title: 'Messaging API',
+      title: 'SARAKEL API',
       version: '1.0.0',
-      description: 'API documentation for messaging service',
+      description: 'API documentation for social media service',
     },
     servers: [
       {
