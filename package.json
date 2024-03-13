@@ -17,7 +17,8 @@
         "mongodb": "^6.5.0",
         "swagger-jsdoc": "^6.2.8",
         "swagger-ui-express": "^5.0.0",
-        "yamljs": "^0.3.0"
+        "yamljs": "^0.3.0",
+        "mongoose": "^5.11.15"
     },
     "devDependencies": {
         "eslint": "^8.57.0",
