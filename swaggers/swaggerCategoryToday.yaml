@@ -1,0 +1,39 @@
+swagger: '2.0'
+info:
+  version: '1.0.0'
+  title: SARAKEL API
+paths:
+  /api/category/today:
+    get:
+      summary: Get today Posts
+      description: Get posts created today.
+      parameters:
+        - name: limit
+          in: query
+          description: The maximum number of posts to return
+          required: false
+          type: integer
+      responses:
+        '200':
+          description: Successful response
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Post'
+        '400':
+          description: Invalid request
+        '500':
+          description: Internal server error
+definitions:
+  Post:
+    type: object
+    properties:
+      postId:
+        type: string
+      title:
+        type: string
+      createdAt:
+        type: string
+        format: date-time
+    tags:
+    - Homepage

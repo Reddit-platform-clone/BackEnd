@@ -1,0 +1,68 @@
+swagger: '2.0'
+info:
+  version: '1.0.0'
+  title: SERAKEL API
+paths:
+  /api/get_comment_replies:
+    post:
+      summary: Get comment replies
+      description: Retrieves replies to the specified comment
+      parameters:
+        - in: query
+          name: commentId
+          description: The ID of the comment to retrieve replies for
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Comment replies retrieved successfully
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Indicates whether the operation was successful
+              data:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    replyId:
+                      type: string
+                      description: Unique identifier for the reply
+                    author:
+                      type: string
+                      description: Author of the reply
+                    content:
+                      type: string
+                      description: Content of the reply
+                    createdAt:
+                      type: string
+                      format: date-time
+                      description: Date and time when the reply was created
+        '500':
+          description: Failed to retrieve comment replies
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Indicates whether the operation was successful
+              message:
+                type: string
+                description: Error message
+      tags:
+        - Comments
+      operationId: getCommentReplies
+      produces:
+        - application/json
+      security:
+        - AuthorizationCode: []
+securityDefinitions:
+  AuthorizationCode:
+    type: oauth2
+    # authorizationUrl: "https://www.example.com/oauth2/authorize"
+    # tokenUrl: "https://www.example.com/oauth2/token"
+    flow: authorizationCode
+    scopes:
+      comment_read: Read access to comments and replies

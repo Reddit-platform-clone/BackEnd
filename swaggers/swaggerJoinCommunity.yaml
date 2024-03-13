@@ -1,0 +1,41 @@
+swagger: '2.0'
+info:
+  version: '1.0.0'
+  title: SERAKEL API
+paths:
+  /api/joinCommunity/{communityId}:
+    post:
+      summary: Join Community
+      description: Join a community by its ID.
+      parameters:
+        - name: communityId
+          in: path
+          description: The ID of the community to join
+          required: true
+          type: string
+        - name: Authorization
+          in: header
+          description: JWT token for user authentication
+          required: true
+          type: string
+          format: jwt
+      responses:
+        '200':
+          description: Successfully joined the community
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Indicates if the join operation was successful
+              message:
+                type: string
+                description: Message indicating the successful join
+        '400':
+          description: Invalid request
+        '401':
+          description: Unauthorized - Missing or invalid JWT token
+        '500':
+          description: Internal server error
+      tags:
+      - Homepage

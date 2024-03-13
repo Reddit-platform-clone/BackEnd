@@ -1,0 +1,71 @@
+swagger: '2.0'
+info:
+  version: '1.0.0'
+  title: SERAKEL API
+paths:
+  /api/get_user_mentions:
+    post:
+      summary: Get user mentions
+      description: Retrieves mentions of the specified user in messages
+      parameters:
+        - in: query
+          name: userId
+          description: The ID of the user to retrieve mentions for
+          required: true
+          type: string
+      responses:
+        '200':
+          description: User mentions retrieved successfully
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Indicates whether the operation was successful
+              data:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    messageId:
+                      type: string
+                      description: Unique identifier for the message
+                    sender:
+                      type: string
+                      description: Sender of the message
+                    title:
+                      type: string
+                      description: Title of the message
+                    content:
+                      type: string
+                      description: Content of the message
+                    createdAt:
+                      type: string
+                      format: date-time
+                      description: Date and time when the message was created
+        '500':
+          description: Failed to retrieve user mentions
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Indicates whether the operation was successful
+              message:
+                type: string
+                description: Error message
+      tags:
+        - Messages
+      operationId: getUserMentions
+      produces:
+        - application/json
+      security:
+        - AuthorizationCode: []
+securityDefinitions:
+  AuthorizationCode:
+    type: oauth2
+    # authorizationUrl: "https://www.example.com/oauth2/authorize"
+    # tokenUrl: "https://www.example.com/oauth2/token"
+    flow: authorizationCode
+    scopes:
+      get_user_mentions: Allow retrieving user mentions

@@ -1,0 +1,37 @@
+swagger: "2.0"
+info:
+  version: "1.0.0"
+  title: SERAKEL API
+paths:
+  /api/searchBy/hashtags:
+    get:
+      summary: Search by Hashtags
+      description: Search for hashtags.
+      parameters:
+        - name: query
+          in: query
+          description: The search query to find hashtags
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Successful response
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Hashtag"
+        "400":
+          description: Invalid request
+        "500":
+          description: Internal server error
+
+      tags: 
+        - Search
+definitions:
+  Hashtag:
+    type: object
+    properties:
+      hashtagId:
+        type: string
+      tag:
+        type: string
