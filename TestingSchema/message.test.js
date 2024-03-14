@@ -3,7 +3,7 @@ const Message = require('../models/messageModel.js');
 
 
 beforeAll(async () => {
-  await mongoose.connect('mongodb://localhost:27017/testDB', {
+  await mongoose.connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true

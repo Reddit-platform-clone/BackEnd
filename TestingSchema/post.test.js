@@ -1,0 +1,42 @@
+const mongoose = require('mongoose');
+const Post = require('../models/postModel.js');
+
+beforeAll(async () => {
+    await mongoose.connect(process.env.MONGO_URI);
+});
+
+describe('Post model test', () => {
+    beforeEach(async () => {
+        await Post.deleteMany({});
+    });
+
+    it('Insert a post into the database', async () => {
+        const postData = {
+            post_id: 1,
+            user_id: 'yousefwael02',
+            data_time: new Date(),
+            parent_id: 2,
+            subreddit_id: 3,
+            num_comments: 4,
+            num_views: 100,
+            is_locked: true
+        };
+
+        const post = new Post(postData);
+        const savedPost = await post.save();
+
+        expect(savedPost._id).toBeDefined();
+        expect(savedPost.user_id).toBe(postData.user_id);
+        expect(savedPost.data_time).toEqual(postData.data_time);
+        expect(savedPost.parent_id).toBe(postData.parent_id);
+        expect(savedPost.subreddit_id).toBe(postData.subreddit_id);
+        expect(savedPost.num_comments).toBe(postData.num_comments);
+        expect(savedPost.is_locked).toBe(true);
+        expect(savedPost.num_views).toBe(postData.num_views);
+    });
+});
+
+afterAll(async () => {
+    await mongoose.connection.close();
+});
+
