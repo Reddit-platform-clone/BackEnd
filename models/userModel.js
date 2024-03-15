@@ -54,7 +54,8 @@ const userSchema = {
   },
 
   gender: {
-    type: Boolean,
+    type: String,
+    enum: ['Male', 'Female'],
     required: true
   },
 
