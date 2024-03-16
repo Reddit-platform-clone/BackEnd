@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Message = require('../models/messageModel.js');
+require('dotenv').config();
 
 
 beforeAll(async () => {
@@ -36,7 +37,7 @@ describe('Message Model Test', () => {
     expect(savedMessage.receiverID).toBe(messageData.receiverID);
     expect(savedMessage.dateTime).toEqual(messageData.dateTime);
     expect(savedMessage.status).toBe(messageData.status);
-  });
+  }, 10000);
 
 
   it('should be able to retrieve all messages from the database', async () => {
@@ -61,7 +62,7 @@ describe('Message Model Test', () => {
 
     const messages = await Message.find({});
     expect(messages.length).toBe(2);
-  });
+  }, 10000);
 });
 
 

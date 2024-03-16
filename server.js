@@ -3,6 +3,14 @@ const bodyParser = require('body-parser');
 const fs = require('fs');
 const path = require('path');
 const { swaggerUi, specs, router } = require('./swaggerConfig');
+require('dotenv').config();
+const mongoose = require('mongoose');
+const Post = require('./models/postModel');
+
+mongoose.connect(process.env.MONGO_URI);
+mongoose.connection.once('open', () => {
+  console.log('Connected to MongoDB!');
+})
 
 const app = express();
 const PORT = process.env.PORT || 3000;

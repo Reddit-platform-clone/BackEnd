@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
-
 const Comment = require('../models/commentModel');
+require('dotenv').config();
 
 beforeAll(async () => {
   await mongoose.connect(process.env.MONGO_URI, {
@@ -33,7 +33,7 @@ describe('Comment Model Test', () => {
     expect(savedComment.userID).toBe(commentData.userID);
     expect(savedComment.dateTime).toEqual(commentData.dateTime);
     expect(savedComment.upvote).toBe(commentData.upvote);
-  });
+  }, 10000);
 
   it('should be able to retrieve all comments from the database', async () => {
     const commentData1 = {
@@ -57,7 +57,7 @@ describe('Comment Model Test', () => {
 
     const comments = await Comment.find({});
     expect(comments.length).toBe(2);
-  });
+  }, 10000);
 });
 
 afterAll(async () => {

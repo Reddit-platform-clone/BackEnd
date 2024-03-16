@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Post = require('../models/postModel.js');
+require('dotenv').config();
 
 beforeAll(async () => {
     await mongoose.connect(process.env.MONGO_URI);
@@ -33,7 +34,7 @@ describe('Post model test', () => {
         expect(savedPost.num_comments).toBe(postData.num_comments);
         expect(savedPost.is_locked).toBe(true);
         expect(savedPost.num_views).toBe(postData.num_views);
-    });
+    }, 10000);
 });
 
 afterAll(async () => {
