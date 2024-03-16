@@ -15,7 +15,7 @@ describe('Post model test', () => {
         const postData = {
             post_id: 1,
             user_id: 'yousefwael02',
-            data_time: new Date(),
+            date_time: new Date(),
             parent_id: 2,
             subreddit_id: 3,
             num_comments: 4,
@@ -28,7 +28,7 @@ describe('Post model test', () => {
 
         expect(savedPost._id).toBeDefined();
         expect(savedPost.user_id).toBe(postData.user_id);
-        expect(savedPost.data_time).toEqual(postData.data_time);
+        expect(savedPost.date_time).toEqual(postData.date_time);
         expect(savedPost.parent_id).toBe(postData.parent_id);
         expect(savedPost.subreddit_id).toBe(postData.subreddit_id);
         expect(savedPost.num_comments).toBe(postData.num_comments);
