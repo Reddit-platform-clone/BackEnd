@@ -8,7 +8,7 @@ beforeAll(async () => {
     useUnifiedTopology: true,
     useCreateIndex: true
   });
-});
+}, 20000);
 
 describe('User Model Test', () => {
   beforeEach(async () => {
@@ -89,8 +89,8 @@ describe('User Model Test', () => {
     const users = await User.find({});
     expect(users.length).toBe(2);
   });
-});
+}, 20000);
 
 afterAll(async () => {
   await mongoose.connection.close();
-});
+}, 20000);
