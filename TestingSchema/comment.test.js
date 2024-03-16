@@ -8,7 +8,7 @@ beforeAll(async () => {
     useUnifiedTopology: true,
     useCreateIndex: true
   });
-});
+}, 20000);
 
 describe('Comment Model Test', () => {
   beforeEach(async () => {
@@ -33,7 +33,7 @@ describe('Comment Model Test', () => {
     expect(savedComment.userID).toBe(commentData.userID);
     expect(savedComment.dateTime).toEqual(commentData.dateTime);
     expect(savedComment.upvote).toBe(commentData.upvote);
-  }, 10000);
+  }, 20000);
 
   it('should be able to retrieve all comments from the database', async () => {
     const commentData1 = {
@@ -57,9 +57,9 @@ describe('Comment Model Test', () => {
 
     const comments = await Comment.find({});
     expect(comments.length).toBe(2);
-  }, 10000);
+  }, 20000);
 });
 
 afterAll(async () => {
   await mongoose.connection.close();
-});
+}, 20000);

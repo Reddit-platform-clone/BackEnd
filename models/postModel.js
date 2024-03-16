@@ -3,7 +3,7 @@ let mongoose = require('mongoose');
 const postSchema = new mongoose.Schema({
     post_id: {type: Number, required: true, unique: true},
     user_id: {type: String, required: true},
-    date_time: {type: Number, required: true},
+    date_time: {type: Date, default: Date.now},
     parent_id: {type: Number, required: true},
     media: {type: JSON},
     downvotes: {type: Number},

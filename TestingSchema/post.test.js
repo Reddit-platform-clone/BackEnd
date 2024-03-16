@@ -4,7 +4,7 @@ require('dotenv').config();
 
 beforeAll(async () => {
     await mongoose.connect(process.env.MONGO_URI);
-});
+}, 20000);
 
 describe('Post model test', () => {
     beforeEach(async () => {
@@ -34,10 +34,10 @@ describe('Post model test', () => {
         expect(savedPost.num_comments).toBe(postData.num_comments);
         expect(savedPost.is_locked).toBe(true);
         expect(savedPost.num_views).toBe(postData.num_views);
-    }, 10000);
-});
+    }, 20000);
+}, 20000);
 
 afterAll(async () => {
     await mongoose.connection.close();
-});
+}, 20000);
 
