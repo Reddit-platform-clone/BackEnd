@@ -1,14 +1,15 @@
 const mongoose = require('mongoose');
 const Message = require('../models/messageModel.js');
+require('dotenv').config();
 
 
 beforeAll(async () => {
-  await mongoose.connect('mongodb://localhost:27017/testDB', {
+  await mongoose.connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true
   });
-});
+}, 20000);
 
 
 describe('Message Model Test', () => {
@@ -36,7 +37,7 @@ describe('Message Model Test', () => {
     expect(savedMessage.receiverID).toBe(messageData.receiverID);
     expect(savedMessage.dateTime).toEqual(messageData.dateTime);
     expect(savedMessage.status).toBe(messageData.status);
-  });
+  }, 20000);
 
 
   it('should be able to retrieve all messages from the database', async () => {
@@ -61,10 +62,10 @@ describe('Message Model Test', () => {
 
     const messages = await Message.find({});
     expect(messages.length).toBe(2);
-  });
+  }, 20000);
 });
 
 
 afterAll(async () => {
   await mongoose.connection.close();
-});
+}, 20000);
