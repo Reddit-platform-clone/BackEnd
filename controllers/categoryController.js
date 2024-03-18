@@ -48,5 +48,5 @@ const categoryController = {
     }
 };
 
-module.exports = createPostController;
+module.exports = categoryController;
 

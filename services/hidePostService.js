@@ -2,7 +2,7 @@ const hidePost = require('../models/hidePostmodel');
 
 
 
-const hidePostservice = {
+const hidePostService = {
     hide: async (req, res) => {
         //hide post logic
 

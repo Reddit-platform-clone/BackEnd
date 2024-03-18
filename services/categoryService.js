@@ -1,7 +1,7 @@
 
-const category = require('../models/categoryModel');
+const Category = require('../models/postCategoryModel');
 
-const createPostService = {
+const categoryService = {
     best: async (req, res) => {
         //get array of best posts
         //return message
@@ -20,5 +20,5 @@ const createPostService = {
     }
 };
 
-module.exports = createPostController;
+module.exports = categoryService;
 
