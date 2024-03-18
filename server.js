@@ -1,7 +1,12 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+
 let dotenv = require('dotenv').config();
-const mongoose = require('./database');
+let mongoose = require('mongoose');
+mongoose.connect(process.env.MONGO_URI);
+mongoose.connection.once('open', ()=>{
+  console.log('Connected to db');
+});
 
 const fs = require('fs');
 const path = require('path');
