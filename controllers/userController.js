@@ -2,11 +2,31 @@ const userService = require('../services/userService');
 
 const userController = {
   logIn: async (req, res) => {
-    res.json({ message: 'welcome back' });
+    try {
+      try {
+        const { username, password } = req.body;
+        const result = await userService.logIn(username, password);
+        res.status(200).json(result);
+      } catch (error) {
+        res.status(401).send(error.message)
+      }
+    } catch (err) {
+      res.status(500).send(err.message)
+    }
   },
 
   singUp: async (req, res) => {
-    res.json({ message: 'welcome to sarakel' });
+    try {
+      try {
+        const { username, password } = req.body;
+        const result = await userService.singUp(username, password);
+        res.status(200).json(result);
+      } catch (error) {
+        res.status(400).send(error.message)
+      }
+    } catch (err) {
+      res.status(500).send(err.message)
+    }
   },
 
   logInForgetPassword: async (req, res) => {

@@ -1,12 +1,37 @@
-const user = require('../models/userModel.js');
+require('dotenv').config();
+
+const userModel = require('../models/userModel.js');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 const userService = {
-  logIn: async (username) => {
+  logIn: async (username, password) => {
     // logic to login registered users
+    const user = await userModel.findOne({ username: username });
+    if (!user) throw new Error('invalid username or password'); 
+
+    const isValid = await bcrypt.compare(password, user.password);
+    if (!isValid) throw new Error('invalid username or password');
+
+    const token = jwt.sign(user.username, process.env.SECRET_ACCESS_TOKEN);
+
+    return { token: token };
   },
 
-  singUp: async (credentials) => {
+  singUp: async (username, password) => {
     // logic to register new users
+    const userExists = await userModel.findOne({ username: username });
+    if (userExists) throw new Error('User already exists');
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const userData = { username: username, password: hashedPassword };
+
+    const token = jwt.sign(userData.username, process.env.SECRET_ACCESS_TOKEN);
+
+    const user = new userModel(userData);
+
+    await user.save();
+    return { token: token };
   },
 
   logInForgetPassword: async (username) => {
