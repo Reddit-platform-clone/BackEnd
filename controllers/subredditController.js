@@ -4,19 +4,7 @@ const subredditService = require('../services/subredditService.js');
 const subredditController = {
     getBestPost: async (req, res) => {
         try {
-            // Placeholder post
-            const bestPost = [
-                {
-                    postId: '1',
-                    postContent: 'Best post',
-                    createdAt: new Date()
-                },
-                {
-                    postId: '2',
-                    postContent: 'Second Best post',
-                    createdAt: new Date()
-                }             
-            ];
+            const bestPost = await subredditService.getBest();
             res.json({ succes: true, date: bestPost });
         } catch (err) {
             res.status(500).json({  success: false, error: err.message })

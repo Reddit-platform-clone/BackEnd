@@ -1,11 +1,23 @@
 
 
-const Subreddit = require('../models/subredditModel.js');
+const Post = require('../models/postModel.js');
 
 const subredditService = {
-    getBest: async (post) => {
+    getBest: async () => {
         // Logic to get best post
+        try {
+            // Fetch posts from the database
+            const posts = await Post.find();
 
+            // Sort posts based on upvotes
+            posts.sort((a, b) => {
+                return b.upvotes - a.upvotes;
+            });
+            return posts[0];
+        } catch(error) {
+            console.error('Error fetching best post:', error);
+            throw new Error('Failed to fetch best post');
+        }
         // return best post
     },
 
