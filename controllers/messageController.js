@@ -1,10 +1,30 @@
 /* eslint-disable no-unused-vars */
+const { request } = require('express');
 const messageService = require('../services/messageService');
-
+const jwt = require('jsonwebtoken');
 const messageController = {
   compose: async (req, res) => {
-    res.json({ success: true, message: 'Message sent successfully' });
+    try {
+  
+      const username = req.user;
+      
+
+     
+      const { recipient, from, title, content } = req.body;
+
+      const result = await messageService.composeMessage({ username, recipient, from, title, content });
+
+      if (result.success) {
+          res.status(200).json({ message: result.message });
+      } else {
+          res.status(400).json({ errors: result.errors, message: result.error });
+      }
+  } catch (error) {
+      console.error('Error composing message:', error);
+      res.status(500).json({ error: 'Failed to send message.' });
+  }
   },
+  
 
   getInboxMessages: async (req, res) => {
     try {
