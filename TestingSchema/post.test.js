@@ -7,9 +7,9 @@ beforeAll(async () => {
 }, 20000);
 
 describe('Post model test', () => {
-    beforeEach(async () => {
-        await Post.deleteMany({});
-    });
+    // beforeEach(async () => {
+    //     await Post.deleteMany({});
+    // });
 
     it('Insert a post into the database', async () => {
         const postData = {
@@ -20,7 +20,8 @@ describe('Post model test', () => {
             subreddit_id: 3,
             num_comments: 4,
             num_views: 100,
-            is_locked: true
+            is_locked: true,
+            upvotes: 7
         };
 
         const post = new Post(postData);
