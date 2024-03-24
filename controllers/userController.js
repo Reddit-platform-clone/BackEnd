@@ -46,7 +46,19 @@ const userController = {
   },
 
   removeFriend: async (req, res) => {
-    res.json({ message: 'friend removed' });
+    try {
+      try {
+        const username = req.user.username;
+        const usernameToRemove = req.params.username;
+        console.log(username, usernameToRemove);
+        const result = await userService.removeFriend(username, usernameToRemove);
+        res.status(200).json(result);
+      } catch (error) {
+        res.status(400).send(error.message)
+      }
+    } catch (err) {
+      res.status(500).send(err.message)
+    }
   },
 
   reportUser: async (req, res) => {

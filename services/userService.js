@@ -53,9 +53,18 @@ const userService = {
     // logic to reset password
   },
 
-  removeFriend: async (username) => {
+  removeFriend: async (username, usernameToRemove) => {
     // logic to remove friend
-    
+    const user = await userModel.findOne({ username: username });
+    if (!user) throw new Error('User does not exist');
+
+    const friendIndex = await user.friends.indexOf(usernameToRemove);
+    if (friendIndex === -1) throw new Error('User is not a friend');
+
+    user.friends.splice(friendIndex, 1);
+    await user.save();
+
+    return { message: 'Friend removed successfully' };
   },
 
   reportUser: async (username) => {

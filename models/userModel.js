@@ -37,6 +37,11 @@ const userSchema = new mongoose.Schema({
     default: []
   },
 
+  friends: {
+    type: [String],
+    default: []
+  },
+
   blockedUsers: {
     type: [String],
     default: []
