@@ -25,9 +25,6 @@ const userSchema = new mongoose.Schema({
 
   displayName: {
     type: String,
-    default: ''
-    // required: true,
-    // unique: true
   },
 
   profilePicture: {
@@ -67,15 +64,6 @@ const userSchema = new mongoose.Schema({
   }
 });
 
-// userSchema.methods.hashPassword = async (password) => {
-//   const hash = await bcrypt.hash(password, 10);
-//   return hash;
-// };
-
-// userSchema.methods.validatePassword = async (password, hash) => {
-//   const compare = await bcrypt.compare(password, hash);
-//   return compare;
-// };
 
 const User = mongoose.model('User', userSchema);
 

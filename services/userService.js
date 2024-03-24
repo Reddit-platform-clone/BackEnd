@@ -1,6 +1,7 @@
 require('dotenv').config();
 
 const userModel = require('../models/userModel.js');
+const utils = require('../utils/helpers.js');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
@@ -10,7 +11,8 @@ const userService = {
     const user = await userModel.findOne({ username: username });
     if (!user) throw new Error('invalid username or password'); 
 
-    const isValid = await bcrypt.compare(password, user.password);
+    // const isValid = await bcrypt.compare(password, user.password);
+    const isValid = await utils.validatePassword(password, user.password);
     if (!isValid) throw new Error('invalid username or password');
 
     const token = jwt.sign(user.username, process.env.SECRET_ACCESS_TOKEN);
@@ -23,7 +25,8 @@ const userService = {
     const userExists = await userModel.findOne({ username: username });
     if (userExists) throw new Error('User already exists');
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    // const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await utils.hashPassword(password);
     const userData = { username: username, password: hashedPassword };
 
     const token = jwt.sign(userData.username, process.env.SECRET_ACCESS_TOKEN);
@@ -52,6 +55,7 @@ const userService = {
 
   removeFriend: async (username) => {
     // logic to remove friend
+    
   },
 
   reportUser: async (username) => {
