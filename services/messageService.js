@@ -84,6 +84,9 @@ const messageService = {
   },
 
   deleteMessage: async (userID,messageId) => {
+    if(!messageId){
+      throw new Error('message Id is null.');
+    }
     const message = await Message.findOne({_id: messageId});
     if (!message) {
       throw new Error('Message not found.');
@@ -94,13 +97,41 @@ const messageService = {
     if (!user) {
       throw new Error('User not found.');
     }
+    if (message.username !== user.username) {
+      throw new Error('You are not authorized to delete this message.');
+    }
 
     
     await Message.findOneAndDelete({_id: messageId});
   },
-  reportMessage: async (messageId, sentuserId) => {
-    // Logic to report a message by its IDs
-    // Example: await Message.findById(messageId);
+  reportMessage: async (userID,messageId,reportDetails) => {
+    if(!reportDetails){
+      throw new Error('report Details is null.');
+    }
+    console.log(messageId);
+    if(!messageId){
+      throw new Error('message Id is null.');
+    }
+    const message = await Message.findOne({_id: messageId});
+    if (!message) {
+      throw new Error('Message not found.');
+    }
+
+    
+    const user = await UserModel.findOne({ username: userID });
+    if (!user) {
+      throw new Error('User not found.');
+    }
+    console.log(message);
+    if (message.username !== userID) {
+      throw new Error('You are not authorized to report this message.');
+    }
+    await Message.findOneAndUpdate(
+      { _id: messageId },
+      { $set: { report: true,reportDetails:reportDetails } },
+      { runValidators: true }
+      );
+
   },
   getSentMessages: async (sentuserId) => {
 

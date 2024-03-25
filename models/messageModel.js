@@ -27,6 +27,14 @@ const messageSchema = new mongoose.Schema({
         type: String,
         enum: ['sent', 'delivered', 'read'], 
         default: 'sent'
+    },
+     report: {
+        type: Boolean,
+        default: false
+    },
+    reportDetails : {
+        type: String,
+        default: null
     }
 });
 

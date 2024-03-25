@@ -56,7 +56,7 @@ const messageController = {
   deleteMessage: async (req, res) => {
     try {
       
-      const messageId = req.body._id;
+      const messageId = req.body.messageId;
       
 
       
@@ -71,7 +71,21 @@ const messageController = {
     }
   },
   reportMessage: async (req, res) => {
-    res.json({ success: true, message: 'Message reported successfully' });
+       try {
+      
+      const {_id,reportDetails} = req.body;
+      
+
+      
+      await messageService.reportMessage(req.user,_id,reportDetails);
+
+      
+      res.status(200).json({ message: 'Message reported successfully.' });
+    } catch (error) {
+      
+      console.error('Failed to report the message:', error);
+      res.status(500).json({ error: 'Failed to report the message.' });
+    }
   },
   getSentMessages: async (req, res) => {
     // Placeholder for retrieving sent messages
