@@ -83,9 +83,20 @@ const messageService = {
     return inboxMessages;
   },
 
-  deleteMessage: async (messageId, sentuserId) => {
-    // Logic to delete a message by its IDs
-    // Example: await Message.findByIdAndDelete(messageId);
+  deleteMessage: async (userID,messageId) => {
+    const message = await Message.findOne({_id: messageId});
+    if (!message) {
+      throw new Error('Message not found.');
+    }
+
+    
+    const user = await UserModel.findOne({ username: userID });
+    if (!user) {
+      throw new Error('User not found.');
+    }
+
+    
+    await Message.findOneAndDelete({_id: messageId});
   },
   reportMessage: async (messageId, sentuserId) => {
     // Logic to report a message by its IDs

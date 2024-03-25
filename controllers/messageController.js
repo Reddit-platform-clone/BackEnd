@@ -42,7 +42,7 @@ const messageController = {
   getUnreadMessages: async (req, res) => {
     try {
       const username = req.user;
-      console.log(username);
+      
       const unreadMessages = await messageService.getUnreadMessages(username);
 
       
@@ -54,7 +54,21 @@ const messageController = {
     }
   },
   deleteMessage: async (req, res) => {
-    res.json({ success: true, message: 'Message sent successfully' });
+    try {
+      
+      const messageId = req.body._id;
+      
+
+      
+      await messageService.deleteMessage(req.user,messageId);
+
+      
+      res.status(200).json({ message: 'Message deleted successfully.' });
+    } catch (error) {
+      
+      console.error('Failed to delete the message:', error);
+      res.status(500).json({ error: 'Failed to delete the message.' });
+    }
   },
   reportMessage: async (req, res) => {
     res.json({ success: true, message: 'Message reported successfully' });
