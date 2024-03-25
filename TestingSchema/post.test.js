@@ -8,7 +8,7 @@ beforeAll(async () => {
 
 describe('Post model test', () => {
     beforeEach(async () => {
-        await Post.deleteMany({});
+        
     });
 
     it('Insert a post into the database', async () => {
