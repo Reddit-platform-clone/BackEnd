@@ -56,7 +56,7 @@ const messageController = {
   deleteMessage: async (req, res) => {
     try {
       
-      const messageId = req.body.messageId;
+      const messageId = req.body;
       
 
       
@@ -102,7 +102,21 @@ const messageController = {
     }
   },
   markMessageUnread: async (req, res) => {
-  
+    try {
+      
+      const messageId = req.body;
+      
+
+      
+      await messageService.markMessageUnread(req.user,messageId);
+
+      
+      res.status(200).json({ message: 'Message unread successfully.' });
+    } catch (error) {
+      
+      console.error('Failed to unread the message:', error);
+      res.status(500).json({ error: 'Failed to unread the message.' });
+    }
   },
   markAllMessagesRead: async (req, res) => {
     // Placeholder for marking all messages as read

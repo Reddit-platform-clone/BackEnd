@@ -108,7 +108,7 @@ const messageService = {
     if(!reportDetails){
       throw new Error('report Details is null.');
     }
-    console.log(messageId);
+    
     if(!messageId){
       throw new Error('message Id is null.');
     }
@@ -122,7 +122,7 @@ const messageService = {
     if (!user) {
       throw new Error('User not found.');
     }
-    console.log(message);
+    
     if (message.username !== userID) {
       throw new Error('You are not authorized to report this message.');
     }
@@ -150,8 +150,28 @@ const messageService = {
 
     return inboxMessages;
   },
-  markMessageUnread: async (messageId, sentuserId) => {
+  markMessageUnread: async (userID,messageId) => {
+    if(!messageId){
+      throw new Error('message Id is null.');
+    }
+    const message = await Message.findOne({_id: messageId});
+    if (!message) {
+      throw new Error('Message not found.');
+    }
 
+    
+    const user = await UserModel.findOne({ username: userID });
+    if (!user) {
+      throw new Error('User not found.');
+    }
+    if (message.username !== user.username) {
+      throw new Error('You are not authorized to unread this message.');
+    }
+    await Message.findOneAndUpdate(
+      { _id: messageId },
+      { $set: { status: 'delivered' } },
+      { runValidators: true }
+      );
   },
   markAllMessagesRead: async (sentuserId) => {
 
