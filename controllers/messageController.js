@@ -88,37 +88,21 @@ const messageController = {
     }
   },
   getSentMessages: async (req, res) => {
-    // Placeholder for retrieving sent messages
     try {
-      // Placeholder response
-      const inboxMessages = [
-        {
-          messageId: '1',
-          sender: 'user1',
-          title: 'Message 1',
-          recipient: 'user2',
-          content: 'This is the content of message 1',
-          status: 'unread',
-          createdAt: new Date(),
-        },
+      const username = req.user;
+      
+      const unreadMessages = await messageService.getSentMessages(username);
 
-      ];
-
-      res.json({ success: true, data: inboxMessages });
+      
+      res.status(200).json(unreadMessages);
     } catch (error) {
-      res.status(500).json({ success: false, message: 'Failed to retrieve inbox messages', error: error.message });
+      
+      console.error('Failed to retrieve sent messages:', error);
+      res.status(500).json({ error: 'Failed to retrieve sent messages.' });
     }
   },
   markMessageUnread: async (req, res) => {
-    // Placeholder for marking a specific message as unread
-    try {
-      // Placeholder logic to mark message as unread
-      const { messageId } = req.body; // Assuming message ID is sent in the request body
-      // Placeholder response
-      res.json({ success: true, message: `Message ${messageId} marked as unread successfully` });
-    } catch (error) {
-      res.status(500).json({ success: false, message: 'Failed to mark message as unread', error: error.message });
-    }
+  
   },
   markAllMessagesRead: async (req, res) => {
     // Placeholder for marking all messages as read

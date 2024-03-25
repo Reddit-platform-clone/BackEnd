@@ -9,8 +9,8 @@ router.get('/message/inbox',authenticateToken, messageController.getInboxMessage
 router.get('/message/unread',authenticateToken, messageController.getUnreadMessages);
 router.delete('/message/del_msg',authenticateToken, messageController.deleteMessage);
 router.post('/api/report_msg',authenticateToken, messageController.reportMessage);
-router.get('/message/sent', messageController.getSentMessages);
-router.post('/api/unread_message', messageController.markMessageUnread);
+router.get('/message/sent',authenticateToken, messageController.getSentMessages);
+router.post('/api/unread_message',authenticateToken, messageController.markMessageUnread);
 router.post('/api/read_all_messages', messageController.markAllMessagesRead);
 router.get('/api/get_user_mentions', messageController.getUserMentions);
 module.exports = router;

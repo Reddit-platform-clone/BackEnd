@@ -73,7 +73,7 @@ const messageService = {
     }
 
     
-    const inboxMessages = await Message.find({ recipient: sentUsername, status: 'sent' });
+    const inboxMessages = await Message.find({ recipient: sentUsername, status: 'delivered' });
 
    
     if (!inboxMessages || inboxMessages.length === 0) {
@@ -133,8 +133,22 @@ const messageService = {
       );
 
   },
-  getSentMessages: async (sentuserId) => {
+  getSentMessages: async (sentUsername) => {
 
+    const user = await UserModel.findOne({ username: sentUsername });
+    if (!user) {
+      throw new Error('User not found.');
+    }
+
+    
+    const inboxMessages = await Message.find({ recipient: sentUsername, status: 'sent' });
+
+   
+    if (!inboxMessages || inboxMessages.length === 0) {
+      return [];
+    }
+
+    return inboxMessages;
   },
   markMessageUnread: async (messageId, sentuserId) => {
 
