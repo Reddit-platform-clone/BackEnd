@@ -119,14 +119,20 @@ const messageController = {
     }
   },
   markAllMessagesRead: async (req, res) => {
-    // Placeholder for marking all messages as read
     try {
-      // Placeholder logic to mark all messages as read
-      // This could involve updating the status of all messages in the database
-      // Placeholder response
-      res.json({ success: true, message: 'All messages marked as read successfully' });
+      
+      
+      
+
+      
+      await messageService.markAllMessagesRead(req.user);
+
+      
+      res.status(200).json({ message: 'Messages readed successfully.' });
     } catch (error) {
-      res.status(500).json({ success: false, message: 'Failed to mark all messages as read', error: error.message });
+      
+      console.error('Failed to read the messages:', error);
+      res.status(500).json({ error: 'Failed to mark read the message.' });
     }
   },
   getUserMentions: async (req, res) => {

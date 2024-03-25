@@ -48,7 +48,7 @@ const messageService = {
 
   getInboxMessages: async (sentUsername) => {
     
-
+    try {
     const user = await UserModel.findOne({ username: sentUsername });
     if (!user) {
       throw new Error('User not found.');
@@ -62,11 +62,14 @@ const messageService = {
       return [];
     }
 
-    return inboxMessages;
+    return inboxMessages;}catch (error) {
+      console.error('Error get message:', error);
+      return { success: false, error: 'Failed to get message.' };
+  }
   },
 
   getUnreadMessages: async (sentUsername) => {
-
+    try {
     const user = await UserModel.findOne({ username: sentUsername });
     if (!user) {
       throw new Error('User not found.');
@@ -80,10 +83,14 @@ const messageService = {
       return [];
     }
 
-    return inboxMessages;
+    return inboxMessages;}catch (error) {
+      console.error('Error get unread message:', error);
+      return { success: false, error: 'Failed to get unread message.' };
+  }
   },
 
   deleteMessage: async (userID,messageId) => {
+    try {
     if(!messageId){
       throw new Error('message Id is null.');
     }
@@ -102,9 +109,13 @@ const messageService = {
     }
 
     
-    await Message.findOneAndDelete({_id: messageId});
+    await Message.findOneAndDelete({_id: messageId});}catch (error) {
+      console.error('Error del message:', error);
+      return { success: false, error: 'Failed to del message.' };
+  }
   },
   reportMessage: async (userID,messageId,reportDetails) => {
+    try {
     if(!reportDetails){
       throw new Error('report Details is null.');
     }
@@ -130,10 +141,14 @@ const messageService = {
       { _id: messageId },
       { $set: { report: true,reportDetails:reportDetails } },
       { runValidators: true }
-      );
-
+      );}
+      catch (error) {
+        console.error('Error report message:', error);
+        return { success: false, error: 'Failed to report message.' };
+    }
   },
   getSentMessages: async (sentUsername) => {
+    try {
 
     const user = await UserModel.findOne({ username: sentUsername });
     if (!user) {
@@ -148,9 +163,14 @@ const messageService = {
       return [];
     }
 
-    return inboxMessages;
+    return inboxMessages;}
+    catch (error) {
+      console.error('Error get sent message:', error);
+      return { success: false, error: 'Failed to get sent message.' };
+  }
   },
   markMessageUnread: async (userID,messageId) => {
+    try{
     if(!messageId){
       throw new Error('message Id is null.');
     }
@@ -174,10 +194,31 @@ const messageService = {
       { _id: messageId },
       { $set: { status: 'delivered' } },
       { runValidators: true }
-      );
+      );}catch (error) {
+        console.error('Error read message:', error);
+        return { success: false, error: 'Failed to mark read message.' };
+    }
   },
-  markAllMessagesRead: async (sentuserId) => {
-
+  markAllMessagesRead: async (userID) => {
+    try {
+    
+    const user = await UserModel.findOne({ username: userID });
+    if (!user) {
+      throw new Error('User not found.');
+    }
+    const message = await Message.find({username: userID,status:'delivered'});
+   
+    if (!message || message.length === 0) {
+      return [];
+    }
+    const result = await Message.updateMany(
+      { username: userID, status: 'delivered' },
+      { $set: { status: 'read' } } 
+    );
+    return result}catch (error) {
+      console.error('Error all read message:', error);
+      return { success: false, error: 'Failed to all read message.' };
+  }
   },
   getUserMentions: async (messageId, sentuserId) => {
 
