@@ -28,53 +28,29 @@ const messageController = {
 
   getInboxMessages: async (req, res) => {
     try {
-      // Placeholder response
-      const inboxMessages = [
-        {
-          messageId: '1',
-          sender: 'user1',
-          title: 'Message 1',
-          recipient: 'user2',
-          content: 'This is the content of message 1',
-          status: 'unread',
-          createdAt: new Date(),
-        },
-        {
-          messageId: '2',
-          sender: 'user2',
-          title: 'Message 2',
-          recipient: 'user3',
-          content: 'This is the content of message 2',
-          status: 'read',
-          createdAt: new Date(),
-        },
-      ];
+      const username = req.user;
+      const inboxMessages = await messageService.getInboxMessages(username);
 
-      res.json({ success: true, data: inboxMessages });
+      
+      res.status(200).json(inboxMessages);
     } catch (error) {
-      res.status(500).json({ success: false, message: 'Failed to retrieve inbox messages', error: error.message });
+      
+      console.error('Failed to retrieve inbox messages:', error);
+      res.status(500).json({ error: 'Failed to retrieve inbox messages.' });
     }
   },
   getUnreadMessages: async (req, res) => {
-    // Placeholder for retrieving unread messages
     try {
-      // Placeholder response
-      const inboxMessages = [
-        {
-          messageId: '1',
-          sender: 'user1',
-          title: 'Message 1',
-          recipient: 'user3',
-          content: 'This is the content of message 1',
-          status: 'unread',
-          createdAt: new Date(),
-        },
+      const username = req.user;
+      console.log(username);
+      const unreadMessages = await messageService.getUnreadMessages(username);
 
-      ];
-
-      res.json({ success: true, data: inboxMessages });
+      
+      res.status(200).json(unreadMessages);
     } catch (error) {
-      res.status(500).json({ success: false, message: 'Failed to retrieve inbox messages', error: error.message });
+      
+      console.error('Failed to retrieve unread messages:', error);
+      res.status(500).json({ error: 'Failed to retrieve unread messages.' });
     }
   },
   deleteMessage: async (req, res) => {

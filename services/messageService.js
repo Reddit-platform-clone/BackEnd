@@ -15,7 +15,9 @@ const messageService = {
 
       
       const { username, recipient } = messageData;
-
+      if (username === recipient) {
+        return { success: false, error: 'Sender and recipient cannot be the same.' };
+    }
       const senderExists = await UserModel.exists({ username: username });
       const receiverExists = await UserModel.exists({ username: recipient });
       
@@ -37,25 +39,48 @@ const messageService = {
 
       
 
-      return { success: true, message: 'Message sent successfully.' };
+    return { success: true, message: 'Message sent successfully.' };
   } catch (error) {
       console.error('Error composing message:', error);
       return { success: false, error: 'Failed to send message.' };
   }
   },
 
-  getInboxMessages: async (sentuserId) => {
+  getInboxMessages: async (sentUsername) => {
+    
 
-    // Logic to retrieve inbox messages for the specified user
-    // Example: const inboxMessages = await Message.find({ recipient: userId });
-    // return inboxMessages;
+    const user = await UserModel.findOne({ username: sentUsername });
+    if (!user) {
+      throw new Error('User not found.');
+    }
+
+    
+    const inboxMessages = await Message.find({ recipient: sentUsername });
+
+    
+    if (!inboxMessages || inboxMessages.length === 0) {
+      return [];
+    }
+
+    return inboxMessages;
   },
 
-  getUnreadMessages: async (sentuserId) => {
+  getUnreadMessages: async (sentUsername) => {
 
-    // Logic to retrieve unread messages for the specified user
-    // Example: const unreadMessages = await Message.find({ recipient: userId, status: 'unread' });
-    // return unreadMessages;
+    const user = await UserModel.findOne({ username: sentUsername });
+    if (!user) {
+      throw new Error('User not found.');
+    }
+
+    
+    const inboxMessages = await Message.find({ recipient: sentUsername, status: 'sent' });
+
+   
+    if (!inboxMessages || inboxMessages.length === 0) {
+      return [];
+    }
+
+    return inboxMessages;
   },
 
   deleteMessage: async (messageId, sentuserId) => {
