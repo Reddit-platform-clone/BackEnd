@@ -13,9 +13,9 @@ beforeAll(async () => {
 }, 20000);
 
 describe('User Model Test', () => {
-  // beforeEach(async () => {
-  //     await User.deleteMany({});
-  // });
+  beforeEach(async () => {
+      await User.deleteMany({});
+  });
 
   it('should be able to insert a user into the database', async () => {
       const userData = {
@@ -30,8 +30,7 @@ describe('User Model Test', () => {
           about: 'I am a user',
           interests: ['music', 'sports'],
           gender: 'Male',
-          socialLinks: [],
-          token: 'token123'
+          socialLinks: []
       };
 
       const user = new User(userData);
@@ -50,7 +49,6 @@ describe('User Model Test', () => {
       expect(savedUser.interests.toObject()).toEqual(userData.interests);
       expect(savedUser.gender).toEqual(userData.gender);
       expect(savedUser.socialLinks.toObject()).toEqual(userData.socialLinks);
-      expect(savedUser.token).toBe(userData.token);
   });
 
   it('should be able to retrieve all users from the database', async () => {
@@ -66,8 +64,7 @@ describe('User Model Test', () => {
       about: 'I am a user',
       interests: ['music', 'sports'],
       gender: 'Male',
-      socialLinks: [],
-      token: 'token123'
+      socialLinks: []
     };
     const user2 = {
       username: 'user456',
@@ -81,8 +78,7 @@ describe('User Model Test', () => {
       about: 'I am user2',
       interests: ['frisbee', 'reading'],
       gender: 'Female',
-      socialLinks: [],
-      token: 'token456'
+      socialLinks: []
     };
 
     await User.create(user1, user2);
@@ -105,7 +101,6 @@ describe('User Model Test', () => {
       interests: ['music', 'sports'],
       gender: 'Male',
       socialLinks: [],
-      token: 'token123'
     };
 
     await User.create(user1);
@@ -124,7 +119,6 @@ describe('User Model Test', () => {
     expect(retrievedUser.interests.toObject()).toEqual(user1.interests);
     expect(retrievedUser.gender).toEqual(user1.gender);
     expect(retrievedUser.socialLinks.toObject()).toEqual(user1.socialLinks);
-    expect(retrievedUser.token).toBe(user1.token);
   });
 
   it('should be able to retrieve any user with a given interest', async () => {
@@ -140,8 +134,7 @@ describe('User Model Test', () => {
       about: 'I am a user',
       interests: ['music', 'sports', 'anime'],
       gender: 'Male',
-      socialLinks: [],
-      token: 'token123'
+      socialLinks: []
     };
     const user2 = {
       username: 'user456',
@@ -155,8 +148,7 @@ describe('User Model Test', () => {
       about: 'I am user2',
       interests: ['frisbee', 'reading', 'anime'],
       gender: 'Female',
-      socialLinks: [],
-      token: 'token456'
+      socialLinks: []
     };
 
     const user3 = {
@@ -171,8 +163,7 @@ describe('User Model Test', () => {
       about: 'I am user2',
       interests: ['frisbee', 'reading'],
       gender: 'Female',
-      socialLinks: [],
-      token: 'token456'
+      socialLinks: []
     };
 
     await User.create(user1, user2, user3);
@@ -196,8 +187,7 @@ describe('User Model Test', () => {
       about: 'I am a user',
       interests: ['music', 'sports'],
       gender: 'Male',
-      socialLinks: [],
-      token: 'token123'
+      socialLinks: []
     };
 
     await User.create(user);
@@ -237,8 +227,7 @@ describe('User Model Test', () => {
       about: 'I am a user',
       interests: ['music', 'sports'],
       gender: 'Male',
-      socialLinks: [],
-      token: 'token123'
+      socialLinks: []
     };
 
     await User.create(user);
