@@ -167,6 +167,9 @@ const messageService = {
     if (message.username !== user.username) {
       throw new Error('You are not authorized to unread this message.');
     }
+    if (message.status !== 'read') {
+      throw new Error('message is not read');
+    }
     await Message.findOneAndUpdate(
       { _id: messageId },
       { $set: { status: 'delivered' } },
