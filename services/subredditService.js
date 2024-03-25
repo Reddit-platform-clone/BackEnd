@@ -89,7 +89,6 @@ const subredditService = {
             console.error('Error fetching random post:', error);
             throw new Error('Failed to fetch random post');
         }
-        // return random post
     }
 };
 
