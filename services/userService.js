@@ -1,6 +1,7 @@
 require('dotenv').config();
 
 const userModel = require('../models/userModel.js');
+const reportModel = require('../models/profileReportModel.js');
 const utils = require('../utils/helpers.js');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -69,6 +70,15 @@ const userService = {
 
   reportUser: async (reporterUsername, reportedUsername, details) => {
     // logic to report a user
+    const reporter = await userModel.findOne({ username: reporterUsername });
+    const reported = await userModel.findOne({ username: reportedUsername });
+
+    if (!reporter || !reported) throw new Error('User does not exist');
+
+    const reportData = { reporterUsername: reporter.username, reportedUsername: reported.username, details: details };
+    const report = new reportModel(reportData);
+    await report.save();
+    return{ message: 'Report sent successfully', reportrter: reporter.username, reported: reported.username, details: details}
   },
 
   blockUser: async (username, usernameToBlock) => {

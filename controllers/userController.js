@@ -63,7 +63,19 @@ const userController = {
   },
 
   reportUser: async (req, res) => {
-    res.json({ message: 'report sent' });
+    try {
+      try {
+        const { reported, details } = req.body;
+        const reporter = req.user.username;
+        console.log(reporter, reported);
+        const result = await userService.reportUser(reporter, reported, details);
+        res.status(200).json(result);
+      } catch (error) {
+        res.status(400).send(error.message)
+      }
+    } catch (err) { 
+      res.status(500).send(err.message)
+    }
   },
 
   blockUser: async (req, res) => {

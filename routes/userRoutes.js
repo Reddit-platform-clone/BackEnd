@@ -12,7 +12,7 @@ router.post('/login/reset_password', userController.resetPassword);
 router.post('/login/verify_email', userController.verifyEmail);
 
 router.post('/api/block_user', authMiddleware, userController.blockUser);
-router.post('/api/report_user', userController.reportUser);
+router.post('/api/report_user', authMiddleware, userController.reportUser);
 router.delete('/api/v1/me/friends/:username', authMiddleware, userController.removeFriend);
 
 router.post('/r/:subreddit/api/friend', authMiddleware, userController.createRelationship);

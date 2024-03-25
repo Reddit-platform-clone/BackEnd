@@ -14,7 +14,8 @@ const reportProfileSchema = new mongoose.Schema({
         required: true
     },
     description: {
-        type: String
+        type: String,
+        default: ''
     },
     date: {
         type: Date,
