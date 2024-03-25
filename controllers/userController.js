@@ -6,6 +6,7 @@ const userController = {
       try {
         const { username, password } = req.body;
         const result = await userService.logIn(username, password);
+        console.log(username, password);
         res.status(200).json(result);
       } catch (error) {
         res.status(401).send(error.message)
@@ -48,9 +49,9 @@ const userController = {
   removeFriend: async (req, res) => {
     try {
       try {
-        const username = req.user.username;
         const usernameToRemove = req.params.username;
-        console.log(username, usernameToRemove);
+        const username = req.user.username;
+        // console.log(username, usernameToRemove);
         const result = await userService.removeFriend(username, usernameToRemove);
         res.status(200).json(result);
       } catch (error) {
@@ -66,7 +67,18 @@ const userController = {
   },
 
   blockUser: async (req, res) => {
-    res.json({ message: 'user blocked ' });
+    try {
+      try {
+        const { usernameToBlock } = req.body;
+        const username = req.user.username;
+        const result = await userService.blockUser(username, usernameToBlock);
+        res.status(200).json(result);
+      } catch (error) {
+        res.status(400).send(error.message)
+      }
+    } catch (err) {
+      res.status(500).send(err.message)
+    }
   },
 
   createRelationship: async (req, res) => {

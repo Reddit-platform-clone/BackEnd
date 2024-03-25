@@ -11,11 +11,11 @@ router.post('/login/forget_username', userController.logInForgetUsername);
 router.post('/login/reset_password', userController.resetPassword);
 router.post('/login/verify_email', userController.verifyEmail);
 
-router.post('/api/block_user', userController.blockUser);
+router.post('/api/block_user', authMiddleware, userController.blockUser);
 router.post('/api/report_user', userController.reportUser);
 router.delete('/api/v1/me/friends/:username', authMiddleware, userController.removeFriend);
 
-router.post('/r/:subreddit/api/friend', userController.createRelationship);
+router.post('/r/:subreddit/api/friend', authMiddleware, userController.createRelationship);
 router.post('/r/:subreddit/api/unfriend', userController.removeRelationship);
 
 router.get('/api/v1/me/friends/:username', userController.getFriendInfo);

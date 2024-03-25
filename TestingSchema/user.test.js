@@ -13,9 +13,9 @@ beforeAll(async () => {
 }, 20000);
 
 describe('User Model Test', () => {
-  beforeEach(async () => {
-      await User.deleteMany({});
-  });
+  // beforeEach(async () => {
+  //     await User.deleteMany({});
+  // });
 
   it('should be able to insert a user into the database', async () => {
       const userData = {

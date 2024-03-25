@@ -15,7 +15,7 @@ const userService = {
     const isValid = await utils.validatePassword(password, user.password);
     if (!isValid) throw new Error('invalid username or password');
 
-    const token = jwt.sign(user.username, process.env.SECRET_ACCESS_TOKEN);
+    const token = jwt.sign({ username: user.username }, process.env.SECRET_ACCESS_TOKEN);
 
     return { token: token };
   },
@@ -23,13 +23,13 @@ const userService = {
   singUp: async (username, password) => {
     // logic to register new users
     const userExists = await userModel.findOne({ username: username });
-    if (userExists) throw new Error('User already exists');
+    if (userExists) throw new Error('invalid username or password');
 
     // const hashedPassword = await bcrypt.hash(password, 10);
     const hashedPassword = await utils.hashPassword(password);
     const userData = { username: username, password: hashedPassword };
 
-    const token = jwt.sign(userData.username, process.env.SECRET_ACCESS_TOKEN);
+    const token = jwt.sign({ username: userData.username }, process.env.SECRET_ACCESS_TOKEN);
 
     const user = new userModel(userData);
 
@@ -71,8 +71,19 @@ const userService = {
     // logic to report a user
   },
 
-  blockUser: async (username) => {
+  blockUser: async (username, usernameToBlock) => {
     // logic to report a user
+    const user = await userModel.findOne({ username: username });
+    if (!user) throw new Error('User does not exist');
+
+    const userToBlock = await userModel.findOne({ username: usernameToBlock });
+    if (!userToBlock) throw new Error('User to block does not exist');
+
+    if (user.blockedUsers.includes(usernameToBlock)) throw new Error('User is already blocked');
+
+    await user.blockedUsers.push(usernameToBlock);
+    await user.save();
+    return { message: 'User blocked successfully' };
   },
 
   createRelationship: async (username) => {
