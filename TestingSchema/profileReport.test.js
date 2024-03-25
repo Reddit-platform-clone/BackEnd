@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Report = require('../models/profileReportModel.js');
 
 beforeAll(async () => {
-  await mongoose.connect('mongodb://localhost:27017/');
+  await mongoose.connect(process.env.MONGO_URI);
 }, 20000);
 
 describe('Report Model Test', () => {
@@ -12,10 +12,9 @@ describe('Report Model Test', () => {
 
   it('Insert a report into the database', async () => {
     const reportData = {
-        reportID: 1,
         reporterUsername: 'user1',
         reportedUsername: 'user2',
-        reason: 'spam',
+        reason: ['spam'],
         description: 'This is spam',
         date_time: new Date(),
     };
@@ -23,29 +22,26 @@ describe('Report Model Test', () => {
     const report = new Report(reportData);
     const savedReport = await report.save();
 
-    expect(savedReport.reportID).toBe(reportData.reportID);
+    expect(savedReport._id).toBeDefined();
     expect(savedReport.reporterUsername).toBe(reportData.reporterUsername);
     expect(savedReport.reportedUsername).toBe(reportData.reportedUsername);
-    expect(savedReport.reason).toBe(reportData.reason);
+    expect(savedReport.reason.toObject()).toEqual(reportData.reason);
     expect(savedReport.description).toBe(reportData.description);
-    // expect(savedReport.date_time).toEqual(reportData.date_time);
   }, 20000);
 
     it('Retrieve all reports from the database', async () => {
         const reportData1 = {
-            reportID: 1,
             reporterUsername: 'user1',
             reportedUsername: 'user2',
-            reason: 'spam',
+            reason: ['spam'],
             description: 'This is spam',
             date_time: new Date(),
         };
     
         const reportData2 = {
-            reportID: 2,
             reporterUsername: 'user3',
             reportedUsername: 'user4',
-            reason: 'harassment',
+            reason: ['harassment'],
             description: 'This is harassment',
             date_time: new Date(),
         };

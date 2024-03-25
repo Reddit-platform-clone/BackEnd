@@ -67,7 +67,7 @@ const userService = {
     return { message: 'Friend removed successfully' };
   },
 
-  reportUser: async (username) => {
+  reportUser: async (reporterUsername, reportedUsername, details) => {
     // logic to report a user
   },
 

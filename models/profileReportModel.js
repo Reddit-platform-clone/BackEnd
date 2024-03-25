@@ -1,11 +1,6 @@
 const mongoose = require('mongoose');
 
 const reportProfileSchema = new mongoose.Schema({
-    reportID: {
-        type: Number,
-        required: true,
-        unique: true
-    },
     reporterUsername: {
         type: String,
         required: true
@@ -15,7 +10,7 @@ const reportProfileSchema = new mongoose.Schema({
         required: true
     },
     reason: {
-        type: String,
+        type: [String],
         required: true
     },
     description: {
@@ -28,6 +23,6 @@ const reportProfileSchema = new mongoose.Schema({
 });
 
 
-const profileReport = mongoose.model('Profile Reports', reportProfileSchema);
+const profileReport = mongoose.model('ProfileReports', reportProfileSchema);
 
 module.exports = profileReport;
