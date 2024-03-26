@@ -131,7 +131,17 @@ const userController = {
   },
 
   getUserAbout: async (req, res) => {
-    res.json({ message: 'user about'})
+    try {
+      try {
+        const username = req.params.username;
+        const result = await userService.getUserAbout(username);
+        res.status(200).json(result);
+      } catch (error) {
+        res.status(400).send(error.message)
+      }
+    } catch (err) {
+      res.status(500).send(err.message)
+    }
   },
   
   getUserOverview: async (req, res) => {

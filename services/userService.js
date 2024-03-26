@@ -133,6 +133,10 @@ const userService = {
 
   getUserAbout: async (username) => {
     // logic to get user details
+    const user = await userModel.findOne({ username: username });
+    if (!user) throw new Error('User does not exist');
+
+    return { about: user.about}
   },
 
   getUserOverview: async (username) => {
