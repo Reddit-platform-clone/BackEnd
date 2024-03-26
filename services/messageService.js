@@ -25,7 +25,7 @@ const messageService = {
         return { success: false, error: 'receiver does not exist.' };
     }   if (!senderExists) {
       
-      return { success: false, error: `Sender (${username}) does not exist.` };
+      return { success: false, error: `Sender  does not exist.` };
   }
 
 //ADEED IN THE FUTURE

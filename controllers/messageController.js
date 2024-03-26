@@ -5,10 +5,18 @@ const jwt = require('jsonwebtoken');
 const messageController = {
   compose: async (req, res) => {
     try {
-  
-      const username = req.user;
+      let username =req.user;
+      // console.log(req.user.iat);
+      if (req.user?.iat){
+        username=req.user.username;
+      }
+  else{
+    username=req.user;
+  }
       
-
+       
+       console.log(username);
+      
      
       const { recipient, from, title, content } = req.body;
 
@@ -28,7 +36,14 @@ const messageController = {
 
   getInboxMessages: async (req, res) => {
     try {
-      const username = req.user;
+      let username =req.user;
+      // console.log(req.user.iat);
+      if (req.user?.iat){
+        username=req.user.username;
+      }
+  else{
+    username=req.user;
+  }
       const inboxMessages = await messageService.getInboxMessages(username);
 
       
@@ -41,7 +56,14 @@ const messageController = {
   },
   getUnreadMessages: async (req, res) => {
     try {
-      const username = req.user;
+      let username =req.user;
+      // console.log(req.user.iat);
+      if (req.user?.iat){
+        username=req.user.username;
+      }
+  else{
+    username=req.user;
+  }
       
       const unreadMessages = await messageService.getUnreadMessages(username);
 
@@ -55,12 +77,19 @@ const messageController = {
   },
   deleteMessage: async (req, res) => {
     try {
+      let username =req.user;
+      // console.log(req.user.iat);
+      if (req.user?.iat){
+        username=req.user.username;
+      }
+  else{
+    username=req.user;
+  }
       
-      const messageId = req.body;
       
 
       
-      await messageService.deleteMessage(req.user,messageId);
+      await messageService.deleteMessage( username ,messageId);
 
       
       res.status(200).json({ message: 'Message deleted successfully.' });
@@ -75,9 +104,18 @@ const messageController = {
       
       const {_id,reportDetails} = req.body;
       
+        let username =req.user;
+        // console.log(req.user.iat);
+        if (req.user?.iat){
+          username=req.user.username;
+        }
+    else{
+      username=req.user;
+    }
+      
 
       
-      await messageService.reportMessage(req.user,_id,reportDetails);
+      await messageService.reportMessage( username ,_id,reportDetails);
 
       
       res.status(200).json({ message: 'Message reported successfully.' });
@@ -89,7 +127,15 @@ const messageController = {
   },
   getSentMessages: async (req, res) => {
     try {
-      const username = req.user;
+      let username =req.user;
+      // console.log(req.user.iat);
+      if (req.user?.iat){
+        username=req.user.username;
+      }
+  else{
+    username=req.user;
+  }
+   
       
       const unreadMessages = await messageService.getSentMessages(username);
 
@@ -106,9 +152,17 @@ const messageController = {
       
       const messageId = req.body;
       
-
+      let username =req.user;
+      // console.log(req.user.iat);
+      if (req.user?.iat){
+        username=req.user.username;
+      }
+  else{
+    username=req.user;
+  }
+   
       
-      await messageService.markMessageUnread(req.user,messageId);
+      await messageService.markMessageUnread( username ,messageId);
 
       
       res.status(200).json({ message: 'Message unread successfully.' });
@@ -122,10 +176,18 @@ const messageController = {
     try {
       
       
-      
+      let username =req.user;
+      // console.log(req.user.iat);
+      if (req.user?.iat){
+        username=req.user.username;
+      }
+  else{
+    username=req.user;
+  }
+   
 
       
-      await messageService.markAllMessagesRead(req.user);
+      await messageService.markAllMessagesRead(username);
 
       
       res.status(200).json({ message: 'Messages readed successfully.' });
