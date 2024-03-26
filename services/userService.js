@@ -47,6 +47,21 @@ const userService = {
 
   getFriendInfo: async (username) => {
     // logic to get user info
+    const user = await userModel.findOne({ username: username });
+    if (!user) throw new Error('User does not exist');
+    
+    const friendName = user.friends.find(friend => friend === friendUsername);
+    if (!friendName) throw new Error('User is not a friend');
+    
+    const friend = await userModel.findOne({ username: friendUsername });
+    return { 
+      username: friend.username, 
+      interests: friend.interests, 
+      socialLinks: friend.socialLinks, 
+      dateOfBirth: friend.dateOfBirth, 
+      profilePicture: friend.profilePicture, 
+      about: friend.about 
+    };    
   },
 
   checkUsernameAvailability: async (username) => {
