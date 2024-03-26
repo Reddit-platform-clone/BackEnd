@@ -211,7 +211,8 @@ const messageService = {
       { _id: messageId },
       { $set: { status: 'delivered' } },
       { runValidators: true }
-      );}catch (error) {
+      );
+      return { success: true, message: 'Message unread successfully.' };}catch (error) {
         console.error('Error read message:', error);
         return { success: false, error: 'Failed to mark read message.' };
     }

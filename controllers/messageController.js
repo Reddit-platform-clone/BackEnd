@@ -181,7 +181,7 @@ const messageController = {
    
       
       const result =await messageService.markMessageUnread( username ,messageId);
-
+console.log(result);
       if (result.success) {
       res.status(200).json({ message: 'Message unread successfully.' });
     } else {
