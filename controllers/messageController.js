@@ -86,7 +86,7 @@ const messageController = {
     username=req.user;
   }
       
-      
+  messageId=req.body
 
       
       await messageService.deleteMessage( username ,messageId);
