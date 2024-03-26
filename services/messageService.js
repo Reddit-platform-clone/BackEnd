@@ -51,10 +51,10 @@ const messageService = {
   getInboxMessages: async (sentUsername) => {
     
     try {
-      console.log("ssss");
+      
     const user = await UserModel.findOne({ username: sentUsername });
     if (!user) {
-      console.log("s");
+     ;
       return { success: false, error:'User not found.'};
     }
 
@@ -63,8 +63,8 @@ const messageService = {
 
     
     if (!inboxMessages || inboxMessages.length === 0) {
-      console.log("sw");
-      return [];
+      
+      return { success: true, message: [] };
     }
 
     return { success: true, message: inboxMessages };
@@ -88,7 +88,7 @@ const messageService = {
 
    
     if (!inboxMessages || inboxMessages.length === 0) {
-      return [];
+      return { success: true, message: []};
     }
     return { success: true, message: inboxMessages };
     }catch (error) {
@@ -132,7 +132,7 @@ const messageService = {
     }
     
     if(!messageId){
-      console.log("ser");
+      
        return { success: false, error:'message Id is null.'};
     }
     const message = await Message.findOne({_id: messageId});
@@ -177,7 +177,7 @@ const messageService = {
 
    
     if (!inboxMessages || inboxMessages.length === 0) {
-      return [];
+      return { success: true, message: [] };
     }
 
     return {success: true, message:inboxMessages};}
@@ -201,7 +201,7 @@ const messageService = {
     if (!user) {
        return { success: false, error:'User not found.'};
     }
-    if (message.username !== user.username) {
+    if (message.username !== user.recipient) {
        return { success: false, error:'You are not authorized to unread this message.'};
     }
     if (message.status !== 'read') {
@@ -224,16 +224,16 @@ const messageService = {
     if (!user) {
        return { success: false, error:'User not found.'};
     }
-    const message = await Message.find({username: userID,status:'delivered'});
+    const message = await Message.find({recipient: userID,status:'delivered'});
    
     if (!message || message.length === 0) {
-      return [];
+      return { success: false, message: 'No Messages to read .' };
     }
     const result = await Message.updateMany(
-      { username: userID, status: 'delivered' },
+      { recipient: userID, status: 'delivered' },
       { $set: { status: 'read' } } 
     );
-    return result}catch (error) {
+    return { success: true, message: 'All Message readed successfully.' };}catch (error) {
       console.error('Error all read message:', error);
       return { success: false, error: 'Failed to all read message.' };
   }
