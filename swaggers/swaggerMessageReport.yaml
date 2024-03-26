@@ -7,12 +7,7 @@ paths:
     post:
       summary: Report a message
       description: Reports a message by its ID
-      parameters:
-        - in: query
-          name: userId
-          description: The ID of the user reporting the message
-          required: true
-          type: string
+      parameters: 
         - in: query
           name: messageId
           description: The ID of the message to report

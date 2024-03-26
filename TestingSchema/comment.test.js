@@ -5,22 +5,21 @@ const mongoose = require('mongoose');
 const Comment = require('../models/commentModel');
 require('dotenv').config();
 
+
+
 beforeAll(async () => {
   await mongoose.connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useCreateIndex: true
   });
 }, 20000);
 
 describe('Comment Model Test', () => {
   beforeEach(async () => {
-    await Comment.deleteMany({});
+   
   });
 
   it('should be able to insert a comment into the database', async () => {
     const commentData = {
-      commentID: '12345',
+      
       postID: 'post123',
       userID: 'user456',
       dateTime: new Date(),
@@ -40,7 +39,7 @@ describe('Comment Model Test', () => {
 
   it('should be able to retrieve all comments from the database', async () => {
     const commentData1 = {
-      commentID: '12345',
+     
       postID: 'post123',
       userID: 'user456',
       dateTime: new Date(),

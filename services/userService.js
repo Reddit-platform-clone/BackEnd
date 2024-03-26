@@ -1,41 +1,12 @@
-require('dotenv').config();
-
-const userModel = require('../models/userModel.js');
-const reportModel = require('../models/profileReportModel.js');
-const utils = require('../utils/helpers.js');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
+const user = require('../models/userModel.js');
 
 const userService = {
-  logIn: async (username, password) => {
+  logIn: async (username) => {
     // logic to login registered users
-    const user = await userModel.findOne({ username: username });
-    if (!user) throw new Error('invalid username or password'); 
-
-    // const isValid = await bcrypt.compare(password, user.password);
-    const isValid = await utils.validatePassword(password, user.password);
-    if (!isValid) throw new Error('invalid username or password');
-
-    const token = jwt.sign({ username: user.username }, process.env.SECRET_ACCESS_TOKEN);
-
-    return { token: token };
   },
 
-  singUp: async (username, password) => {
+  singUp: async (credentials) => {
     // logic to register new users
-    const userExists = await userModel.findOne({ username: username });
-    if (userExists) throw new Error('invalid username or password');
-
-    // const hashedPassword = await bcrypt.hash(password, 10);
-    const hashedPassword = await utils.hashPassword(password);
-    const userData = { username: username, password: hashedPassword };
-
-    const token = jwt.sign({ username: userData.username }, process.env.SECRET_ACCESS_TOKEN);
-
-    const user = new userModel(userData);
-
-    await user.save();
-    return { token: token };
   },
 
   logInForgetPassword: async (username) => {
@@ -54,47 +25,16 @@ const userService = {
     // logic to reset password
   },
 
-  removeFriend: async (username, usernameToRemove) => {
+  removeFriend: async (username) => {
     // logic to remove friend
-    const user = await userModel.findOne({ username: username });
-    if (!user) throw new Error('User does not exist');
-
-    const friendIndex = await user.friends.indexOf(usernameToRemove);
-    if (friendIndex === -1) throw new Error('User is not a friend');
-
-    user.friends.splice(friendIndex, 1);
-    await user.save();
-
-    return { message: 'Friend removed successfully' };
   },
 
-  reportUser: async (reporterUsername, reportedUsername, details) => {
+  reportUser: async (username) => {
     // logic to report a user
-    const reporter = await userModel.findOne({ username: reporterUsername });
-    const reported = await userModel.findOne({ username: reportedUsername });
-
-    if (!reporter || !reported) throw new Error('User does not exist');
-
-    const reportData = { reporterUsername: reporter.username, reportedUsername: reported.username, details: details };
-    const report = new reportModel(reportData);
-    report.reason.push(details);
-    await report.save();
-    return{ message: 'Report sent successfully', reportrter: reporter.username, reported: reported.username, details: details}
   },
 
-  blockUser: async (username, usernameToBlock) => {
+  blockUser: async (username) => {
     // logic to report a user
-    const user = await userModel.findOne({ username: username });
-    if (!user) throw new Error('User does not exist');
-
-    const userToBlock = await userModel.findOne({ username: usernameToBlock });
-    if (!userToBlock) throw new Error('User to block does not exist');
-
-    if (user.blockedUsers.includes(usernameToBlock)) throw new Error('User is already blocked');
-
-    await user.blockedUsers.push(usernameToBlock);
-    await user.save();
-    return { message: 'User blocked successfully' };
   },
 
   createRelationship: async (username) => {
@@ -105,7 +45,7 @@ const userService = {
     // logic to create relationships
   },
 
-  getFriendInfo: async (username, friendUsername) => {
+  getFriendInfo: async (username) => {
     // logic to get user info
     const user = await userModel.findOne({ username: username });
     if (!user) throw new Error('User does not exist');
@@ -126,17 +66,10 @@ const userService = {
 
   checkUsernameAvailability: async (username) => {
     // logic to check username validity
-    const user = await userModel.findOne({ username: username });
-    if (user) throw new Error('Username is not available');
-    return { message: 'Username is available' };
   },
 
   getUserAbout: async (username) => {
     // logic to get user details
-    const user = await userModel.findOne({ username: username });
-    if (!user) throw new Error('User does not exist');
-
-    return { about: user.about}
   },
 
   getUserOverview: async (username) => {

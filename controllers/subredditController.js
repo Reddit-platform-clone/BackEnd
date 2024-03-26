@@ -4,20 +4,8 @@ const subredditService = require('../services/subredditService.js');
 const subredditController = {
     getBestPost: async (req, res) => {
         try {
-            // Placeholder post
-            const bestPost = [
-                {
-                    postId: '1',
-                    postContent: 'Best post',
-                    createdAt: new Date()
-                },
-                {
-                    postId: '2',
-                    postContent: 'Second Best post',
-                    createdAt: new Date()
-                }             
-            ];
-            res.json({ succes: true, date: bestPost });
+            const bestPost = await subredditService.getBest();
+            res.json({ succes: true, data: bestPost });
         } catch (err) {
             res.status(500).json({  success: false, error: err.message })
         }
@@ -25,20 +13,8 @@ const subredditController = {
 
     getHotPost: async (req, res) => {
         try {
-            // Placeholder post
-            const hotPost = [
-                {
-                    postId: '1',
-                    postContent: 'Hot post',
-                    createdAt: new Date()
-                },
-                {
-                    postId: '2',
-                    postContent: 'Second Hot post',
-                    createdAt: new Date()
-                }             
-            ];
-            res.json({ succes: true, date: hotPost });
+            const hotPost = await subredditService.getHot();
+            res.json({ succes: true, data: hotPost });
         } catch (err) {
             res.status(500).json({  success: false, error: err.message })
         }
@@ -46,20 +22,8 @@ const subredditController = {
 
     getNewPost: async (req, res) => {
         try {
-            // Placeholder post
-            const newPost = [
-                {
-                    postId: '1',
-                    postContent: 'New post',
-                    createdAt: new Date()
-                },
-                {
-                    postId: '2',
-                    postContent: 'Second New post',
-                    createdAt: new Date()
-                }             
-            ];
-            res.json({ succes: true, date: newPost });
+            const newPost = await subredditService.getNew();
+            res.json({ succes: true, data: newPost });
         } catch (err) {
             res.status(500).json({  success: false, error: err.message })
         }
@@ -67,20 +31,8 @@ const subredditController = {
 
     getTopPost: async (req, res) => {
         try {
-            // Placeholder post
-            const topPost = [
-                {
-                    postId: '1',
-                    postContent: 'Top post',
-                    createdAt: new Date()
-                },
-                {
-                    postId: '2',
-                    postContent: 'Second Top post',
-                    createdAt: new Date()
-                }             
-            ];
-            res.json({ succes: true, date: topPost });
+            const topPost = await subredditService.getTop();
+            res.json({ succes: true, data: topPost });
         } catch (err) {
             res.status(500).json({  success: false, error: err.message })
         }
@@ -88,20 +40,8 @@ const subredditController = {
 
     getRandomPost: async (req, res) => {
         try {
-            // Placeholder post
-            const randomPost = [
-                {
-                    postId: '1',
-                    postContent: 'Random post',
-                    createdAt: new Date()
-                },
-                {
-                    postId: '2',
-                    postContent: 'Second Random post',
-                    createdAt: new Date()
-                }             
-            ];
-            res.json({ succes: true, date: randomPost });
+            const randomPost = await subredditService.getRandom();
+            res.json({ succes: true, data: randomPost });
         } catch (err) {
             res.status(500).json({  success: false, error: err.message })
         }

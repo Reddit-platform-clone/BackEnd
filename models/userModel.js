@@ -1,43 +1,38 @@
 const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
+require('dotenv').config();
 
-const userSchema = new mongoose.Schema({
+const userSchema = {
   username: {
     type: String,
-    // required: true,
+    required: true,
     unique: true
   },
 
   password: {
     type: String,
-    // required: true
+    required: true
   },
 
   email: {
     type: String,
-    // required: true
+    required: true
   },
 
   dateOfBirth: {
     type: String,
-    // required: true
+    required: true
   },
 
   displayName: {
     type: String,
+    required: true,
   },
 
   profilePicture: {
     type: String,
-    default: null
   },
 
   followers: {
-    type: [String],
-    default: []
-  },
-
-  friends: {
     type: [String],
     default: []
   },
@@ -48,27 +43,31 @@ const userSchema = new mongoose.Schema({
   },
 
   about: {
-    type: String,
-    default: null
+    type: String
   },
 
   interests: {
     type: [String],
-    default: []
+    default: [],
+    required: true
   },
 
   gender: {
     type: String,
     enum: ['Male', 'Female'],
-    // required: true
+    required: true
   },
 
   socialLinks: {
     type: [String],
     default: []
-  }
-});
+  },
 
+  token: {
+    type: String,
+    required: true
+  },
+};
 
 const User = mongoose.model('User', userSchema);
 
