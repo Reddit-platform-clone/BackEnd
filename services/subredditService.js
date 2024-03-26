@@ -20,7 +20,7 @@ const subredditService = {
         }
     },
 
-    getHot: async (post) => {
+    getHot: async () => {
         // Logic to get hot post
         try {
             // Fetch posts from the database
@@ -28,8 +28,8 @@ const subredditService = {
 
             // Sort posts based on score criteria
             posts.sort((a, b) => {
-                const scoreA = a.upvotes + a.num_comments.length - Math.floor((Date.now() - a.date_time) / (1000 * 60 * 60 * 24));
-                const scoreB = b.upvotes + b.num_comments.length - Math.floor((Date.now() - b.date_time) / (1000 * 60 * 60 * 24));
+                const scoreA = a.upvotes + a.num_comments - Math.floor((Date.now() - a.date_time) / (1000 * 60 * 60 * 24));
+                const scoreB = b.upvotes + b.num_comments - Math.floor((Date.now() - b.date_time) / (1000 * 60 * 60 * 24));
                 return scoreB - scoreA;
             });
 
@@ -40,7 +40,7 @@ const subredditService = {
         }
     },
 
-    getNew: async (post) => {
+    getNew: async () => {
         // Logic to get new post
         try {
             // Fetch posts from the database
@@ -55,7 +55,7 @@ const subredditService = {
         }
     },
 
-    getTop: async (post) => {
+    getTop: async () => {
         // Logic to get top post
         try {
             // Fetch posts from the database
@@ -63,8 +63,8 @@ const subredditService = {
 
             // Sort posts based on score criteria
             posts.sort((a, b) => {
-                const scoreA = a.upvotes + a.num_comments.length;
-                const scoreB = b.upvotes + b.num_comments.length;
+                const scoreA = a.upvotes + a.num_comments;
+                const scoreB = b.upvotes + b.num_comments;
                 return scoreB - scoreA;
             });
 
@@ -75,7 +75,7 @@ const subredditService = {
         }
     },
 
-    getRandom: async (post) => {
+    getRandom: async () => {
         // Logic to get random post
         try {
             // Fetch posts from the database
@@ -84,7 +84,7 @@ const subredditService = {
             // Generate a random index within the range of the posts array
             const randomIndex = Math.floor(Math.random() * posts.length);
 
-            return post[randomIndex];
+            return posts[parseInt(randomIndex)];
         } catch (error) {
             console.error('Error fetching random post:', error);
             throw new Error('Failed to fetch random post');
