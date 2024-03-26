@@ -17,6 +17,6 @@ describe('POST /message/compose', () => {
 
     expect(response.statusCode).toBe(200);
     expect(response.body).toHaveProperty('message', 'Message sent successfully.');
-    // Add more assertions as needed based on your application's response structure and requirements
+
   });
 });
