@@ -3,8 +3,15 @@ const searchByService = require('../services/searchByServices.js');
 const searchByController = {
     users: async (req, res) => {
         try {
-            // Implement logic to search by users
-            const usersResults = await User.find({ /* search criteria */ });
+            
+            const keyword = req.query.keyword; // Assuming keyword is provided as a query parameter
+
+            if (!keyword) {
+                return res.status(400).json({ error: "Keyword is required to search" });
+            }
+
+            // Call service method to search users
+            const usersResults = await searchByService.searchByUsers(keyword);
 
             // Return users results
             return res.status(200).json(usersResults);
@@ -16,19 +23,15 @@ const searchByController = {
     
     posts: async (req, res) => {
         try {
-            // Logic to search by posts
-            let posts = await Post.find({ /* search criteria */ });
+            const keyword = req.query.keyword;
 
-            // Logic for Trending Today
-            const today = new Date();
-            today.setHours(0, 0, 0, 0); // Set time to the beginning of today
-            posts = posts.filter(post => post.createdAt >= today); // Filter posts created today
+            if (!keyword) {
+                return res.status(400).json({ error: "Keyword is required" });
+            }
 
-            // Logic for Sorting (Assuming sorting by date in descending order)
-            posts.sort((a, b) => b.createdAt - a.createdAt); // Sort posts by date in descending order
+            const postsResults = await searchByService.searchByPosts(keyword);
 
-            // return posts results
-            return res.status(200).json(posts);
+            return res.status(200).json(postsResults);
         } catch (error) {
             console.error("Error searching by posts:", error);
             return res.status(500).json({ error: "Internal Server Error" });
@@ -37,12 +40,14 @@ const searchByController = {
     
     comments: async (req, res) => {
         try {
-            // Implement logic to search by comments
-            const commentsResults = await Comment.find({ /* search criteria */ });
+            const keyword = req.query.keyword;
 
-            // Implement logic for sorting
+            if (!keyword) {
+                return res.status(400).json({ error: "Keyword is required" });
+            }
 
-            // Return comments results
+            const commentsResults = await searchByService.searchByComments(keyword);
+
             return res.status(200).json(commentsResults);
         } catch (error) {
             console.error("Error searching by comments:", error);
@@ -52,10 +57,14 @@ const searchByController = {
 
     communities: async (req, res) => {
         try {
-            // Implement logic to search by communities
-            const communitiesResults = await Community.find({ /* search criteria */ });
+            const keyword = req.query.keyword;
 
-            // Return communities results
+            if (!keyword) {
+                return res.status(400).json({ error: "Keyword is required" });
+            }
+
+            const communitiesResults = await searchByService.searchByCommunities(keyword);
+
             return res.status(200).json(communitiesResults);
         } catch (error) {
             console.error("Error searching by communities:", error);
@@ -65,10 +74,14 @@ const searchByController = {
 
     hashtags: async (req, res) => {
         try {
-            // Implement logic to search by hashtags
-            const hashtagsResults = await Hashtag.find({ /* search criteria */ });
+            const keyword = req.query.keyword;
 
-            // Return hashtags results
+            if (!keyword) {
+                return res.status(400).json({ error: "Keyword is required" });
+            }
+
+            const hashtagsResults = await searchByService.searchByHashtags(keyword);
+
             return res.status(200).json(hashtagsResults);
         } catch (error) {
             console.error("Error searching by hashtags:", error);
@@ -76,6 +89,4 @@ const searchByController = {
         }
     }
 };
-
-
 module.exports = searchByController;
