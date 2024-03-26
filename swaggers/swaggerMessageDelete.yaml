@@ -9,12 +9,7 @@ paths:
       description: Deletes a message by its ID
       parameters:
         - in: query
-          name: userId
-          description: The ID of the user
-          required: true
-          type: string
-        - in: query
-          name: messageId
+          name: _id
           description: The ID of the message to delete
           required: true
           type: string
