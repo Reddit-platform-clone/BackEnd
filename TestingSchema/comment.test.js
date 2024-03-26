@@ -14,7 +14,7 @@ beforeAll(async () => {
 
 describe('Comment Model Test', () => {
   beforeEach(async () => {
-    await Comment.deleteMany({});
+   
   });
 
   it('should be able to insert a comment into the database', async () => {
