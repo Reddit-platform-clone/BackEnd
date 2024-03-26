@@ -5,6 +5,11 @@ const userController = {
     try {
       try {
         const { username, password } = req.body;
+        if (!username || !password) {
+          res.status(400).send('missing username or password');
+          return;
+        }
+
         const result = await userService.logIn(username, password);
         res.status(200).json(result);
       } catch (error) {
@@ -19,6 +24,10 @@ const userController = {
     try {
       try {
         const { username, password } = req.body;
+        if (!username || !password) {
+          res.status(400).send('missing username or password');
+          return;
+        }
         const result = await userService.singUp(username, password);
         res.status(200).json(result);
       } catch (error) {
@@ -81,6 +90,10 @@ const userController = {
     try {
       try {
         const { usernameToBlock } = req.body;
+        if (!usernameToBlock) { 
+          res.status(400).send('missing username to block'); 
+          return; 
+        }
         const username = req.user.username;
         const result = await userService.blockUser(username, usernameToBlock);
         res.status(200).json(result);
@@ -103,7 +116,6 @@ const userController = {
   getFriendInfo: async (req, res) => {
     try {
       try {
-        console.log('get friend info');
         const friendUsername = req.params.username;
         const username = req.user.username;
         const result = await userService.getFriendInfo(username, friendUsername);
