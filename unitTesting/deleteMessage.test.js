@@ -16,8 +16,7 @@ describe('Message Controller', () => {
                     authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Inp5YWQiLCJpYXQiOjE3MTE0MTc1NjZ9.3VJdo_nz1cHd7nVAdizTCILET4FTMyjz8b7VpVsXJh0'
                 },
                 body: {
-                    
-                    _id:'6602520fb98ea4302462f5bf'
+                    "_id": "66027496b4d8270e5c5a0684"
                 }
             };
             const res = {
@@ -27,7 +26,7 @@ describe('Message Controller', () => {
 
         
             
-            messageService.composeMessage.mockResolvedValue({ success: true, message: 'Message deleted successfully.' });
+            messageService.deleteMessage.mockResolvedValue({ success: true, message: 'Message deleted successfully.' });
 
             
             await messageController.deleteMessage(req, res);

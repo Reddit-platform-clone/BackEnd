@@ -15,7 +15,7 @@ const messageController = {
   }
       
        
-       console.log(username);
+       
       
      
       const { recipient, from, title, content } = req.body;

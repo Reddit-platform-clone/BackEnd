@@ -118,7 +118,7 @@ const messageService = {
 
     
     await Message.findOneAndDelete({_id: messageId});
-    return { success: true, message: 'Message reported successfully.' };
+    return { success: true, message: 'Message deleted successfully' };
   }catch (error) {
       console.error('Error del message:', error);
       return { success: false, error: 'Failed to del message.' };
