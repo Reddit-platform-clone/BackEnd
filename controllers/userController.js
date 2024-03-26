@@ -117,7 +117,17 @@ const userController = {
   },
 
   checkUsernameAvailability: async (req, res) => {
-    res.json({ message: 'check username availability' })
+    try {
+      try {
+        const { username } = req.body;
+        const result = await userService.checkUsernameAvailability(username);
+        res.status(200).json(result);
+      } catch (error) {
+        res.status(400).send(error.message)
+      }
+    } catch (err) {
+      res.status(500).send(err.message)
+    }
   },
 
   getUserAbout: async (req, res) => {
