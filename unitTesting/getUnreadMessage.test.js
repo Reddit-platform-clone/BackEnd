@@ -25,10 +25,10 @@ describe('Message Controller', () => {
 
             const mockInboxMessages = [
                 {
-                    status: "sent",
+                    status: "delivered",
                     report: false,
                     reportDetails: null,
-                    _id: "66024a20b98ea4302462f5ad",
+                    _id: "6602679a3585ae5020a9fe46",
                     username: "abdallah",
                     recipient: "zyad",
                     title: "ss",
@@ -38,7 +38,7 @@ describe('Message Controller', () => {
                 }
             ];
 
-            messageService.getInboxMessages.mockResolvedValue(mockInboxMessages);
+            messageService.getInboxMessages.mockResolvedValue({success: true,message:mockInboxMessages});
 
             await messageController.getInboxMessages(req, res);
 
