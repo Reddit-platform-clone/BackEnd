@@ -201,7 +201,8 @@ const messageService = {
     if (!user) {
        return { success: false, error:'User not found.'};
     }
-    if (message.username !== user.recipient) {
+   
+    if (message.recipient !== userID) {
        return { success: false, error:'You are not authorized to unread this message.'};
     }
     if (message.status !== 'read') {

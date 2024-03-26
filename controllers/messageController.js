@@ -182,9 +182,10 @@ const messageController = {
     username=req.user;
   }
    
-      
+      console.log(username);
+      console.log(messageId);
       const result =await messageService.markMessageUnread( username ,messageId);
-console.log(result);
+console.log('ssssssss');
       if (result.success) {
       res.status(200).json({ message: 'Message unread successfully.' });
     } else {
