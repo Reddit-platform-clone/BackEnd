@@ -1,51 +1,31 @@
-const messageService = require('../services/messageService');
-const messageController = require('../controllers/messageController');
-const jwt = require('jsonwebtoken');
+const request = require('supertest');
+const app = require('../server');
 
-jest.mock('../services/messageService');
-jest.mock('jsonwebtoken');
+describe('GET /message/unread', () => {
+  it('should retrieve inbox messages', async () => {
+    const token = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Inp5YWQiLCJpYXQiOjE3MTE0MTc1NjZ9.3VJdo_nz1cHd7nVAdizTCILET4FTMyjz8b7VpVsXJh0'; 
 
-describe('Message Controller', () => {
-    describe('getInboxMessages', () => {
-        it('should retrieve inbox messages successfully', async () => {
-            const token = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Inp5YWQiLCJpYXQiOjE3MTE0MTc1NjZ9.3VJdo_nz1cHd7nVAdizTCILET4FTMyjz8b7VpVsXJh0';
-           
-            const req = {
-                headers: {
-                    authorization: token
-                }
-            };
-            const res = {
-                status: jest.fn().mockReturnThis(),
-                json: jest.fn()
-            };
+    const response = await request(app)
+      .get('/message/unread')
+      .set('Authorization', token);
 
-            
-       
-
-            const mockInboxMessages = [
-                {
-                    status: "delivered",
-                    report: false,
-                    reportDetails: null,
-                    _id: "6602679a3585ae5020a9fe46",
-                    username: "abdallah",
-                    recipient: "zyad",
-                    title: "ss",
-                    content: "This is a test message.",
-                    dateTime: "2024-03-26T04:08:00.022Z",
-                    __v: 0
-                }
-            ];
-
-            messageService.getInboxMessages.mockResolvedValue({success: true,message:mockInboxMessages});
-
-            await messageController.getInboxMessages(req, res);
-
-            
-            expect(res.status).toHaveBeenCalledWith(200);
-            expect(res.json).toHaveBeenCalledWith(mockInboxMessages);
-        });
-
-    });
+   
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toHaveLength(2); 
+    expect(response.body[0]).toHaveProperty('status', 'delivered');
+    expect(response.body[0]).toHaveProperty('_id');
+    expect(response.body[0]).toHaveProperty('username', 'abdallah');
+    expect(response.body[0]).toHaveProperty('recipient', 'zyad');
+    expect(response.body[0]).toHaveProperty('title', 'ss');
+    expect(response.body[0]).toHaveProperty('content', 'This is a test message.');
+    expect(response.body[0]).toHaveProperty('dateTime');
+    expect(response.body[1]).toHaveProperty('status', 'delivered');
+    expect(response.body[1]).toHaveProperty('_id');
+    expect(response.body[1]).toHaveProperty('username', 'abdallah');
+    expect(response.body[1]).toHaveProperty('recipient', 'zyad');
+    expect(response.body[1]).toHaveProperty('title', 's');
+    expect(response.body[1]).toHaveProperty('content', 'This is a test message.');
+    expect(response.body[1]).toHaveProperty('dateTime');
+   
+  });
 });
