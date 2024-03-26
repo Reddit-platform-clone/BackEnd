@@ -172,14 +172,15 @@ const messageService = {
     }
 
     
-    const inboxMessages = await Message.find({ recipient: sentUsername, status: 'sent' });
+    const inboxMessages = await Message.find({ username: sentUsername});
+    
 
    
     if (!inboxMessages || inboxMessages.length === 0) {
       return [];
     }
 
-    return inboxMessages;}
+    return {success: true, message:inboxMessages};}
     catch (error) {
       console.error('Error get sent message:', error);
       return { success: false, error: 'Failed to get sent message.' };

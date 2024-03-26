@@ -151,11 +151,11 @@ const messageController = {
     username=req.user;
   }
    
-      
+      console.log(username);
       const unreadMessages = await messageService.getSentMessages(username);
 
       if (unreadMessages.success) {
-      res.status(200).json(unreadMessages);
+      res.status(200).json(unreadMessages.message);
     } else {
       res.status(400).json({ errors: unreadMessages.errors, message: unreadMessages.error });
   }
