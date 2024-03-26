@@ -51,8 +51,10 @@ const messageService = {
   getInboxMessages: async (sentUsername) => {
     
     try {
+      console.log("ssss");
     const user = await UserModel.findOne({ username: sentUsername });
     if (!user) {
+      console.log("s");
       return { success: false, error:'User not found.'};
     }
 
@@ -61,6 +63,7 @@ const messageService = {
 
     
     if (!inboxMessages || inboxMessages.length === 0) {
+      console.log("sw");
       return [];
     }
 

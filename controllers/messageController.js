@@ -44,10 +44,11 @@ const messageController = {
   else{
     username=req.user;
   }
-  
+  console.log("Succ");
       const inboxMessages = await messageService.getInboxMessages(username);
+      console.log(JSON.stringify(inboxMessages));
       if (inboxMessages.success) {
-        
+        console.log("Succ");
       res.status(200).json(inboxMessages.message);
     } else {
       res.status(400).json({ errors: inboxMessages.errors, message: inboxMessages.error });
