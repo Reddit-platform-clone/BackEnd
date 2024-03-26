@@ -15,10 +15,10 @@ router.post('/api/block_user', authMiddleware, userController.blockUser);
 router.post('/api/report_user', authMiddleware, userController.reportUser);
 router.delete('/api/v1/me/friends/:username', authMiddleware, userController.removeFriend);
 
-router.post('/r/:subreddit/api/friend', authMiddleware, userController.createRelationship);
+router.post('/r/:subreddit/api/friend', userController.createRelationship);
 router.post('/r/:subreddit/api/unfriend', userController.removeRelationship);
 
-router.get('/api/v1/me/friends/:username', userController.getFriendInfo);
+router.get('/api/v1/me/friends/:username',authMiddleware, userController.getFriendInfo);
 router.get('/api/username_available', userController.checkUsernameAvailability);
 
 router.get('/user/:username/about', userController.getUserAbout);

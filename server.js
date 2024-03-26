@@ -7,7 +7,7 @@ require('dotenv').config();
 const mongoose = require('mongoose');
 const Post = require('./models/postModel');
 
-mongoose.connect('mongodb://localhost:27017/');
+mongoose.connect(process.env.MONGO_URI);
 mongoose.connection.once('open', () => {
   console.log('Connected to MongoDB!');
 })

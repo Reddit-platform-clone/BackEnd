@@ -6,7 +6,6 @@ const userController = {
       try {
         const { username, password } = req.body;
         const result = await userService.logIn(username, password);
-        console.log(username, password);
         res.status(200).json(result);
       } catch (error) {
         res.status(401).send(error.message)
@@ -102,7 +101,19 @@ const userController = {
   },
 
   getFriendInfo: async (req, res) => {
-    res.json({ message: 'user info' })
+    try {
+      try {
+        console.log('get friend info');
+        const friendUsername = req.params.username;
+        const username = req.user.username;
+        const result = await userService.getFriendInfo(username, friendUsername);
+        res.status(200).json(result);
+      } catch (error) {
+        res.status(400).send(error.message)
+      }
+    } catch (err) {
+      res.status(500).send(err.message)
+    }
   },
 
   checkUsernameAvailability: async (req, res) => {
