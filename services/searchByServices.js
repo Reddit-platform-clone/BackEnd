@@ -1,6 +1,10 @@
 const sort = require('../models/searchByModel.js');
-const User=require('../models/userModel.js');
-const 
+const User = require('../models/userModel.js');
+const Post = require('../models/postModel.js');
+const Comment = require('../models/commentModel.js');
+const Community = require('../schemas/communitySchema.js');
+const Hashtag = require('../models/hashtagModel.js');
+
 
 const searchByService = {
     searchByUsers: async (userId) => {
