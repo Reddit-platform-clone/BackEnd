@@ -83,17 +83,17 @@ describe('Testing listing endpoints', () => {
         expect(randomPost).toEqual({post_id: 2, upvotes: 150, user_id: 'yousefwael02', parent_id: 1, Subreddit_id: 1, num_comments: 1, num_views:1, is_locked: false});
     });
 
-    // it('should return null when no posts are available', async () => {
-    //     Subreddit.find.mockResolvedValue([]);
+    it('should return null when no posts are available', async () => {
+        Subreddit.find.mockResolvedValue([]);
 
-    //     const bestPost = await subredditService.getBest();
+        const bestPost = await subredditService.getBest();
 
-    //     expect(bestPost).toBeNull();
-    // }, 20000);
+        expect(bestPost).toBeNull();
+    });
 
-    // it('should handle errors and throw an error message', async () => {
-    //     Subreddit.find.mockRejectedValue(new Error('Database error'));
+    it('should handle errors and throw an error message', async () => {
+        Subreddit.find.mockRejectedValue(new Error('Database error'));
 
-    //     await expect(subredditService.getBest()).rejects.toThrow('Failed to fetch best post');
-    // }, 20000);
+        await expect(subredditService.getBest()).rejects.toThrow('Failed to fetch best post');
+    });
 })
