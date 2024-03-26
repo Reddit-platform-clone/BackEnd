@@ -12,7 +12,7 @@ beforeAll(async () => {
   });
 }, 20000);
 
-describe('Subreddit Schema Test', () => {});
+describe('Subreddit Schema Test', () => {
 
   it('should be able to insert a subreddit into the database', async () => {
     const subredditData = {
