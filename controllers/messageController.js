@@ -13,13 +13,16 @@ const messageController = {
   else{
     username=req.user;
   }
-      
-       
-       
-      
-     
-      const { recipient, from, title, content } = req.body;
 
+
+      const { recipient, from, title, content } = req.body;
+      console.log('re');
+      console.log(recipient);
+      console.log('rq');
+      console.log(req);
+      console.log('user');
+      console.log(username);
+      console.log('ss');
       const result = await messageService.composeMessage({ username, recipient, from, title, content });
 
       if (result.success) {
@@ -206,9 +209,10 @@ console.log(result);
     username=req.user;
   }
    
-
+    console.log(username);
       
       const result =await messageService.markAllMessagesRead(username);
+      console.log(result);
       if (result.success) {
       
       res.status(200).json({ message: 'Messages readed successfully.' });
