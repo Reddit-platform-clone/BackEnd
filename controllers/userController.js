@@ -2,11 +2,40 @@ const userService = require('../services/userService');
 
 const userController = {
   logIn: async (req, res) => {
-    res.json({ message: 'welcome back' });
+    try {
+      try {
+        const { username, password } = req.body;
+        if (!username || !password) {
+          res.status(400).send('missing username or password');
+          return;
+        }
+
+        const result = await userService.logIn(username, password);
+        res.status(200).json(result);
+      } catch (error) {
+        res.status(401).send(error.message)
+      }
+    } catch (err) {
+      res.status(500).send(err.message)
+    }
   },
 
   singUp: async (req, res) => {
-    res.json({ message: 'welcome to sarakel' });
+    try {
+      try {
+        const { username, password } = req.body;
+        if (!username || !password) {
+          res.status(400).send('missing username or password');
+          return;
+        }
+        const result = await userService.singUp(username, password);
+        res.status(200).json(result);
+      } catch (error) {
+        res.status(400).send(error.message)
+      }
+    } catch (err) {
+      res.status(500).send(err.message)
+    }
   },
 
   logInForgetPassword: async (req, res) => {
@@ -34,7 +63,22 @@ const userController = {
   },
 
   blockUser: async (req, res) => {
-    res.json({ message: 'user blocked ' });
+    try {
+      try {
+        const { usernameToBlock } = req.body;
+        if (!usernameToBlock) { 
+          res.status(400).send('missing username to block'); 
+          return; 
+        }
+        const username = req.user.username;
+        const result = await userService.blockUser(username, usernameToBlock);
+        res.status(200).json(result);
+      } catch (error) {
+        res.status(400).send(error.message)
+      }
+    } catch (err) {
+      res.status(500).send(err.message)
+    }
   },
 
   createRelationship: async (req, res) => {
@@ -46,7 +90,18 @@ const userController = {
   },
 
   getFriendInfo: async (req, res) => {
-    res.json({ message: 'user info' })
+    try {
+      try {
+        const friendUsername = req.params.username;
+        const username = req.user.username;
+        const result = await userService.getFriendInfo(username, friendUsername);
+        res.status(200).json(result);
+      } catch (error) {
+        res.status(400).send(error.message)
+      }
+    } catch (err) {
+      res.status(500).send(err.message)
+    }
   },
 
   checkUsernameAvailability: async (req, res) => {
