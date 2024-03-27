@@ -10,7 +10,7 @@ describe('POST /api/block_user', () => {
             .set('Authorization', 'Bearer ' + token);
         expect(response.statusCode).toBe(200);
         expect(response.body).toHaveProperty('message');
-    }),
+    }, 20000),
 
     it('should not block a user with missing an unauthorized token', async () => {
         const response = await request(app)

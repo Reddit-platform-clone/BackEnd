@@ -84,7 +84,7 @@ describe('Testing listing endpoints', () => {
     });
 
     it('should return null when no posts are available', async () => {
-        Subreddit.find.mockResolvedValue([]);
+        Post.find.mockResolvedValue([]);
 
         const bestPost = await subredditService.getBest();
 
@@ -92,7 +92,7 @@ describe('Testing listing endpoints', () => {
     });
 
     it('should handle errors and throw an error message', async () => {
-        Subreddit.find.mockRejectedValue(new Error('Database error'));
+        Post.find.mockRejectedValue(new Error('Database error'));
 
         await expect(subredditService.getBest()).rejects.toThrow('Failed to fetch best post');
     });

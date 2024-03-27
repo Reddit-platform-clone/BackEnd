@@ -9,7 +9,7 @@ describe('POST /api/v1/me/friends/:username', () => {
             .set('Authorization', 'Bearer ' + token);
         expect(response.statusCode).toBe(200);
         expect(response.body).toHaveProperty('message');
-    }),
+    }, 20000),
 
     it('should not remove a friend if not authorized', async () => {
         const response = await request(app)

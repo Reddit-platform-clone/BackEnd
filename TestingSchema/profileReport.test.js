@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Report = require('../models/profileReportModel.js');
+require('dotenv').config();
 
 beforeAll(async () => {
   await mongoose.connect(process.env.MONGO_URI);
