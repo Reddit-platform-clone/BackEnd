@@ -14,18 +14,15 @@ const userSchema = {
   },
 
   email: {
-    type: String,
-    required: true
+    type: String
   },
 
   dateOfBirth: {
-    type: String,
-    required: true
+    type: String
   },
 
   displayName: {
-    type: String,
-    required: true,
+    type: String
   },
 
   profilePicture: {
@@ -33,6 +30,11 @@ const userSchema = {
   },
 
   followers: {
+    type: [String],
+    default: []
+  },
+
+  friends: {
     type: [String],
     default: []
   },
@@ -48,25 +50,18 @@ const userSchema = {
 
   interests: {
     type: [String],
-    default: [],
-    required: true
+    default: []
   },
 
   gender: {
     type: String,
-    enum: ['Male', 'Female'],
-    required: true
+    enum: ['Male', 'Female']
   },
 
   socialLinks: {
     type: [String],
     default: []
-  },
-
-  token: {
-    type: String,
-    required: true
-  },
+  }
 };
 
 const User = mongoose.model('User', userSchema);
