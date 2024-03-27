@@ -3,7 +3,7 @@ const app = require('../server');
 
 describe('GET /api/v1/me/friends/:username', () => {
     it('should block a user', async () => {
-        token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImtvZnRhIDNhbGZhN20iLCJpYXQiOjE3MTE0ODczOTN9.ls_1FK78CYqVj6qr5E55nw1AyEA9o2RlIdi9_UDbbb0'
+        token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImtvZnRhIDNhbGZhN20iLCJpYXQiOjE3MTE0OTkxNDZ9.vEvVmG0O5d39fPB9aApiYvyFI5wqrHwtq87v68wxHSs'
         const response = await request(app)
             .get('/api/v1/me/friends/abdallah')
             .set('Authorization', 'Bearer ' + token);

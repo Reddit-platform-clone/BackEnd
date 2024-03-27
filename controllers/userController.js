@@ -55,11 +55,34 @@ const userController = {
   },
 
   removeFriend: async (req, res) => {
-    res.json({ message: 'friend removed' });
+    try {
+      try {
+        const username = req.user.username;
+        const usernameToRemove = req.params.username;
+        const result = await userService.removeFriend(username, usernameToRemove);
+        res.status(200).json(result);
+      } catch (error) {
+        res.status(400).send(error.message)
+      }
+    } catch (err) {
+      res.status(500).send(err.message)
+    }
   },
 
   reportUser: async (req, res) => {
-    res.json({ message: 'report sent' });
+    try {
+      try {
+        const { reported, details } = req.body;
+        const reporter = req.user.username;
+        console.log(reporter, reported);
+        const result = await userService.reportUser(reporter, reported, details);
+        res.status(200).json(result);
+      } catch (error) {
+        res.status(400).send(error.message)
+      }
+    } catch (err) { 
+      res.status(500).send(err.message)
+    }
   },
 
   blockUser: async (req, res) => {
@@ -105,11 +128,31 @@ const userController = {
   },
 
   checkUsernameAvailability: async (req, res) => {
-    res.json({ message: 'check username availability' })
+    try {
+      try {
+        const { username } = req.body;
+        const result = await userService.checkUsernameAvailability(username);
+        res.status(200).json(result);
+      } catch (error) {
+        res.status(400).send(error.message)
+      }
+    } catch (err) {
+      res.status(500).send(err.message)
+    }
   },
 
   getUserAbout: async (req, res) => {
-    res.json({ message: 'user about'})
+    try {
+      try {
+        const username = req.params.username;
+        const result = await userService.getUserAbout(username);
+        res.status(200).json(result);
+      } catch (error) {
+        res.status(400).send(error.message)
+      }
+    } catch (err) {
+      res.status(500).send(err.message)
+    }
   },
   
   getUserOverview: async (req, res) => {
