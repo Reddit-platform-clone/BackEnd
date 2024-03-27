@@ -1,12 +1,14 @@
 const request = require('supertest');
 const app = require('../server');
+const { default: test } = require('node:test');
 
 describe('POST /signup', () => {
     it('should register a new user', async () => {
+        username = 'testuser' + Date.now();
         const response = await request(app)
             .post('/signup')
             .send({
-                username: 'wael',
+                username: 'hamada',
                 password: '145'
             });
         expect(response.statusCode).toBe(200);
