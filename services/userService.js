@@ -18,7 +18,7 @@ const userService = {
 
     const token = jwt.sign({ username: user.username }, process.env.SECRET_ACCESS_TOKEN);
 
-    return { token: token };
+    return { token: token, username: user.username };
   },
 
   singUp: async (username, password) => {
