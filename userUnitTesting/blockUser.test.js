@@ -3,7 +3,7 @@ const request = require('supertest');
 
 describe('POST /api/block_user', () => {
     it('should block a user', async () => {
-        token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImtvZnRhIDNhbGZhN20iLCJpYXQiOjE3MTE0OTkxNDZ9.vEvVmG0O5d39fPB9aApiYvyFI5wqrHwtq87v68wxHSs'
+        token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImJlYm9AZ21haWwuY29tIiwiaWF0IjoxNzEyMDU5ODY3fQ.NV5opXmReq0vo-LVrvT6OiQsthwrAM6mAJEfajYVPto'
         const response = await request('http://localhost:5000/')
             .post('api/block_user')
             .send({ usernameToBlock: 'wael' })
