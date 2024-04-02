@@ -1,6 +1,6 @@
 
 const request = require('supertest');
-const app = require('../server'); 
+// const app = require('../server'); 
 
 describe('POST /api/report_msge', () => {
   it('should report a  message', async () => {
@@ -10,8 +10,8 @@ describe('POST /api/report_msge', () => {
         reportDetails:"vioal"
     };
 
-    const response = await request(app)
-      .post('/api/report_msg')
+    const response = await request('http://localhost:5000/')
+      .post('api/report_msg')
       .set('Authorization', token)
       .send(messageData);
 
