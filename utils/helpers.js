@@ -10,4 +10,9 @@ const validatePassword = async (password, hash) => {
   return compare;
 };
 
-module.exports = { hashPassword, validatePassword };
+function isValidEmail(email) {
+  var pattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+  return email.match(pattern) !== null;
+}
+
+module.exports = { hashPassword, validatePassword, isValidEmail };

@@ -7,28 +7,38 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 const userService = {
-  logIn: async (username, password) => {
+  logIn: async (emailOrUsername, password) => {
     // logic to login registered users
-    const user = await userModel.findOne({ username: username });
-    if (!user) throw new Error('invalid username or password'); 
+    let user;
+    if (utils.isValidEmail(emailOrUsername)){
+      user = await userModel.findOne({ email: emailOrUsername });
+      console.log(emailOrUsername)
+      if (!user) throw new Error('invalid email'); 
+    } else {
+      user = await userModel.findOne({ username: emailOrUsername });
+      console.log(user.email)
+      if (!user) throw new Error('invalid username')
+    }
 
-    // const isValid = await bcrypt.compare(password, user.password);
     const isValid = await utils.validatePassword(password, user.password);
-    if (!isValid) throw new Error('invalid username or password');
+    if (!isValid) throw new Error('invalid email or password');
 
     const token = jwt.sign({ username: user.username }, process.env.SECRET_ACCESS_TOKEN);
 
     return { token: token };
   },
 
-  singUp: async (username, password) => {
+  singUp: async (username, email, password) => {
     // logic to register new users
     const userExists = await userModel.findOne({ username: username });
     if (userExists) throw new Error('invalid username or password');
 
+    const emailExists = await userModel.findOne({ email: email });
+    if (emailExists) throw new Error ('thi email is already linked to an account')
+
     // const hashedPassword = await bcrypt.hash(password, 10);
     const hashedPassword = await utils.hashPassword(password);
-    const userData = { username: username, password: hashedPassword };
+    const userData = { username: username, password: hashedPassword, email: email };
 
     const token = jwt.sign({ username: userData.username }, process.env.SECRET_ACCESS_TOKEN);
 

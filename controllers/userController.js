@@ -1,16 +1,17 @@
 const userService = require('../services/userService');
+const utils = require('../utils/helpers.js');
 
 const userController = {
   logIn: async (req, res) => {
     try {
       try {
-        const { username, password } = req.body;
-        if (!username || !password) {
+        const { emailOrUsername, password } = req.body;
+        if (!emailOrUsername || !password) {
           res.status(400).send('missing username or password');
           return;
         }
 
-        const result = await userService.logIn(username, password);
+        const result = await userService.logIn(emailOrUsername, password);
         res.status(200).json(result);
       } catch (error) {
         res.status(401).send(error.message)
@@ -23,12 +24,18 @@ const userController = {
   singUp: async (req, res) => {
     try {
       try {
-        const { username, password } = req.body;
-        if (!username || !password) {
-          res.status(400).send('missing username or password');
+        const { username, email, password } = req.body;
+        if (!username || !password || !email) {
+          res.status(400).send('missing username or email or password');
           return;
         }
-        const result = await userService.singUp(username, password);
+
+        if (!utils.isValidEmail(email)){
+          res.status(400).send('please enter a valid email');
+          return;
+        }
+
+        const result = await userService.singUp(username, email, password);
         res.status(200).json(result);
       } catch (error) {
         res.status(400).send(error.message)
