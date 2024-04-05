@@ -30,11 +30,11 @@ const messageService = {
       return { success: false, error: `Sender  does not exist.` };
   }
 
-//ADEED IN THE FUTURE
-      // if (sender.blockedUsers.includes(receiver._id) || receiver.blockedUsers.includes(sender._id)) {
-      //     return { success: false, error: 'Message cannot be sent because of blocking.' };
-      // }
-      
+
+if ((sender.blockedUsers && sender.blockedUsers.includes(receiver.username)) || 
+(receiver.blockedUsers && receiver.blockedUsers.includes(sender.username))) {
+return { success: false, error: 'Message cannot be sent because of blocking.' };
+}    
     const message = new Message(messageData);
 
     await message.save();
