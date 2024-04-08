@@ -4,6 +4,7 @@ const userModel = require('../models/userModel.js');
 const reportModel = require('../models/profileReportModel.js');
 const utils = require('../utils/helpers.js');
 const jwt = require('jsonwebtoken');
+const crypto = require('crypto')
 
 const userService = {
   logIn: async (emailOrUsername, password) => {
@@ -49,18 +50,27 @@ const userService = {
 
   verifyToken: async (token) => {
     userData = await utils.verifyGoogleToken(token);
-    let user = userModel.findOne({ email: userData.email});
+    
+    let user = await userModel.findOne({ email: userData.email});
     let userToken;
     if(user) {
+      if (!user.password) {
+        const pass = crypto.randomBytes(10).toString('Hex');
+        const hashedPass = await utils.hashPassword(pass);
+        user.password = hashedPass;
+        await user.save();
+      }
       userToken = jwt.sign({ username: user.username }, process.env.SECRET_ACCESS_TOKEN);
       return { token: userToken };
     }
-    const username =  utils.generateRandomUsername;
-    user = { username: username, email: userData.email };
+    const username = utils.generateRandomUsername();
+    const password = crypto.randomBytes(10).toString('Hex');
+    const hashedPassword = await utils.hashPassword(password);
 
-    userToken = jwt.sign({ username: user.username }, process.env.SECRET_ACCESS_TOKEN);
-    
-    const newUser = new userModel(user);
+    const newEntry = { username: username, email: userData.email, password: hashedPassword };
+
+    userToken = jwt.sign({ username: newEntry.username }, process.env.SECRET_ACCESS_TOKEN);
+    const newUser = new userModel(newEntry);
     await newUser.save();
     
     return { token: userToken };
