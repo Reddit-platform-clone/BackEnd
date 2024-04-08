@@ -49,31 +49,35 @@ const userService = {
   },
 
   verifyToken: async (token) => {
-    userData = await utils.verifyGoogleToken(token);
-    
-    let user = await userModel.findOne({ email: userData.email});
-    let userToken;
-    if(user) {
-      if (!user.password) {
-        const pass = crypto.randomBytes(10).toString('Hex');
-        const hashedPass = await utils.hashPassword(pass);
-        user.password = hashedPass;
-        await user.save();
+    try {
+      userData = await utils.verifyGoogleToken(token);
+      
+      let user = await userModel.findOne({ email: userData.email});
+      let userToken;
+      if(user) {
+        if (!user.password) {
+          const pass = crypto.randomBytes(10).toString('Hex');
+          const hashedPass = await utils.hashPassword(pass);
+          user.password = hashedPass;
+          await user.save();
+        }
+        userToken = jwt.sign({ username: user.username }, process.env.SECRET_ACCESS_TOKEN);
+        return { token: userToken };
       }
-      userToken = jwt.sign({ username: user.username }, process.env.SECRET_ACCESS_TOKEN);
+      const username = utils.generateRandomUsername();
+      const password = crypto.randomBytes(10).toString('Hex');
+      const hashedPassword = await utils.hashPassword(password);
+  
+      const newEntry = { username: username, email: userData.email, password: hashedPassword };
+  
+      userToken = jwt.sign({ username: newEntry.username }, process.env.SECRET_ACCESS_TOKEN);
+      const newUser = new userModel(newEntry);
+      await newUser.save();
+      
       return { token: userToken };
+    } catch (err) {
+      return (err.message)
     }
-    const username = utils.generateRandomUsername();
-    const password = crypto.randomBytes(10).toString('Hex');
-    const hashedPassword = await utils.hashPassword(password);
-
-    const newEntry = { username: username, email: userData.email, password: hashedPassword };
-
-    userToken = jwt.sign({ username: newEntry.username }, process.env.SECRET_ACCESS_TOKEN);
-    const newUser = new userModel(newEntry);
-    await newUser.save();
-    
-    return { token: userToken };
   },
 
   logInForgetPassword: async (username) => {

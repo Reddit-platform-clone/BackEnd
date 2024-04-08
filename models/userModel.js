@@ -9,6 +9,7 @@ const userSchema = {
 
   password: {
     type: String,
+    required: true
   },
 
   email: {
