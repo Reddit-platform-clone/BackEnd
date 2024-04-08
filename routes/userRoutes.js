@@ -6,6 +6,7 @@ const authMiddleware = require('../middleware/userAuthMiddleware.js');
 
 router.post('/login', userController.logIn);
 router.post('/signup', userController.singUp);
+router.post('/verifyToken', userController.verifyToken);
 router.post('/login/forget_password', userController.logInForgetPassword);
 router.post('/login/forget_username', userController.logInForgetUsername);
 router.post('/login/reset_password', userController.resetPassword);

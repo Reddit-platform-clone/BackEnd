@@ -1,3 +1,4 @@
+const { util } = require('chai');
 const userService = require('../services/userService');
 const utils = require('../utils/helpers.js');
 
@@ -42,6 +43,17 @@ const userController = {
       }
     } catch (err) {
       res.status(500).send(err.message)
+    }
+  },
+
+  verifyToken: async (req, res) => {
+    try {
+      const token = req.body.token;
+      const result = await userService.verifyToken(token)
+
+      res.status(200).json(result);
+    } catch(err) {
+      res.status(400).send({ error: err.message });
     }
   },
 

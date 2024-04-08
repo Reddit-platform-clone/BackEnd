@@ -3,7 +3,6 @@ require('dotenv').config();
 const userModel = require('../models/userModel.js');
 const reportModel = require('../models/profileReportModel.js');
 const utils = require('../utils/helpers.js');
-const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 const userService = {
@@ -46,6 +45,25 @@ const userService = {
 
     await user.save();
     return { token: token };
+  },
+
+  verifyToken: async (token) => {
+    userData = await utils.verifyGoogleToken(token);
+    let user = userModel.findOne({ email: userData.email});
+    let userToken;
+    if(user) {
+      userToken = jwt.sign({ username: user.username }, process.env.SECRET_ACCESS_TOKEN);
+      return { token: userToken };
+    }
+    const username =  utils.generateRandomUsername;
+    user = { username: username, email: userData.email };
+
+    userToken = jwt.sign({ username: user.username }, process.env.SECRET_ACCESS_TOKEN);
+    
+    const newUser = new userModel(user);
+    await newUser.save();
+    
+    return { token: userToken };
   },
 
   logInForgetPassword: async (username) => {
