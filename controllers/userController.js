@@ -1,4 +1,3 @@
-const { util } = require('chai');
 const userService = require('../services/userService');
 const utils = require('../utils/helpers.js');
 
