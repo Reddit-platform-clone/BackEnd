@@ -136,15 +136,11 @@ const userController = {
 
   checkUsernameAvailability: async (req, res) => {
     try {
-      try {
-        const { username } = req.body;
-        const result = await userService.checkUsernameAvailability(username);
-        res.status(200).json(result);
-      } catch (error) {
-        res.status(400).send(error.message)
-      }
-    } catch (err) {
-      res.status(500).send(err.message)
+      const { username } = req.params; // Assuming username is in the URL params
+      const result = await userService.checkUsernameAvailability(username);
+      res.status(200).json(result);
+    } catch (error) {
+      res.status(400).send(error.message);
     }
   },
 

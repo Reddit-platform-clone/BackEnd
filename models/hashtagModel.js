@@ -1,7 +1,7 @@
 let mongoose = require('mongoose');
 
 const hashtagSchema = new mongoose.Schema({
-    hashtagString: {type: string, required: true, unique: true} 
+    hashtagString: {type: String, required: true, unique: true} 
 });
 
 const Hashtag = mongoose.model('hashtag', hashtagSchema);

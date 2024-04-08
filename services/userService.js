@@ -137,7 +137,8 @@ const userService = {
   checkUsernameAvailability: async (username) => {
     // logic to check username validity
     const user = await userModel.findOne({ username: username });
-    if (user) throw new Error('Username is not available');
+    // console.log(user);
+    if (user == null) throw new Error('Username is not available');
     return { message: 'Username is available' };
   },
 
