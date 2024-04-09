@@ -1,4 +1,4 @@
-const hidePost = require('../models/hidePostmodel');
+const hidePost = require('../models/hidePostModel');
 
 
 

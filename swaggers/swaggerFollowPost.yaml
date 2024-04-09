@@ -3,19 +3,27 @@ info:
   version: '1.0.0'
   title: SERAKEL API
 paths:
-  /message/del_msg:
-    delete:
-      summary: Delete a message
-      description: Deletes a message by its ID
+  /api/follow_post:
+    post:
+      summary: Follow a post
+      description: Allows a user to follow a specific post
       parameters:
-        - in: query
-          name: _id
-          description: The ID of the message to delete
+        - in: body
+          name: followDetails
+          description: Details for following a post
           required: true
-          type: string
+          schema:
+            type: object
+            properties:
+              userId:
+                type: string
+                description: The ID of the user who wants to follow the post
+              postId:
+                type: string
+                description: The ID of the post to be followed
       responses:
         '200':
-          description: Message deleted successfully
+          description: Post followed successfully
           schema:
             type: object
             properties:
@@ -24,9 +32,9 @@ paths:
                 description: Indicates whether the operation was successful
               message:
                 type: string
-                description: Success message indicating that the message was deleted successfully
+                description: Success message indicating that the post was followed successfully
         '500':
-          description: Failed to delete the message
+          description: Failed to follow post
           schema:
             type: object
             properties:
@@ -37,8 +45,10 @@ paths:
                 type: string
                 description: Error message
       tags:
-        - Messages
-      operationId: deleteMessage
+        - Follows
+      operationId: followPost
+      consumes:
+        - application/json
       produces:
         - application/json
       security:
@@ -50,4 +60,4 @@ securityDefinitions:
     # tokenUrl: "https://www.example.com/oauth2/token"
     flow: authorizationCode
     scopes:
-      delete_message: Allow deleting messages
+      follow_post: Allow following a post

@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Comment = require('../models/commentModel');
 require('dotenv').config();
 
-console.log(process.env.MONGO_URI);
+
 
 beforeAll(async () => {
   await mongoose.connect(process.env.MONGO_URI, {
@@ -16,7 +16,7 @@ describe('Comment Model Test', () => {
 
   it('should be able to insert a comment into the database', async () => {
     const commentData = {
-      commentID: '12345',
+      
       postID: 'post123',
       userID: 'user456',
       dateTime: new Date(),
@@ -36,7 +36,7 @@ describe('Comment Model Test', () => {
 
   it('should be able to retrieve all comments from the database', async () => {
     const commentData1 = {
-      commentID: '12345',
+     
       postID: 'post123',
       userID: 'user456',
       dateTime: new Date(),

@@ -1,8 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-let dotenv = require('dotenv').config();
-const mongoose = require('./database');
-
+const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
 const { swaggerUi, specs, router } = require('./swaggerConfig');
@@ -19,6 +17,7 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 app.use(bodyParser.json());
+app.use(cors());
 
 app.use('/api-docs', router);
 
@@ -39,5 +38,5 @@ loadRoutes(routesDirectory);
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
+module.exports = app;
 /* eslint-enable import/no-dynamic-require, global-require */
-
