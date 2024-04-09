@@ -1,26 +1,86 @@
 /* eslint-disable no-unused-vars */
 
-const Message = require('../models/messageModel'); // Assuming you have a Message model
-
+const Message = require('../models/messageModel'); 
+const jwt = require('jsonwebtoken');
+const { validationResult } = require('express-validator');
+const UserModel = require('../models/userModel'); 
 const messageService = {
   composeMessage: async (messageData) => {
-    // Logic to create a new message
-    // Example: const newMessage = await Message.create(messageData);
-    // return newMessage;
+    try {
+     
+      const errors = validationResult(messageData);
+      if (!errors.isEmpty()) {
+          return { success: false, errors: errors.array() };
+      }
+
+      
+      const { username, recipient } = messageData;
+      if (username === recipient) {
+        return { success: false, error: 'Sender and recipient cannot be the same.' };
+    }
+      const senderExists = await UserModel.exists({ username: username });
+      const receiverExists = await UserModel.exists({ username: recipient });
+      
+      if ( !receiverExists) {
+        return { success: false, error: 'receiver does not exist.' };
+    }   if (!senderExists) {
+      
+      return { success: false, error: `Sender (${username}) does not exist.` };
+  }
+
+//ADEED IN THE FUTURE
+      // if (sender.blockedUsers.includes(receiver._id) || receiver.blockedUsers.includes(sender._id)) {
+      //     return { success: false, error: 'Message cannot be sent because of blocking.' };
+      // }
+      
+    const message = new Message(messageData);
+
+    await message.save();
+
+      
+
+    return { success: true, message: 'Message sent successfully.' };
+  } catch (error) {
+      console.error('Error composing message:', error);
+      return { success: false, error: 'Failed to send message.' };
+  }
   },
 
-  getInboxMessages: async (sentuserId) => {
+  getInboxMessages: async (sentUsername) => {
+    
 
-    // Logic to retrieve inbox messages for the specified user
-    // Example: const inboxMessages = await Message.find({ recipient: userId });
-    // return inboxMessages;
+    const user = await UserModel.findOne({ username: sentUsername });
+    if (!user) {
+      throw new Error('User not found.');
+    }
+
+    
+    const inboxMessages = await Message.find({ recipient: sentUsername });
+
+    
+    if (!inboxMessages || inboxMessages.length === 0) {
+      return [];
+    }
+
+    return inboxMessages;
   },
 
-  getUnreadMessages: async (sentuserId) => {
+  getUnreadMessages: async (sentUsername) => {
 
-    // Logic to retrieve unread messages for the specified user
-    // Example: const unreadMessages = await Message.find({ recipient: userId, status: 'unread' });
-    // return unreadMessages;
+    const user = await UserModel.findOne({ username: sentUsername });
+    if (!user) {
+      throw new Error('User not found.');
+    }
+
+    
+    const inboxMessages = await Message.find({ recipient: sentUsername, status: 'sent' });
+
+   
+    if (!inboxMessages || inboxMessages.length === 0) {
+      return [];
+    }
+
+    return inboxMessages;
   },
 
   deleteMessage: async (messageId, sentuserId) => {

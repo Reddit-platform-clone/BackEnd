@@ -12,7 +12,7 @@ beforeAll(async () => {
 
 describe('User Model Test', () => {
   beforeEach(async () => {
-      await User.deleteMany({});
+      
   });
 
   it('should be able to insert a user into the database', async () => {

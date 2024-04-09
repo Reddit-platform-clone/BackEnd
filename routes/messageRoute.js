@@ -2,10 +2,11 @@ const express = require('express');
 
 const router = express.Router();
 const messageController = require('../controllers/messageController');
+const authenticateToken = require('../middleware/authMiddleware');
 
-router.post('/message/compose', messageController.compose);
-router.get('/message/inbox', messageController.getInboxMessages);
-router.get('/message/unread', messageController.getUnreadMessages);
+router.post('/message/compose',authenticateToken, messageController.compose);
+router.get('/message/inbox',authenticateToken, messageController.getInboxMessages);
+router.get('/message/unread',authenticateToken, messageController.getUnreadMessages);
 router.delete('/message/del_msg', messageController.deleteMessage);
 router.post('/api/report_msg', messageController.reportMessage);
 router.get('/message/sent', messageController.getSentMessages);

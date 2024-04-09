@@ -26,7 +26,6 @@ const userSchema = {
   displayName: {
     type: String,
     required: true,
-    unique: true
   },
 
   profilePicture: {
