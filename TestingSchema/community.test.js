@@ -1,6 +1,3 @@
-
-require('dotenv').config();
-
 const mongoose = require('mongoose');
 const Community = require('../schemas/communitySchema');
 require('dotenv').config();
@@ -12,7 +9,7 @@ beforeAll(async () => {
   });
 }, 20000);
 
-describe('Community Schema Test', () => {});
+describe('Community Schema Test', () => {
 
   it('should be able to insert a community into the database', async () => {
     const communityData = {

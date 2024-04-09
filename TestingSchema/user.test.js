@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const User = require('../models/userModel');
 const e = require('express');
 const exp = require('constants');
+console.log(process.env.MONGO_URI);
 
 beforeAll(async () => {
   await mongoose.connect(process.env.MONGO_URI, {

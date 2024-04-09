@@ -13,7 +13,8 @@ const postSchema = new mongoose.Schema({
     scheduled: {type: Boolean},
     is_spoiler: {type: Boolean},
     num_views: {type: Number, required: true},
-    is_locked: {type: Boolean, required: true} 
+    is_locked: {type: Boolean, required: true},
+    post_content:{type: String}
 });
 
 const Post = mongoose.model('post', postSchema);
