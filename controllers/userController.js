@@ -188,6 +188,18 @@ const userController = {
     res.json({ message: 'user downvoted'})
   },
 
+  getUserIdentity: async (req, res) => {
+    try {
+      const username = req.user.username;
+
+      const result = await userService.getUserIdentity(username);
+
+      res.status(200).json(result);
+    } catch(err) {
+      res.status(400).send(err.message);
+    }
+  },
+
   getPrefs: async (req, res) => {
     try {
       const username = req.user.username;
