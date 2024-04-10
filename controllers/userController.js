@@ -10,11 +10,10 @@ const userController = {
           res.status(400).send('missing username or password');
           return;
         }
-
         const result = await userService.logIn(emailOrUsername, password);
         res.status(200).json(result);
       } catch (error) {
-        res.status(401).send(error.message)
+        res.status(400).send(error.message)
       }
     } catch (err) {
       res.status(500).send(err.message)
@@ -193,8 +192,17 @@ const userController = {
     res.json({ message: 'user identity'})
   },
 
-  getPreferences: async (req, res) => {
-    res.json({ message: 'user preferences'})
+  updatePrefs: async (req, res) => {
+    try {
+      const username = req.user.username;
+      const settings = req.body;
+
+      const result = await userService.updatePrefs(username, settings);
+  
+      res.status(200).json(result);
+    } catch(err) {
+      res.status(400).send(err.message)
+    }
   }
 };
 

@@ -30,6 +30,6 @@ router.get('/user/:username/upvoted', userController.getUserUpvoted);
 router.get('/user/:username/downvoted', userController.getUserDownvoted);
 
 router.get('/api/v1/me', userController.getIdentity);
-router.patch('/api/v1/me/prefs', userController.getPreferences);
+router.patch('/api/v1/me/prefs', authMiddleware.authorizeationToken, userController.updatePrefs);
 
 module.exports = router;

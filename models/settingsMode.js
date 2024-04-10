@@ -1,75 +1,234 @@
 const mongoose = require('mongoose');
 
 const settingsSchema = new mongoose.Schema({
+    username: {
+        type: String,
+        required: true,
+        unique: true
+    },
+
     // account settings
-    optIntoBeta: Boolean,
-    optOutRedesign: Boolean,
+    optIntoBeta: {
+        type: Boolean,
+        default: false
+    },
+    optOutRedesign: {
+        type: Boolean,
+        default: false
+    },
 
     // privacy and security
-    showInSearch: Boolean,
-    personalizeAds: Boolean,
-    alcohol: Boolean,
-    dating: Boolean,
-    gambling: Boolean,
-    pregnancyAndParenting: Boolean,
-    weightLoss: Boolean,
-    twoFactorAuthentication: Boolean,
+    showInSearch: {
+        type: Boolean,
+        default: false
+    },
+    personalizeAds: {
+        type: Boolean,
+        default: false
+    },
+    alcohol: {
+        type: Boolean,
+        default: false
+    },
+    dating: {
+        type: Boolean,
+        default: false
+    },
+    gambling: {
+        type: Boolean,
+        default: false
+    },
+    pregnancyAndParenting: {
+        type: Boolean,
+        default: false
+    },
+    weightLoss: {
+        type: Boolean,
+        default: false
+    },
+    twoFactorAuthentication: {
+        type: Boolean,
+        default: false
+    },
 
     // feed settings
-    showMatureContent: Boolean,
-    blurMatureContent: Boolean,
-    enableHomeFeedRecs: Boolean,
-    autoPlay: Boolean,
-    reduceAnimations: Boolean,
-    communityThemes: Boolean,
+    showMatureContent: {
+        type: Boolean,
+        default: false
+    },
+    blurMatureContent: {
+        type: Boolean,
+        default: false
+    },
+    enableHomeFeedRecs: {
+        type: Boolean,
+        default: false
+    },
+    autoPlay: {
+        type: Boolean,
+        default: false
+    },
+    reduceAnimations: {
+        type: Boolean,
+        default: false
+    },
+    communityThemes: {
+        type: Boolean,
+        default: false
+    },
     communityContentSort: {
         type: String,
         enum: ['hot', 'new', 'top', 'rising']
     },
-    rememberPerCommunity: Boolean,
+    rememberPerCommunity: {
+        type: Boolean,
+        default: false
+    },
     globalContentView: {
         type: String,
         enum: ['card', 'classic', 'compact']
     },
-    rememberPerCommunityView: Boolean,
-    openPostsInNewWindow: Boolean,
-    defaultToMarkdown: Boolean,
+    rememberPerCommunityView: {
+        type: Boolean,
+        default: false
+    },
+    openPostsInNewWindow: {
+        type: Boolean,
+        default: false
+    },
+    defaultToMarkdown: {
+        type: Boolean,
+        default: false
+    },
 
     // notifications
-    privateMessages: Boolean,
-    chatMessages: Boolean,
-    chatRequesets: Boolean,
-    mentionsOfUsername: Boolean,
-    commentsOnPosts: Boolean,
-    upvotesOnPosts: Boolean,
-    upvotesOnComments: Boolean,
-    repliesToComments: Boolean,
-    activityOnComments: Boolean,
-    activityOnChatPosts: Boolean,
-    newFollowers: Boolean,
-    awardsReceived: Boolean,
-    postsFollowed: Boolean,
-    commentsFollowed: Boolean,
-    trendingPosts: Boolean,
-    communityRecs: Boolean,
-    rereddit: Boolean,
-    featuredContents: Boolean,
-    redditAnnouncements: Boolean,
-    cakeDay: Boolean,
+    privateMessages: {
+        type: Boolean,
+        default: false
+    },
+    chatMessages: {
+        type: Boolean,
+        default: false
+    },
+    chatRequesets: {
+        type: Boolean,
+        default: false
+    },
+    mentionsOfUsername: {
+        type: Boolean,
+        default: false
+    },
+    commentsOnPosts: {
+        type: Boolean,
+        default: false
+    },
+    upvotesOnPosts: {
+        type: Boolean,
+        default: false
+    },
+    upvotesOnComments: {
+        type: Boolean,
+        default: false
+    },
+    repliesToComments: {
+        type: Boolean,
+        default: false
+    },
+    activityOnComments: {
+        type: Boolean,
+        default: false
+    },
+    activityOnChatPosts: {
+        type: Boolean,
+        default: false
+    },
+    newFollowers: {
+        type: Boolean,
+        default: false
+    },
+    awardsReceived: {
+        type: Boolean,
+        default: false
+    },
+    postsFollowed: {
+        type: Boolean,
+        default: false
+    },
+    commentsFollowed: {
+        type: Boolean,
+        default: false
+    },
+    trendingPosts: {
+        type: Boolean,
+        default: false
+    },
+    communityRecs: {
+        type: Boolean,
+        default: false
+    },
+    rereddit: {
+        type: Boolean,
+        default: false
+    },
+    featuredContents: {
+        type: Boolean,
+        default: false
+    },
+    redditAnnouncements: {
+        type: Boolean,
+        default: false
+    },
+    cakeDay: {
+        type: Boolean,
+        default: false
+    },
 
     // emails
-    privateMessagesEmail: Boolean,
-    chatRequesetsEmail: Boolean,
-    newUserWelcome: Boolean,
-    commentsOnPostsEmali: Boolean,
-    repliesToCommentsEmail: Boolean,
-    upvotesOnPostsEmail: Boolean,
-    upvotesOnCommentsEmail: Boolean,
-    mentionsOfUsernameEmail: Boolean,
-    newFollowersEmail: Boolean,
-    dailyDigest: Boolean,
-    unsubscribeFromAllEmails: Boolean,
-});
+    privateMessagesEmail: {
+        type: Boolean,
+        default: false
+    },
+    chatRequesetsEmail: {
+        type: Boolean,
+        default: false
+    },
+    newUserWelcome: {
+        type: Boolean,
+        default: false
+    },
+    commentsOnPostsEmali: {
+        type: Boolean,
+        default: false
+    },
+    repliesToCommentsEmail: {
+        type: Boolean,
+        default: false
+    },
+    upvotesOnPostsEmail: {
+        type: Boolean,
+        default: false
+    },
+    upvotesOnCommentsEmail: {
+        type: Boolean,
+        default: false
+    },
+    mentionsOfUsernameEmail: {
+        type: Boolean,
+        default: false
+    },
+    newFollowersEmail: {
+        type: Boolean,
+        default: false
+    },
+    dailyDigest: {
+        type: Boolean,
+        default: false
+    },
+    unsubscribeFromAllEmails: {
+        type: Boolean,
+        default: false
+    },
+}, { strict: 'throw' });
 
 const Settings = mongoose.model('Settings', settingsSchema);
 

@@ -2,6 +2,7 @@ require('dotenv').config();
 
 const userModel = require('../models/userModel.js');
 const reportModel = require('../models/profileReportModel.js');
+const settingsModel = require('../models/settingsMode.js');
 const utils = require('../utils/helpers.js');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto')
@@ -15,8 +16,8 @@ const userService = {
       console.log(emailOrUsername)
       if (!user) throw new Error('invalid email'); 
     } else {
+      console.log(emailOrUsername, password)
       user = await userModel.findOne({ username: emailOrUsername });
-      console.log(user.email)
       if (!user) throw new Error('invalid username')
     }
 
@@ -206,8 +207,14 @@ const userService = {
     // logic to get user identity
   },
 
-  getPreferences: async () => {
-    // logic to get user preferences
+  updatePrefs: async (username, settings) => {
+    // logic to get update preferences
+    const user = await userModel.findOne({ username: username });
+    if (!user) throw new Error('User not found');
+
+    const userSettings = await settingsModel.findOneAndUpdate({ username: username }, settings, { new: true, upsert: true, runValidators: true });
+
+    return { settings: userSettings };
   }
 };
 
