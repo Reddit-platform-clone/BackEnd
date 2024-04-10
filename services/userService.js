@@ -203,8 +203,12 @@ const userService = {
     // logic to get user details
   },
   
-  getIdentity: async () => {
+  getPrefs: async (username) => {
     // logic to get user identity
+    const settings = await settingsModel.findOne({ username: username });
+    if (!settings) throw new Error('User not found');
+
+    return { settings: settings };
   },
 
   updatePrefs: async (username, settings) => {
