@@ -13,10 +13,8 @@ const userService = {
     let user;
     if (utils.isValidEmail(emailOrUsername)){
       user = await userModel.findOne({ email: emailOrUsername });
-      console.log(emailOrUsername)
       if (!user) throw new Error('invalid email'); 
     } else {
-      console.log(emailOrUsername, password)
       user = await userModel.findOne({ username: emailOrUsername });
       if (!user) throw new Error('invalid username')
     }
@@ -170,7 +168,6 @@ const userService = {
   checkUsernameAvailability: async (username) => {
     // logic to check username validity
     const user = await userModel.findOne({ username: username });
-    // console.log(user);
     if (user == null) throw new Error('Username is not available');
     return { message: 'Username is available' };
   },

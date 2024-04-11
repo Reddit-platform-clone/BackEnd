@@ -91,7 +91,6 @@ const userController = {
       try {
         const { reported, details } = req.body;
         const reporter = req.user.username;
-        console.log(reporter, reported);
         const result = await userService.reportUser(reporter, reported, details);
         res.status(200).json(result);
       } catch (error) {
