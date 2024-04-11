@@ -16,13 +16,7 @@ const messageController = {
 
 
       const { recipient, from, title, content } = req.body;
-      console.log('re');
-      console.log(recipient);
-      console.log('rq');
-      console.log(req);
-      console.log('user');
-      console.log(username);
-      console.log('ss');
+   
       const result = await messageService.composeMessage({ username, recipient, from, title, content });
 
       if (result.success) {
@@ -130,7 +124,7 @@ const messageController = {
 
       
       const result=await messageService.reportMessage( username ,_id,reportDetails);
-      console.log(result);
+      
       if (result.success) {
       
       res.status(200).json({ message: 'Message reported successfully.' });
@@ -154,7 +148,7 @@ const messageController = {
     username=req.user;
   }
    
-      console.log(username);
+    
       const unreadMessages = await messageService.getSentMessages(username);
 
       if (unreadMessages.success) {
@@ -182,10 +176,8 @@ const messageController = {
     username=req.user;
   }
    
-      console.log(username);
-      console.log(messageId);
       const result =await messageService.markMessageUnread( username ,messageId);
-console.log('ssssssss');
+
       if (result.success) {
       res.status(200).json({ message: 'Message unread successfully.' });
     } else {
@@ -210,10 +202,10 @@ console.log('ssssssss');
     username=req.user;
   }
    
-    console.log(username);
+    
       
       const result =await messageService.markAllMessagesRead(username);
-      console.log(result);
+      
       if (result.success) {
       
       res.status(200).json({ message: 'Messages readed successfully.' });

@@ -14,18 +14,20 @@ const messageService = {
       if (!errors.isEmpty()) {
           return { success: false, errors: errors.array() };
       }
-
+if (!messageData.title){
+  return { success: false, errors: 'title is required' };
+}
       
       const { username, recipient } = messageData;
       if (username === recipient) {
         return { success: false, error: 'Sender and recipient cannot be the same.' };
     }
-      const senderExists = await UserModel.exists({ username: username });
-      const receiverExists = await UserModel.exists({ username: recipient });
+      const sender = await UserModel.findOne({ username: username });
+      const receiver = await UserModel.findOne({ username: recipient });
       
-      if ( !receiverExists) {
+      if ( !receiver) {
         return { success: false, error: 'receiver does not exist.' };
-    }   if (!senderExists) {
+    }   if (!sender) {
       
       return { success: false, error: `Sender  does not exist.` };
   }
@@ -59,7 +61,7 @@ return { success: false, error: 'Message cannot be sent because of blocking.' };
     }
 
     
-    const inboxMessages = await Message.find({ recipient: sentUsername });
+    const inboxMessages = await Message.find({ recipient: sentUsername,typeOfMessaage:'compose' });
 
     
     if (!inboxMessages || inboxMessages.length === 0) {
@@ -84,7 +86,7 @@ return { success: false, error: 'Message cannot be sent because of blocking.' };
     }
 
     
-    const inboxMessages = await Message.find({ recipient: sentUsername, status: 'delivered' });
+    const inboxMessages = await Message.find({ recipient: sentUsername, status: 'delivered',typeOfMessaage:'compose' });
 
    
     if (!inboxMessages || inboxMessages.length === 0) {
@@ -172,7 +174,7 @@ return { success: false, error: 'Message cannot be sent because of blocking.' };
     }
 
     
-    const inboxMessages = await Message.find({ username: sentUsername});
+    const inboxMessages = await Message.find({ username: sentUsername,typeOfMessaage:'compose'});
     
 
    
@@ -225,7 +227,7 @@ return { success: false, error: 'Message cannot be sent because of blocking.' };
     if (!user) {
        return { success: false, error:'User not found.'};
     }
-    const message = await Message.find({recipient: userID,status:'delivered'});
+    const message = await Message.find({recipient: userID,status:'delivered',typeOfMessaage:'compose'});
    
     if (!message || message.length === 0) {
       return { success: false, message: 'No Messages to read .' };
