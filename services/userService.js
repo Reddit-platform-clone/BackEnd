@@ -5,7 +5,7 @@ const reportModel = require('../models/profileReportModel.js');
 const settingsModel = require('../models/settingsMode.js');
 const utils = require('../utils/helpers.js');
 const jwt = require('jsonwebtoken');
-const crypto = require('crypto')
+const crypto = require('crypto');
 
 const userService = {
   logIn: async (emailOrUsername, password) => {
@@ -18,22 +18,22 @@ const userService = {
       user = await userModel.findOne({ username: emailOrUsername });
       if (!user) throw new Error('invalid username')
     }
+  
+  const isValid = await utils.validatePassword(password, user.password);
+  if (!isValid) throw new Error('invalid email or password');
+  
+  const token = jwt.sign({ username: user.username }, process.env.SECRET_ACCESS_TOKEN);
+  
+  return { token: token };
+},
 
-    const isValid = await utils.validatePassword(password, user.password);
-    if (!isValid) throw new Error('invalid email or password');
-
-    const token = jwt.sign({ username: user.username }, process.env.SECRET_ACCESS_TOKEN);
-
-    return { token: token };
-  },
-
-  singUp: async (username, email, password) => {
-    // logic to register new users
+singUp: async (username, email, password) => {
+  // logic to register new users
     const userExists = await userModel.findOne({ username: username });
     if (userExists) throw new Error('invalid username or password');
 
     const emailExists = await userModel.findOne({ email: email });
-    if (emailExists) throw new Error ('thi email is already linked to an account')
+    if (emailExists) throw new Error ('this email is already linked to an account')
 
     // const hashedPassword = await bcrypt.hash(password, 10);
     const hashedPassword = await utils.hashPassword(password);
@@ -79,20 +79,48 @@ const userService = {
     }
   },
 
-  logInForgetPassword: async (username) => {
+  logInForgetPassword: async (emailOrUsername) => {
     // logic to reset password
+    let user;
+    let userEmail;
+    if (utils.isValidEmail(emailOrUsername)){
+      user = await userModel.findOne({ email: emailOrUsername });
+      if (!user) throw new Error('invalid email'); 
+
+      userEmail = emailOrUsername;
+    } else {
+      user = await userModel.findOne({ username: emailOrUsername });
+      if (!user) throw new Error('invalid username')
+
+      userEmail = user.email;
+    }
+    const resetToken = crypto.randomBytes(64).toString('hex');
+    user.resetPasswordToken = resetToken;
+    user.resetPasswordTokenExpires = Date.now() + 5 * 60 * 1000;
+    await user.save();
+
+    return { email: userEmail, resetToken: resetToken }
   },
 
-  logInForgetUsername: async (email) => {
-    // logic to reset username
-  },
-
-  verifyEmail: async (email) => {
-    // logic to verify email
-  },
-
-  resetPassword: async (password) => {
+  resetPassword: async (token, password) => {
     // logic to reset password
+    const user = await userModel.findOne({ resetPasswordToken: token });
+    if (!user) throw new Error('User not found')
+
+    if(Date.now() > user.resetPasswordTokenExpires){
+      user.resetPasswordToken = undefined;
+      user.resetPasswordTokenExpires = undefined;
+      await user.save();
+      throw new Error('link expired')
+    }
+
+    const hashedPassword = await utils.hashPassword(password);
+    user.password = hashedPassword;
+    user.resetPasswordToken = undefined;
+    user.resetPasswordTokenExpires = undefined;
+    await user.save();
+
+    return { message: 'password updated' }
   },
 
   removeFriend: async (username, usernameToRemove) => {

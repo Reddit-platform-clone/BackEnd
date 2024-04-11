@@ -60,7 +60,10 @@ const userSchema = {
   socialLinks: {
     type: [String],
     default: []
-  }
+  },
+
+  resetPasswordToken: String,
+  resetPasswordTokenExpires: Date
 };
 
 const User = mongoose.model('User', userSchema);
