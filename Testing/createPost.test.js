@@ -1,24 +1,30 @@
 const mongoose = require('mongoose');
-const post = require('../models/postModel');
+const createPost = require('../services/createPostService');
+const Post = require('../models/postModel');
+const User = require('../models/userModel');
+const faker = require('faker');
 require('dotenv').config();
 
-console.log(process.env.MONGO_URI);
-
-beforeAll(async () =>
- {
-    await mongoose.connect(process.env.MONGO_URI, {
+beforeAll(async () => {
+    //fix later
+    await mongoose.connect('mongodb+srv://admin:admin4321@reddit-clone.af8eobe.mongodb.net/reddit-clone?retryWrites=true&w=majority&appName=Reddit-clone', 
+    {
     });
-}, 20000);
+  }, 20000);
+
+  const Username = faker.internet.userName();
 
 
 describe('Post Controller', () => {
-    let username;
+    let poster;
     let postId;
+
+    
 
     beforeAll(async () => {
         // Create a mock user for testing
-        const user = {  
-        username: 'user123',
+        const userData = {  
+        username: Username,
         password: 'password123',
         email: 'user@gmail.com',
         dateOfBirth: '1999-01-01',
@@ -32,36 +38,39 @@ describe('Post Controller', () => {
         socialLinks: [],
         token: 'token123'};
 
-        const newUser = await userService.createUser(user);
-        username = newUser.username; // Save the username for later use
+        const user = new User(userData);
+        const newUser = await user.save();
+
+        
+        poster = newUser.username;
     });
 
     it('should create a new post and retrieve it successfully', async () => {
         // Create a mock post data
         const postData = {
-        user_id: 'radwaPost',
-        date_time: new Date(),
-        subreddit_id: 3,
-        post_content: 'hi first post'
+        userId: poster,
+        content: 'hi first post',
+        communityId: 1234
         };
 
         // Create a new post
-        const newPost = await postService.createPost(postData, username);
-        postId = newPost.post_id; // Save the post ID for later use
+        const newPost = await createPost.createPost(postData, postData.userId);
+        postId = newPost.postId; // Save the post ID for later use
+        console.log("post id: ", postId);
 
         // Retrieve the created post
-        const retrievedPost = await postService.getPostById(post_id);
+        const retrievedPost = await createPost.getPostById(postId);
 
         // Expectations
         expect(retrievedPost).toBeDefined();
-        expect(retrievedPost.post_id).toBeDefined();
-        expect(retrievedPost.user_id).toBe(postData.user_id);
-        expect(retrievedPost.date_time).toEqual(postData.date_time);
-        expect(retrievedPost.subreddit_id).toBe(postData.subreddit_id);
+        expect(retrievedPost.postId).toBeDefined();
+        expect(retrievedPost.userId).toBe(postData.userId);
+        expect(retrievedPost.communityId).toBe(postData.communityId);
     });
 }, 20000);
 
 afterAll(async () => {
+    await Post.deleteMany({});
     await mongoose.connection.close();
-    }, 20000);
+}, 20000);
     

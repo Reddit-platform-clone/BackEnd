@@ -1,18 +1,16 @@
 const Post = require('../models/postModel');
 const User = require('../models/userModel');
+const { v4: uuidv4 } = require('uuid'); // Import the uuid library
 
-const postService = {
+const createPostService = {
     createPost: async (postData, username) => {
         try {
-            // Count the number of existing posts in the database
-            const postCount = await Post.countDocuments();
-
-            // Generate a unique post ID based on the post count
-            const postId = postCount + 1;
+            // Generate a unique post ID using UUID
+            const postId = uuidv4();
 
             // Add the generated post ID and user ID to the post data
-            postData.post_id = postId;
-            postData.user_id = username;
+            postData.postId = postId;
+            postData.userId = username;
 
             // Create a new post object using the updated postData
             const newPost = new Post(postData);
@@ -27,24 +25,24 @@ const postService = {
             throw new Error("Failed to create post");
         }
     },
-    getPostById: async (post_id) => {
+    getPostById: async (postId) => {
         try {
             // Find the post by its ID
-            const post = await Post.findById(postId);
+            const post = await Post.findOne({ postId });
 
             // If the post is not found, return null
             if (!post) {
                 
-                throw new Error(`Post with ID ${post_id} not found`);
+                throw new Error(`Post with ID ${postId} not found`);
             }
 
             // Return the found post
             return post;
         } catch (error) {
-            console.error(`Error fetching post with ID ${post_id}:`, error);
+            console.error(`Error fetching post with ID ${postId}:`, error);
             throw new Error("Failed to fetch post");
         }
     }
 };
 
-module.exports = createpostService;
+module.exports = createPostService;
