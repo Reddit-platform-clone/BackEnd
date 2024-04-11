@@ -213,8 +213,10 @@ const userService = {
 
   getPrefs: async (username) => {
     // logic to get user identity
-    const settings = await settingsModel.findOne({ username: username });
-    if (!settings) throw new Error('User not found');
+    const user = await userModel.findOne({ username: username });
+    if (!user) throw new Error('User not found');
+
+    const settings = await settingsModel.findOneAndUpdate({ username: username }, {}, { new: true, upsert: true });
 
     return { settings: settings };
   },
