@@ -6,7 +6,6 @@ const path = require('path');
 const { swaggerUi, specs, router } = require('./swaggerConfig');
 require('dotenv').config();
 const mongoose = require('mongoose');
-const Post = require('./models/postModel');
 
 mongoose.connect(process.env.MONGO_URI);
 mongoose.connection.once('open', () => {
