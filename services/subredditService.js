@@ -13,7 +13,7 @@ const subredditService = {
             posts.sort((a, b) => {
                 return b.upvotes - a.upvotes;
             });
-            return posts[0];
+            return posts;
         } catch(error) {
             console.error('Error fetching best post:', error);
             throw new Error('Failed to fetch best post');
