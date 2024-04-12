@@ -1,8 +1,5 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-let dotenv = require('dotenv').config();
-const mongoose = require('./database');
-
 const fs = require('fs');
 const path = require('path');
 const { swaggerUi, specs, router } = require('./swaggerConfig');
