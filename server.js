@@ -4,8 +4,7 @@ const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
 const { swaggerUi, specs, router } = require('./swaggerConfig');
-// const startWebSocketServer = require('./utils/WebSockets');
-let { app, server } = require("./utils/WebSockets");
+const { app, server } = require("./utils/WebSockets");
 
 require('dotenv').config();
 const mongoose = require('mongoose');
@@ -16,7 +15,6 @@ mongoose.connection.once('open', () => {
   console.log('Connected to MongoDB!');
 });
 
-// const app = express();
 const PORT = process.env.PORT || 5000;
 app.use(express.json())
 app.use(bodyParser.json());
@@ -32,14 +30,12 @@ function loadRoutes(directory) {
   });
 }
 
-
 const routesDirectory = path.join(__dirname, 'routes');
 loadRoutes(routesDirectory);
 
-  server = app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
+  console.log(`WebSocket server is running on port ${server.address().port}`);
 });
-
-// startWebSocketServer(server);
 
 module.exports = app;
