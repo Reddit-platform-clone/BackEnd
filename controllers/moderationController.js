@@ -1,4 +1,4 @@
-const userService = require('../services/moderationService');
+const moderationService = require('../services/moderationService');
 
 const moderationController = {
     approve: async (req, res) => {
@@ -29,8 +29,17 @@ const moderationController = {
         res.json({ message: 'icon deleted' })
     },
 
-    createSubreddit: async (req, res) => {
-        res.json({ message: 'created' })
+    createCommunity: async (req, res) => {
+        try {
+            const creator = req.user.username;
+            const communityDetails = req.body;        
+
+            const result = await moderationService.createCommunity(creator, communityDetails);
+
+            res.status(200).json(result);
+        } catch (err) {
+            res.status(400).send(err.message);
+        }
     },
 
     uploadSubredditIcon: async (req, res) => {

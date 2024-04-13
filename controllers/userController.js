@@ -1,40 +1,142 @@
 const userService = require('../services/userService');
+const utils = require('../utils/helpers.js');
+const mail = require('../utils/mailHandler.js');
 
 const userController = {
   logIn: async (req, res) => {
-    res.json({ message: 'welcome back' });
+    try {
+      try {
+        const { emailOrUsername, password } = req.body;
+        if (!emailOrUsername || !password) {
+          res.status(400).send('missing username or password');
+          return;
+        }
+        const result = await userService.logIn(emailOrUsername, password);
+        res.status(200).json(result);
+      } catch (error) {
+        res.status(400).send(error.message);
+      }
+    } catch (err) {
+      res.status(500).send(err.message);
+    }
   },
 
   singUp: async (req, res) => {
-    res.json({ message: 'welcome to sarakel' });
+    try {
+      try {
+        const { username, email, password } = req.body;
+        if (!username || !password || !email) {
+          res.status(400).send('missing username or email or password');
+          return;
+        }
+
+        if (!utils.isValidEmail(email)){
+          res.status(400).send('please enter a valid email');
+          return;
+        }
+
+        const result = await userService.singUp(username, email, password);
+        res.status(200).json(result);
+      } catch (error) {
+        res.status(400).send(error.message);
+      }
+    } catch (err) {
+      res.status(500).send(err.message);
+    }
+  },
+
+  verifyToken: async (req, res) => {
+    try {
+      const token = req.body.token;
+      const result = await userService.verifyToken(token);
+
+      res.status(200).json(result);
+    } catch(err) {
+      res.status(400).send({ error: err.message });
+    }
   },
 
   logInForgetPassword: async (req, res) => {
-    res.json({ message: 'enter username and email' });
-  },
+    try {
+      const emailOrUsername = req.body.emailOrUsername;
+      const userData = await userService.logInForgetPassword(emailOrUsername);
+      const resetUrl = `${req.protocol}://${req.get('host')}/login/reset_password/${userData.resetToken}`;
+      const emailHTML = `Click <a href=${resetUrl}>here</a> to reset your password, this link is valid for a short period of time, if you didn't request changing your password ignore this email`;
+      const emailSubject = 'Reset Password';
+      
+      await mail({
+          email: userData.email,
+          subject: emailSubject,
+          text: emailHTML
+        })      
+        
+        res.status(200).json({ status: 'success', message: 'reset email sent' });
+    } catch(err) {
 
-  logInForgetUsername: async (req, res) => {
-    res.json({ message: 'enter email' });
-  },
-
-  verifyEmail: async (req, res) => {
-    res.json({ message: 'username reset' })
+      res.status(400).send(err.message);
+    }
   },
 
   resetPassword: async (req, res) => {
-    res.json({ message: 'password reset' })
+    try {
+      const password = req.body.password;
+      const token = req.params.token;
+
+      const result = await userService.resetPassword(token, password);
+
+      res.status(200).json(result);
+    } catch(err) {
+      res.status(400).json({ error: err.message });
+    }
   },
 
   removeFriend: async (req, res) => {
-    res.json({ message: 'friend removed' });
+    try {
+      try {
+        const username = req.user.username;
+        const usernameToRemove = req.params.username;
+        const result = await userService.removeFriend(username, usernameToRemove);
+        res.status(200).json(result);
+      } catch (error) {
+        res.status(400).send(error.message);
+      }
+    } catch (err) {
+      res.status(500).send(err.message);
+    }
   },
 
   reportUser: async (req, res) => {
-    res.json({ message: 'report sent' });
+    try {
+      try {
+        const { reported, details } = req.body;
+        const reporter = req.user.username;
+        const result = await userService.reportUser(reporter, reported, details);
+        res.status(200).json(result);
+      } catch (error) {
+        res.status(400).send(error.message);
+      }
+    } catch (err) { 
+      res.status(500).send(err.message);
+    }
   },
 
   blockUser: async (req, res) => {
-    res.json({ message: 'user blocked ' });
+    try {
+      try {
+        const { usernameToBlock } = req.body;
+        if (!usernameToBlock) { 
+          res.status(400).send('missing username to block'); 
+          return; 
+        }
+        const username = req.user.username;
+        const result = await userService.blockUser(username, usernameToBlock);
+        res.status(200).json(result);
+      } catch (error) {
+        res.status(400).send(error.message);
+      }
+    } catch (err) {
+      res.status(500).send(err.message);
+    }
   },
 
   createRelationship: async (req, res) => {
@@ -46,15 +148,42 @@ const userController = {
   },
 
   getFriendInfo: async (req, res) => {
-    res.json({ message: 'user info' })
+    try {
+      try {
+        const friendUsername = req.params.username;
+        const username = req.user.username;
+        const result = await userService.getFriendInfo(username, friendUsername);
+        res.status(200).json(result);
+      } catch (error) {
+        res.status(400).send(error.message);
+      }
+    } catch (err) {
+      res.status(500).send(err.message);
+    }
   },
 
   checkUsernameAvailability: async (req, res) => {
-    res.json({ message: 'check username availability' })
+    try {
+      const { username } = req.params; // Assuming username is in the URL params
+      const result = await userService.checkUsernameAvailability(username);
+      res.status(200).json(result);
+    } catch (error) {
+      res.status(400).send(error.message);
+    }
   },
 
   getUserAbout: async (req, res) => {
-    res.json({ message: 'user about'})
+    try {
+      try {
+        const username = req.params.username;
+        const result = await userService.getUserAbout(username);
+        res.status(200).json(result);
+      } catch (error) {
+        res.status(400).send(error.message);
+      }
+    } catch (err) {
+      res.status(500).send(err.message);
+    }
   },
   
   getUserOverview: async (req, res) => {
@@ -77,12 +206,41 @@ const userController = {
     res.json({ message: 'user downvoted'})
   },
 
-  getIdentity: async (req, res) => {
-    res.json({ message: 'user identity'})
+  getUserIdentity: async (req, res) => {
+    try {
+      const username = req.user.username;
+
+      const result = await userService.getUserIdentity(username);
+
+      res.status(200).json(result);
+    } catch(err) {
+      res.status(400).send(err.message);
+    }
   },
 
-  getPreferences: async (req, res) => {
-    res.json({ message: 'user preferences'})
+  getPrefs: async (req, res) => {
+    try {
+      const username = req.user.username;
+  
+      const result = await userService.getPrefs(username);
+  
+      res.status(200).json(result);
+    } catch(err) {
+      res.status(400).send(err.message);
+    }
+  },
+
+  updatePrefs: async (req, res) => {
+    try {
+      const username = req.user.username;
+      const settings = req.body;
+
+      const result = await userService.updatePrefs(username, settings);
+  
+      res.status(200).json(result);
+    } catch(err) {
+      res.status(400).send(err.message);
+    }
   }
 };
 
