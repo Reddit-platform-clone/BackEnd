@@ -15,7 +15,7 @@ const categoryService = {
                 }, 
                 createdAt: -1 
             })
-            .limit(100);
+            
 
             return res.status(200).json(bestPosts);
         } catch (error) {
@@ -66,6 +66,7 @@ const categoryService = {
         }
     },
     today: async (req, res, keyword) => {
+       
         try {
             const today = new Date();
             today.setHours(0, 0, 0, 0);
