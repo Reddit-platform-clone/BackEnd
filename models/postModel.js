@@ -1,7 +1,7 @@
 let mongoose = require('mongoose');
 
 const postSchema = new mongoose.Schema({
-    postId: {type: Number, required: true, unique: true},
+    postId: {type: String, unique: true},
     content: { type: String, required: true },
     title: {type: String},
     userId: {type: String, required: true},
@@ -9,9 +9,9 @@ const postSchema = new mongoose.Schema({
     media: {type: JSON},
     downvotes: {type: Number},
     communityId: {type: Number, required: true},
-    communityName: {type: String, required: true},
+    communityName: {type: String},
     upvotes: {type: Number},
-    numComments: {type: Number, required: true},
+    numComments: {type: Number},
     scheduled: {type: Boolean},
     isSpoiler: {type: Boolean},
     numViews: {type: Number, required: true},

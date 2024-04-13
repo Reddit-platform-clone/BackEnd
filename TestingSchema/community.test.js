@@ -1,6 +1,3 @@
-
-require('dotenv').config();
-
 const mongoose = require('mongoose');
 const Community = require('../schemas/communitySchema');
 require('dotenv').config();
