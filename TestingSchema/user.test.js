@@ -176,7 +176,6 @@ describe('User Model Test', () => {
     await User.create(user1, user2, user3);
 
     const users = await User.find({ interests: 'anime' }, 'username');
-    console.log(users);
 
     expect(users.length).toBe(2);
   });

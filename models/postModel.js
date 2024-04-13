@@ -5,8 +5,7 @@ const postSchema = new mongoose.Schema({
     content: { type: String, required: true },
     title: {type: String},
     userId: {type: String, required: true},
-    dateTime: {type: Date, default: Date.now},
-    parentId: {type: Number},
+    parentId: {type: Number, required: true},
     media: {type: JSON},
     downvotes: {type: Number},
     communityId: {type: Number, required: true},
@@ -15,9 +14,9 @@ const postSchema = new mongoose.Schema({
     numComments: {type: Number},
     scheduled: {type: Boolean},
     isSpoiler: {type: Boolean},
-    numViews: {type: Number},
-    isLocked: {type: Boolean, required: true, default: false},
-});
+    numViews: {type: Number, required: true},
+    isLocked: {type: Boolean, required: true},
+}, {timestamps: true});
 
 const Post = mongoose.model('post', postSchema);
 

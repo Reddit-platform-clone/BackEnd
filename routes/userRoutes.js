@@ -8,9 +8,7 @@ router.post('/login', userController.logIn);
 router.post('/signup', userController.singUp);
 router.post('/verifyToken', userController.verifyToken);
 router.post('/login/forget_password', userController.logInForgetPassword);
-router.post('/login/forget_username', userController.logInForgetUsername);
-router.post('/login/reset_password', userController.resetPassword);
-router.post('/login/verify_email', userController.verifyEmail);
+router.patch('/login/reset_password/:token', userController.resetPassword);
 
 router.post('/api/block_user', authMiddleware.authorizeationToken, userController.blockUser);
 router.post('/api/report_user', authMiddleware.authorizeationToken, userController.reportUser);
@@ -29,7 +27,8 @@ router.get('/user/:username/comments', userController.getUserComments);
 router.get('/user/:username/upvoted', userController.getUserUpvoted);
 router.get('/user/:username/downvoted', userController.getUserDownvoted);
 
-router.get('/api/v1/me', userController.getIdentity);
-router.patch('/api/v1/me/prefs', userController.getPreferences);
+router.get('/api/v1/me', authMiddleware.authorizeationToken, userController.getUserIdentity);
+router.get('/api/v1/me/prefs', authMiddleware.authorizeationToken, userController.getPrefs);
+router.patch('/api/v1/me/prefs', authMiddleware.authorizeationToken, userController.updatePrefs);
 
 module.exports = router;

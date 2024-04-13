@@ -2,6 +2,7 @@ const express = require('express');
 
 const router = express.Router();
 const moderationController = require('../controllers/moderationController.js');
+const authMiddleware = require('../middleware/userAuthMiddleware.js');
 
 router.post(('/api/approve'), moderationController.approve);
 router.post(('/api/remove'), moderationController.remove);
@@ -10,7 +11,7 @@ router.post(('/r/:subreddit/api/accept_moderator_invite'), moderationController.
 router.post(('/api/leavemoderator'), moderationController.leaveModerator);
 router.post(('/r/:subreddit/api/delete_sr_banner'), moderationController.deleteBanner);
 router.post(('/r/:subreddit/api/delete_sr_icon'), moderationController.deleteIcon);
-router.post(('/api/site_admin'), moderationController.createSubreddit);
+router.post(('/api/site_admin'), authMiddleware.authorizeationToken, moderationController.createCommunity);
 router.post(('/r/:subreddit/api/upload_sr_icon'), moderationController.uploadSubredditIcon);
 
 router.get(('/r/:subreddit/about/edited'), moderationController.getRecentlyEditedPosts);

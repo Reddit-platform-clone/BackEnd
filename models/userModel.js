@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-require('dotenv').config();
 
 const userSchema = {
   username: {
@@ -61,7 +60,10 @@ const userSchema = {
   socialLinks: {
     type: [String],
     default: []
-  }
+  },
+
+  resetPasswordToken: String,
+  resetPasswordTokenExpires: Date
 };
 
 const User = mongoose.model('User', userSchema);
