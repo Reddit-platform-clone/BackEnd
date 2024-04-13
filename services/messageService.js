@@ -13,10 +13,10 @@ const messageService = {
       const errors = validationResult(messageData);
       if (!errors.isEmpty()) {
           return { success: false, errors: errors.array() };
-      }
-if (!messageData.title){
-  return { success: false, errors: 'title is required' };
-}
+      } 
+ 
+  
+  
       
       const { username, recipient } = messageData;
       if (username === recipient) {
@@ -40,9 +40,9 @@ return { success: false, error: 'Message cannot be sent because of blocking.' };
     const message = new Message(messageData);
 
    
-    await Promise.all([ message.save()]);
-
-		
+    // await Promise.all([ message.save()]);
+    await message.save();
+        
 		const receiverSocketId = getReceiverSocketId(receiver.username);
 		if (receiverSocketId) {
 			console.log("ee");
@@ -65,7 +65,7 @@ return { success: false, error: 'Message cannot be sent because of blocking.' };
       
     const user = await UserModel.findOne({ username: sentUsername });
     if (!user) {
-     ;
+     
       return { success: false, error:'User not found.'};
     }
 

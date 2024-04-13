@@ -15,9 +15,9 @@ const messageController = {
   }
 
 
-      const { recipient, from, title, content } = req.body;
+      const { recipient, from, title, content,typeOfMessaage } = req.body;
    
-      const result = await messageService.composeMessage({ username, recipient, from, title, content });
+      const result = await messageService.composeMessage({ username, recipient, from, title, content,typeOfMessaage });
 
       if (result.success) {
           res.status(200).json({ message: result.message });

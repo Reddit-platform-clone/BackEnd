@@ -39,7 +39,8 @@ const messageSchema = new mongoose.Schema({
     typeOfMessaage:{
         type: String,
         enum: ['compose', 'live'], 
-        default: 'compose'
+        default: 'compose',
+        // required:true
     }
 });
 
