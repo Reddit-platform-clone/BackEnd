@@ -9,11 +9,6 @@ paths:
       description: Marks a message as unread for the specified user
       parameters:
         - in: query
-          name: sentUserId
-          description: The ID of the user who sent the message
-          required: true
-          type: string
-        - in: query
           name: messageId
           description: The ID of the message to mark as unread
           required: true

@@ -109,10 +109,10 @@ const userService = {
     // logic to get user info
     const user = await userModel.findOne({ username: username });
     if (!user) throw new Error('User does not exist');
-
+    
     const friendName = user.friends.find(friend => friend === friendUsername);
     if (!friendName) throw new Error('User is not a friend');
-
+    
     const friend = await userModel.findOne({ username: friendUsername });
     return { 
       username: friend.username, 
