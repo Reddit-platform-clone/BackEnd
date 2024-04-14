@@ -64,20 +64,12 @@ const userSchema = {
     default: []
   },
 
-  savedPosts: {
-    type: [String],
-    default: []
-  },
-
-  upVotes: {
-    type: [String],
-    default: []
-  },
-
-  downVotes: {
-    type: [String],
-    default: []
-  },
+  savedPosts: [String],
+  upVotes: [String],
+  downVotes: [String],
+  followPosts:[String],
+  hidePosts:[String],
+  savedCategories:[String],
 
   resetPasswordToken: String,
   resetPasswordTokenExpires: Date
