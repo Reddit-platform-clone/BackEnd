@@ -33,7 +33,8 @@ const commentSchema = new mongoose.Schema({
     replyToID: {
         type: String,
         default: null
-    }
+    },
+    content: { type: String}
 });
 
 const Comment = mongoose.model('Comment', commentSchema);

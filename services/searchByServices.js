@@ -1,34 +1,83 @@
 const sort = require('../models/searchByModel.js');
+const Post = require('../models/postModel.js');
+const User = require('../models/userModel.js');
+const Comment = require('../models/commentModel.js');
+const Community = require('../schemas/communitySchema.js');
+const Hashtag = require('../models/hashtagModel.js');
+
 
 const searchByService = {
-    searchByUsers: async (userId) => {
-        // Logic to search by users
-         
-        // return users results;
+    searchByUsers: async (keyword) => {
+        try {
+            // Search for users by username or displayName
+            const usersResults = await User.find({
+                $or: [
+                    { username: { $regex: keyword, $options: 'i' } },
+                    { displayName: { $regex: keyword, $options: 'i' } }
+                ]
+            });
+            return usersResults;
+        } catch (error) {
+            console.error("Error searching by users:", error);
+            throw new Error("Failed to search for users");
+        }
     },
     
-    searchByPosts: async (post) => {
-        // Logic to search by posts
-        //Logic for Trending today
-        //Logic for Sorting
-        // return posts results
+    searchByPosts: async (keyword) => {
+        try {
+            // Perform text search on the 'content' and 'title' fields
+            const postsResults = await Post.find(
+                { $text: { $search: keyword } }, // Search for the keyword
+                { score: { $meta: "textScore" } } // Sort by relevance score
+            ).sort({ score: { $meta: "textScore" } }); // Sort results by relevance score
+            return postsResults;
+        } catch (error) {
+            console.error("Error searching by posts:", error);
+            throw new Error("Failed to search for posts");
+        }
     },
     
-    searchByComments: async (commentId) => {
-        // Logic to search by comments
-        //Logic for sorting
-        // return comments results;
+    searchByComments: async (keyword) => {
+        try {
+            // Search for comments by content
+            const commentsResults = await Comment.find({
+                content: { $regex: keyword, $options: 'i' }
+            });
+            return commentsResults;
+        } catch (error) {
+            console.error("Error searching by comments:", error);
+            throw new Error("Failed to search for comments");
+        }
     },
 
-    searchByCommunities: async (communityId) => {
-        // Logic to search by communities
-    
-        // return communities results;
+    searchByCommunities: async (keyword) => {
+        try {
+            // Search for communities by name or description
+            const communitiesResults = await Community.find({
+                $or: [
+                    { communityID: { $regex: keyword, $options: 'i' } },
+                    { description: { $regex: keyword, $options: 'i' } },
+                    { communityName: { $regex: keyword, $options: 'i' } },
+                ]
+            });
+            return communitiesResults;
+        } catch (error) {
+            console.error("Error searching by communities:", error);
+            throw new Error("Failed to search for communities");
+        }
     },
 
-    searchByHashtags: async (hashtags) => {
-        //logic to search by hashtags
-        //return hashtags results
+    searchByHashtags: async (keyword) => {
+        try {
+            // Search for hashtags by name
+            const hashtagsResults = await Hashtag.find({
+                hashtagString: { $regex: keyword, $options: 'i' }
+            });
+            return hashtagsResults;
+        } catch (error) {
+            console.error("Error searching by hashtags:", error);
+            throw new Error("Failed to search for hashtags");
+        }
     }
 };
 

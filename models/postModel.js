@@ -2,6 +2,7 @@ let mongoose = require('mongoose');
 
 const postSchema = new mongoose.Schema({
     post_id: {type: Number, required: true, unique: true},
+    content: { type: String},
     user_id: {type: String, required: true},
     date_time: {type: Date, default: Date.now},
     parent_id: {type: Number, required: true},
@@ -16,6 +17,7 @@ const postSchema = new mongoose.Schema({
     is_locked: {type: Boolean, required: true} 
 });
 
+postSchema.index({ content: 'text', title: 'text' });
 const Post = mongoose.model('post', postSchema);
 
 module.exports = Post;
