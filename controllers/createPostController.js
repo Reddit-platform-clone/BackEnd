@@ -7,7 +7,7 @@ const CreatePostController = {
             const postData = req.body;
 
             // Get the ID of the currently logged-in user
-            const userId = req.user.id; // Assuming the user ID is stored in req.user.id
+            const userId = req.body.userId; // Assuming the user ID is stored in req.body.userId
 
             // Call the createPost method from the postService to create and add the post to the database
             const newPost = await postService.createPost(postData, username); // Pass userId as an argument
