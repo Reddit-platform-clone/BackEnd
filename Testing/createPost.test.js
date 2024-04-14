@@ -13,6 +13,7 @@ beforeAll(async () => {
   }, 20000);
 
   const Username = faker.internet.userName();
+  const Email = faker.internet.email();
 
 
 describe('Post Controller', () => {
@@ -26,7 +27,7 @@ describe('Post Controller', () => {
         const userData = {  
         username: Username,
         password: 'password123',
-        email: 'user@gmail.com',
+        email: Email,
         dateOfBirth: '1999-01-01',
         displayName: 'myuser',
         profilePicture: 'profile.jpg',
