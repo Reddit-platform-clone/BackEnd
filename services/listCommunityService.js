@@ -11,3 +11,5 @@ const listCommunityService = {
         }
     }
 }
+
+module.exports = listCommunityService;
