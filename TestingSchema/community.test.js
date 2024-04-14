@@ -19,7 +19,8 @@ describe('Community Schema Test', () => {;
       moderatorInvite: false,
       type: 'Public',
       isNSFW: false,
-      description: 'new circle'
+      description: 'new circle',
+      members: []
     };
 
     const community = new Community(communityData);

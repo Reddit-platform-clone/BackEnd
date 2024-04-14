@@ -43,7 +43,7 @@ const subredditService = {
                 return scoreB - scoreA;
             });
 
-            return posts[0];
+            return posts;
         } catch (error) {
             console.error('Error fetching hot post:', error);
             throw new Error('Failed to fetch hot post');
@@ -58,7 +58,7 @@ const subredditService = {
 
             posts.sort((a,b) => b.date_time - a.date_time);
 
-            return posts[0];
+            return posts;
         } catch (error) {
             console.error('Error fetching new posts:', error);
             throw new Error('Failed to fetch new posts');
@@ -78,7 +78,7 @@ const subredditService = {
                 return scoreB - scoreA;
             });
 
-            return posts[0];
+            return posts;
         } catch (error) {
             console.error('Error fetching hot post:', error);
             throw new Error('Failed to fetch hot post');
