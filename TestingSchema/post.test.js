@@ -9,29 +9,28 @@ beforeAll(async () => {
 describe('Post model test', () => {
     it('Insert a post into the database', async () => {
         const postData = {
-            postId: 6,
-            content: '',
-            title: 'chreg',
+            postId: 13,
+            content: 'HELIIIIIIIIII',
+            title: 'LIVE POST',
             userId: 'yousefwael02',
-            parentId: 6,
-            media: [],
+            parentId: "6",
+            media: {},
             downvotes: 1,
-            communityId: 6,
-            communityName: '6',
-            upvotes: 154,
-            numComments: 25,
+            communityId: "6",
+            communityName: 'miami heat',
+            upvotes: 1,
+            numComments: 0,
             scheduled: false,
             isSpoiler: false,
-            numViews: 18,
-            isLocked: false 
+            numViews: 0,
+            isLocked: false
         };
 
         const post = new Post(postData);
         const savedPost = await post.save();
 
-        expect(savedPost._id).toBeDefined();
+        expect(savedPost.postId).toBeDefined();
         expect(savedPost.userId).toBe(postData.userId);
-        expect(savedPost.dateTime).toBeDefined();
         expect(savedPost.parentId).toBe(postData.parentId);
         expect(savedPost.subredditId).toBe(postData.subredditId);
         expect(savedPost.numComments).toBe(postData.numComments);

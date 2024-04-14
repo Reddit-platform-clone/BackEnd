@@ -2,6 +2,7 @@ const postService = require('../services/createPostService');
 
 const CreatePostController = {
     createPost: async (req, res) => {
+        
         try {
             // Extract post data from the request body
             const postData = req.body;
