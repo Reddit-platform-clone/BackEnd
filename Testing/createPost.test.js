@@ -49,8 +49,10 @@ describe('Post Controller', () => {
         // Create a mock post data
         const postData = {
         userId: poster,
+        parentId: "parent",
         content: 'hi first post',
-        communityId: 1234
+        communityId: "1234",
+        isLocked: false
         };
 
         // Create a new post
@@ -70,7 +72,6 @@ describe('Post Controller', () => {
 }, 20000);
 
 afterAll(async () => {
-    await Post.deleteMany({});
     await mongoose.connection.close();
 }, 20000);
     
