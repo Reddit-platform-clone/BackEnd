@@ -241,6 +241,30 @@ const userController = {
     } catch(err) {
       res.status(400).send(err.message);
     }
+  },
+
+  savePost: async (req, res) => {
+    try {
+      const username = req.user.username;
+      const postId = req.body.postId;
+
+      const result = await userService.savePost(username, postId);
+      res.status(200).json({message : result});
+    } catch (error) {
+      res.status(500).json({message: error.message});
+    }
+  },
+
+  unSavePost: async (req, res) => {
+    try {
+      const username = req.user.username;
+      const postId = req.body.postId;
+
+      const result = await userService.unsavePost(username, postId);
+      res.status(200).json({message: result})
+    } catch (error) {
+      res.status(500).json({message: error.message})
+    }
   }
 };
 
