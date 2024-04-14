@@ -15,13 +15,11 @@ paths:
           schema:
             type: object
             properties:
-              userId:
-                type: string
-                description: The ID of the user saving the post or comment
-              thingType:
+              
+              type:
                 type: string
                 description: The type of thing to save (e.g., 'post', 'comment')
-              thingId:
+              entityId:
                 type: string
                 description: The ID of the post or comment to save
       responses:
