@@ -76,10 +76,37 @@ const commentService = {
            
           
           }catch (error) {
-              console.error('Error get message:', error);
+              console.error('Error get comment:', error);
               return { success: false, error: 'Failed to get comments replies.' };
           }
 
     },
+    deleteComment: async (userID,commentId) => {
+        try {
+        if(!commentId){
+           return { success: false, error:'comment Id is null.'};
+        }
+        const comment = await Comment.findOne({_id: commentId});
+        if (!comment) {
+           return { success: false, error:'comment not found.'};
+        }
+    
+        
+        const user = await UserModel.findOne({ username: userID });
+        if (!user) {
+           return { success: false, error:'User not found.'};
+        }
+        if (comment.userID !== user.username) {
+           return { success: false, error:'You are not authorized to delete this comment.'};
+        }
+    
+        
+        await Comment.findOneAndDelete({_id: commentId});
+        return { success: true, message: 'comment deleted successfully' };
+      }catch (error) {
+          console.error('Error del comment:', error);
+          return { success: false, error: 'Failed to del comment.' };
+      }
+      },
 };
 module.exports=commentService
