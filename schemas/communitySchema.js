@@ -11,6 +11,6 @@ const communitySchema = new Schema({
   type: {type: String, required: true},
   isNSFW: {type: Boolean},
   description: {type: String}
-});
+}, {timestamps: true});
 
 module.exports = mongoose.model('Community', communitySchema);
