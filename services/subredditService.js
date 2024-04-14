@@ -3,6 +3,16 @@
 const Post = require('../models/postModel.js');
 
 const subredditService = {
+    getAll: async () => {
+        try {
+            const post = await Post.find();
+            return post;
+        } catch (error) {
+            console.log('Error fetching posts:', error);
+            throw new Error('Failed to fetch post');
+        }
+    },
+
     getBest: async () => {
         // Logic to get best post
         try {
