@@ -8,7 +8,7 @@ const postSchema = new mongoose.Schema({
     parentId: {type: Number, required: true},
     media: {type: JSON},
     downvotes: {type: Number},
-    communityId: {type: Number, required: true},
+    communityId: {type: String, required: true},
     communityName: {type: String},
     upvotes: {type: Number},
     numComments: {type: Number},
