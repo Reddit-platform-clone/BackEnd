@@ -15,7 +15,10 @@ const commentService = {
             
             return { success: false, errors: errors.array() };
         }
-       
+        
+       if(data.rr && !data.commentData.replyToID){
+        return { success: false, error: `replyToID  is missing.` };
+       }
        
         const senderExists = await UserModel.exists({ username: data.username });
         

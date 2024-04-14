@@ -3,9 +3,9 @@ const commentService=require('../services/commentService');
 
 const { request } = require('express');
 const commentController = {
-  postComment: async (req, res) => {
+  postComment: async (req, res,rr) => {
     try {
-console.log("CO");
+
       const commentData=req.body;
       let username =req.user;
       // console.log(req.user.iat);
@@ -16,7 +16,7 @@ console.log("CO");
     username=req.user;
   }
 
-      const result=await commentService.postComment({commentData,username});
+      const result=await commentService.postComment({commentData,username,rr});
 
       if (result.success) {
         res.status(200).json({ message: result.message });
