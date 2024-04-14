@@ -2,7 +2,7 @@ const express = require('express');
 
 const router = express.Router();
 const editController = require('../controllers/editController');
-
-router.post('/api/editusertext', editController.editUserText);
+const authenticateToken = require('../middleware/authMiddleware');
+router.post('/api/editusertext',authenticateToken, editController.editUserText);
 
 module.exports = router;
