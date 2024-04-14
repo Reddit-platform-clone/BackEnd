@@ -13,8 +13,6 @@ const messageController = {
   else{
     username=req.user;
   }
-console.log("controller");
-console.log("user")
 
       const { recipient, from, title, content } = req.body;
 
