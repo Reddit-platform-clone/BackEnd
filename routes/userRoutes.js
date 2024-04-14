@@ -31,4 +31,7 @@ router.get('/api/v1/me', authMiddleware.authorizeationToken, userController.getU
 router.get('/api/v1/me/prefs', authMiddleware.authorizeationToken, userController.getPrefs);
 router.patch('/api/v1/me/prefs', authMiddleware.authorizeationToken, userController.updatePrefs);
 
+router.post('/api/:username/savePost', userController.savePost);
+router.post('/api/:username/unSavePost', userController.unSavePost);
+
 module.exports = router;
