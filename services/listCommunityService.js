@@ -1,4 +1,4 @@
-const Community = require('../schemas/communitySchema.js');
+const Community = require('../models/communityModel.js');
 
 const listCommunityService = {
     listCommunities: async () => {
