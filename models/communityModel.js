@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 const communitySchema = new mongoose.Schema({
     title: { type: String, unique: true, required: true },
+    type: { type: String, enum: ['private', 'ristricted', 'public']},
     isNSFW: { type: Boolean, default: false },
     description: String,
     rules: { type: [String], default: [] },
