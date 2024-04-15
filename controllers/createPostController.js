@@ -12,7 +12,7 @@ const CreatePostController = {
             console.log("userId: ", userId);
 
             // Call the createPost method from the postService to create and add the post to the database
-            const newPost = await postService.createPost(postData, userId); // Pass userId as an argument
+            const newPost = await postService.createPost(postData); // Pass userId as an argument
 
             // Return the newly created post in the response
             return res.status(201).json(newPost);
