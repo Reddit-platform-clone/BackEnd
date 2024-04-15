@@ -16,7 +16,7 @@ const commentService = {
             return { success: false, errors: errors.array() };
         }
         
-       if(data.rr && !data.commentData.replyToID){
+       if(data.rr=='reply' && !data.commentData.replyToID){
         return { success: false, error: `replyToID  is missing.` };
        }
        
