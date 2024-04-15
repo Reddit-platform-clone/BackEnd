@@ -21,11 +21,12 @@ const userSchema = {
   },
 
   displayName: {
-    type: String
+    type: String,
   },
 
   profilePicture: {
     type: String,
+    default: 'soora gamda fashkh'
   },
 
   followers: {
@@ -44,7 +45,8 @@ const userSchema = {
   },
 
   about: {
-    type: String
+    type: String,
+    default: 'user gamed mot'
   },
 
   interests: {
@@ -62,9 +64,20 @@ const userSchema = {
     default: []
   },
 
-  savedPosts: [String],
-  upVotes: [String],
-  downVotes: [String],
+  savedPosts: {
+    type: [String],
+    default: []
+  },
+
+  upVotes: {
+    type: [String],
+    default: []
+  },
+
+  downVotes: {
+    type: [String],
+    default: []
+  },
 
   resetPasswordToken: String,
   resetPasswordTokenExpires: Date

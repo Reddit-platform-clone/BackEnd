@@ -21,11 +21,11 @@ router.get('/api/v1/me/friends/:username', authMiddleware.authorizeationToken, u
 router.get('/api/username_available/:username', userController.checkUsernameAvailability);
 
 router.get('/user/:username/about', authMiddleware.authorizeationToken, userController.getUserAbout);
-router.get('/user/:username/overview', userController.getUserOverview);
-router.get('/user/:username/submitted', userController.getUserSubmitted);
-router.get('/user/:username/comments', userController.getUserComments);
-router.get('/user/:username/upvoted', userController.getUserUpvoted);
-router.get('/user/:username/downvoted', userController.getUserDownvoted);
+router.get('/user/:username/overview', authMiddleware.authorizeationToken, userController.getUserOverview);
+router.get('/user/:username/submitted', authMiddleware.authorizeationToken, userController.getUserSubmitted);
+router.get('/user/:username/comments', authMiddleware.authorizeationToken, userController.getUserComments);
+router.get('/user/:username/upvoted', authMiddleware.authorizeationToken, userController.getUserUpvoted);
+router.get('/user/:username/downvoted', authMiddleware.authorizeationToken, userController.getUserDownvoted);
 
 router.get('/api/v1/me', authMiddleware.authorizeationToken, userController.getUserIdentity);
 router.get('/api/v1/me/prefs', authMiddleware.authorizeationToken, userController.getPrefs);

@@ -187,23 +187,65 @@ const userController = {
   },
   
   getUserOverview: async (req, res) => {
-    res.json({ message: 'user overview'})
+    try {
+      const username = req.params.username;
+      const result = await userService.getUserOverview(username);
+      res.status(200).json(result);
+    } catch (err) {
+      res.status(400).send(err.message);
+    }
   },
   
   getUserSubmitted: async (req, res) => {
-    res.json({ message: 'user submitted'})
+    try {
+      const username = req.params.username;
+      const result = await userService.getUserSubmitted(username);
+      res.status(200).json(result);
+    } catch (err) {
+      res.status(400).send(err.message);
+    }
   },
   
   getUserComments: async (req, res) => {
-    res.json({ message: 'user comments'})
+    try {
+      const username = req.params.username;
+      const result = await userService.getUserComments(username);
+      res.status(200).json(result);
+    } catch (err) {
+      res.status(400).send(err.message);
+    }
   },
   
   getUserUpvoted: async (req, res) => {
-    res.json({ message: 'user upvoted'})
+    try {
+      const usernameToView = req.params.username;
+      const user = req.user.username;
+      if (usernameToView != user) {
+        res.status(403).json({ message: 'you have no access to this page' });
+        return;
+      }
+
+      const result = await userService.getUserUpvoted(usernameToView);
+      res.status(200).json(result);
+    } catch (err) {
+      res.status(400).send(err.message);
+    }
   },
   
   getUserDownvoted: async (req, res) => {
-    res.json({ message: 'user downvoted'})
+    try {
+      const usernameToView = req.params.username;
+      const user = req.user.username;
+      if (usernameToView != user) {
+        res.status(403).json({ message: 'you have no access to this page' });
+        return;
+      }
+
+      const result = await userService.getUserDownvoted(usernameToView);
+      res.status(200).json(result);
+    } catch (err) {
+      res.status(400).send(err.message);
+    }
   },
 
   getUserIdentity: async (req, res) => {
