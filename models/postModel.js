@@ -2,11 +2,11 @@ let mongoose = require('mongoose');
 
 const postSchema = new mongoose.Schema({
     postId: {type: String, unique: true},
-    content: { type: String, required: true },
+    content: { type: String},
     title: {type: String},
     userId: {type: String, required: true},
     parentId: {type: String, required: true, default:"0"},
-    media: {type: JSON},
+    media: {type: Array},
     downvotes: {type: Number, default:0},
     communityId: {type: String, required: true},
     communityName: {type: String},

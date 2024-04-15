@@ -31,10 +31,9 @@ const moderationService = {
 
     createCommunity: async (creator, details) => {
         // logic to create a subreddit
-        const communityTitle = details.title;
-        let community = await communityModel.findOne({ title: communityTitle });
+        const communityTitle = details.communityName;
+        let community = await communityModel.findOne({ communityName: communityTitle });
         if (community) throw new Error('community title not available');
-
         community = new communityModel(details);
         await community.moderatorsUsernames.push(creator);
         await community.save();

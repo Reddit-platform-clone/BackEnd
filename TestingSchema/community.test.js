@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const Community = require('../schemas/communitySchema');
+const Community = require('../models/communityModel');
 require('dotenv').config();
 
 console.log(process.env.MONGO_URI);
@@ -19,7 +19,8 @@ describe('Community Schema Test', () => {;
       moderatorInvite: false,
       type: 'Public',
       isNSFW: false,
-      description: 'new circle'
+      description: 'new circle',
+      members: []
     };
 
     const community = new Community(communityData);

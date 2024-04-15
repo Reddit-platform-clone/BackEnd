@@ -62,6 +62,10 @@ const userSchema = {
     default: []
   },
 
+  savedPosts: [String],
+  upVotes: [String],
+  downVotes: [String],
+
   resetPasswordToken: String,
   resetPasswordTokenExpires: Date
 };

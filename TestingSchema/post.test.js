@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const Post = require('../models/postModel.js');
 require('dotenv').config();
-console.log(process.env.MONGO_URI);
 
 beforeAll(async () => {
     await mongoose.connect(process.env.MONGO_URI);
@@ -10,21 +9,21 @@ beforeAll(async () => {
 describe('Post model test', () => {
     it('Insert a post into the database', async () => {
         const postData = {
-            postId: 13,
-            content: 'HELIIIIIIIIII',
-            title: 'LIVE POST',
+            postId: 6,
+            content: '',
+            title: 'chreg',
             userId: 'yousefwael02',
-            parentId: "6",
-            media: {},
+            parentId: 6,
+            media: [],
             downvotes: 1,
-            communityId: "6",
-            communityName: 'miami heat',
-            upvotes: 1,
-            numComments: 0,
+            communityId: 6,
+            communityName: '6',
+            upvotes: 154,
+            numComments: 25,
             scheduled: false,
             isSpoiler: false,
-            numViews: 0,
-            isLocked: false
+            numViews: 18,
+            isLocked: false 
         };
 
         const post = new Post(postData);

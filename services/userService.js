@@ -196,7 +196,7 @@ singUp: async (username, email, password) => {
   checkUsernameAvailability: async (username) => {
     // logic to check username validity
     const user = await userModel.findOne({ username: username });
-    if (user == null) throw new Error('Username is not available');
+    if (user) throw new Error('Username is not available');
     return { message: 'Username is available' };
   },
 
@@ -254,6 +254,23 @@ singUp: async (username, email, password) => {
     const userSettings = await settingsModel.findOneAndUpdate({ username: username }, settings, { new: true, upsert: true, runValidators: true });
 
     return { settings: userSettings };
+  },
+
+  savePost: async (username, postId) => {
+    const user = await userModel.findOne({username: username});
+    user.savedPosts.push(postId);
+    user.save();
+    
+    return { message: 'Post saved successfully'};
+  },
+
+  unsavePost: async (username, postId) => {
+    const user = await userModel.findOne({username: username});
+    const postIndex = user.savedPosts.indexOf(postId);
+    user.savedPosts.splice(postIndex,1);
+    user.save();
+
+    return { message: 'Post unsaved successfully'};
   }
 };
 

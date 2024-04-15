@@ -20,12 +20,12 @@ const messageService = {
       if (username === recipient) {
         return { success: false, error: 'Sender and recipient cannot be the same.' };
     }
-      const senderExists = await UserModel.exists({ username: username });
-      const receiverExists = await UserModel.exists({ username: recipient });
+      const sender = await UserModel.findOne({ username: username });
+      const receiver = await UserModel.findOne({ username: recipient });
       
-      if ( !receiverExists) {
+      if ( !receiver) {
         return { success: false, error: 'receiver does not exist.' };
-    }   if (!senderExists) {
+    }   if (!sender) {
       
       return { success: false, error: `Sender  does not exist.` };
   }
