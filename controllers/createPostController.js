@@ -2,15 +2,17 @@ const postService = require('../services/createPostService');
 
 const CreatePostController = {
     createPost: async (req, res) => {
+        
         try {
             // Extract post data from the request body
             const postData = req.body;
 
             // Get the ID of the currently logged-in user
-            const userId = req.user.id; // Assuming the user ID is stored in req.user.id
+            const userId = req.body.userId; // Assuming the user ID is stored in req.body.userId
+            console.log("userId: ", userId);
 
             // Call the createPost method from the postService to create and add the post to the database
-            const newPost = await postService.createPost(postData, username); // Pass userId as an argument
+            const newPost = await postService.createPost(postData); // Pass userId as an argument
 
             // Return the newly created post in the response
             return res.status(201).json(newPost);
