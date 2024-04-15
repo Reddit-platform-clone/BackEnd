@@ -14,10 +14,10 @@ const userController = {
         const result = await userService.logIn(emailOrUsername, password);
         res.status(200).json(result);
       } catch (error) {
-        res.status(400).send(error.message);
+        res.status(400).json({ message: error.message });
       }
     } catch (err) {
-      res.status(500).send(err.message);
+      res.status(500).json({ message: err.message });
     }
   },
 
@@ -38,10 +38,10 @@ const userController = {
         const result = await userService.singUp(username, email, password);
         res.status(200).json(result);
       } catch (error) {
-        res.status(400).send(error.message);
+        res.status(400).json({ message: error.message });
       }
     } catch (err) {
-      res.status(500).send(err.message);
+      res.status(500).json({ message: err.message });
     }
   },
 
@@ -73,7 +73,7 @@ const userController = {
         res.status(200).json({ status: 'success', message: 'reset email sent' });
     } catch(err) {
 
-      res.status(400).send(err.message);
+      res.status(400).json({ message: err.message });
     }
   },
 
@@ -98,10 +98,10 @@ const userController = {
         const result = await userService.removeFriend(username, usernameToRemove);
         res.status(200).json(result);
       } catch (error) {
-        res.status(400).send(error.message);
+        res.status(400).json({ message: error.message });
       }
     } catch (err) {
-      res.status(500).send(err.message);
+      res.status(500).json({ message: err.message });
     }
   },
 
@@ -113,10 +113,10 @@ const userController = {
         const result = await userService.reportUser(reporter, reported, details);
         res.status(200).json(result);
       } catch (error) {
-        res.status(400).send(error.message);
+        res.status(400).json({ message: error.message });
       }
     } catch (err) { 
-      res.status(500).send(err.message);
+      res.status(500).json({ message: err.message });
     }
   },
 
@@ -132,10 +132,10 @@ const userController = {
         const result = await userService.blockUser(username, usernameToBlock);
         res.status(200).json(result);
       } catch (error) {
-        res.status(400).send(error.message);
+        res.status(400).json({ message: error.message });
       }
     } catch (err) {
-      res.status(500).send(err.message);
+      res.status(500).json({ message: err.message });
     }
   },
 
@@ -155,10 +155,10 @@ const userController = {
         const result = await userService.getFriendInfo(username, friendUsername);
         res.status(200).json(result);
       } catch (error) {
-        res.status(400).send(error.message);
+        res.status(400).json({ message: error.message });
       }
     } catch (err) {
-      res.status(500).send(err.message);
+      res.status(500).json({ message: err.message });
     }
   },
 
@@ -168,7 +168,7 @@ const userController = {
       const result = await userService.checkUsernameAvailability(username);
       res.status(200).json(result);
     } catch (error) {
-      res.status(400).send(error.message);
+      res.status(400).json({ message: error.message });
     }
   },
 
@@ -179,10 +179,10 @@ const userController = {
         const result = await userService.getUserAbout(username);
         res.status(200).json(result);
       } catch (error) {
-        res.status(400).send(error.message);
+        res.status(400).json({ message: error.message });
       }
     } catch (err) {
-      res.status(500).send(err.message);
+      res.status(500).json({ message: err.message });
     }
   },
   
@@ -192,7 +192,7 @@ const userController = {
       const result = await userService.getUserOverview(username);
       res.status(200).json(result);
     } catch (err) {
-      res.status(400).send(err.message);
+      res.status(400).json({ message: err.message });
     }
   },
   
@@ -202,7 +202,7 @@ const userController = {
       const result = await userService.getUserSubmitted(username);
       res.status(200).json(result);
     } catch (err) {
-      res.status(400).send(err.message);
+      res.status(400).json({ message: err.message });
     }
   },
   
@@ -212,7 +212,7 @@ const userController = {
       const result = await userService.getUserComments(username);
       res.status(200).json(result);
     } catch (err) {
-      res.status(400).send(err.message);
+      res.status(400).json({ message: err.message });
     }
   },
   
@@ -228,7 +228,7 @@ const userController = {
       const result = await userService.getUserUpvoted(usernameToView);
       res.status(200).json(result);
     } catch (err) {
-      res.status(400).send(err.message);
+      res.status(400).json({ message: err.message });
     }
   },
   
@@ -244,7 +244,7 @@ const userController = {
       const result = await userService.getUserDownvoted(usernameToView);
       res.status(200).json(result);
     } catch (err) {
-      res.status(400).send(err.message);
+      res.status(400).json({ message: err.message });
     }
   },
 
@@ -256,7 +256,7 @@ const userController = {
 
       res.status(200).json(result);
     } catch(err) {
-      res.status(400).send(err.message);
+      res.status(400).json({ message: err.message });
     }
   },
 
@@ -268,7 +268,7 @@ const userController = {
   
       res.status(200).json(result);
     } catch(err) {
-      res.status(400).send(err.message);
+      res.status(400).json({ message: err.message });
     }
   },
 
@@ -281,7 +281,7 @@ const userController = {
   
       res.status(200).json(result);
     } catch(err) {
-      res.status(400).send(err.message);
+      res.status(400).json({ message: err.message });
     }
   },
 
