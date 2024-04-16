@@ -3,11 +3,15 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
+const mongoose = require('mongoose');
 const { swaggerUi, specs, router } = require('./swaggerConfig');
 require('dotenv').config();
-const mongoose = require('mongoose');
 
-mongoose.connect(process.env.MONGO_URI);
+mongoose.connect(process.env.MONGO_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useCreateIndex: true
+});
 mongoose.connection.once('open', () => {
   console.log('Connected to MongoDB!');
 })

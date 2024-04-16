@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const Community = require('../schemas/communitySchema');
+const Community = require('../models/communityModel');
 require('dotenv').config();
 
 console.log(process.env.MONGO_URI);

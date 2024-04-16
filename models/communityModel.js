@@ -8,7 +8,8 @@ const communitySchema = new mongoose.Schema({
     rules: { type: [String], default: [] },
     banned: { type: [String], default: [] },
     moderatorsUsernames: { type:[String], required:true },
-    members: { type: [String], default: [] }
+    members: { type: [String], default: [] },
+    displayPic: {type: String}
 }, { strict: 'throw', timestamps: true });
 
 const Communities = mongoose.model('Communities', communitySchema);

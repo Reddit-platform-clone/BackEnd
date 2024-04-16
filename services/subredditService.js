@@ -38,8 +38,8 @@ const subredditService = {
 
             // Sort posts based on score criteria
             posts.sort((a, b) => {
-                const scoreA = a.upvotes + a.num_comments - Math.floor((Date.now() - a.date_time) / (1000 * 60 * 60 * 24));
-                const scoreB = b.upvotes + b.num_comments - Math.floor((Date.now() - b.date_time) / (1000 * 60 * 60 * 24));
+                const scoreA = a.upvotes + a.numComments - Math.floor((Date.now() - a.createdAt) / (1000 * 60 * 60 * 24));
+                const scoreB = b.upvotes + b.numComments - Math.floor((Date.now() - b.createdAt) / (1000 * 60 * 60 * 24));
                 return scoreB - scoreA;
             });
 
@@ -56,7 +56,7 @@ const subredditService = {
             // Fetch posts from the database
             const posts = await Post.find();
 
-            posts.sort((a,b) => b.date_time - a.date_time);
+            posts.sort((a,b) => b.createdAt - a.createdAt);
 
             return posts;
         } catch (error) {
@@ -73,8 +73,8 @@ const subredditService = {
 
             // Sort posts based on score criteria
             posts.sort((a, b) => {
-                const scoreA = a.upvotes + a.num_comments;
-                const scoreB = b.upvotes + b.num_comments;
+                const scoreA = a.upvotes + a.numComments;
+                const scoreB = b.upvotes + b.numComments;
                 return scoreB - scoreA;
             });
 

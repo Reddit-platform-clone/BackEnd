@@ -61,7 +61,8 @@ if(checkerExist==1){
 
     
     await report.save(); 
-    return { success: true, message: 'Thank you for reporting message 4. We will review it soon' };
+    return { success: true, message: 'Thank you for reporting. We will review it soon' };
+
 }
 else{
     return { success: false, error:'tpe is not user/comment/post.'};
