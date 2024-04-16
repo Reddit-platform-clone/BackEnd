@@ -68,13 +68,34 @@ const userSchema = {
     type: String
   },
 
-  savedPosts: [String],
-  upVotes: [String],
-  downVotes: [String],
-  followPosts:[String],
-  hidePosts:[String],
-  savedCategories:[String],
-  joinedCommunities: [String], 
+  savedPosts: {
+    type: [String],
+    default: []
+  },
+  upVotes: {
+    type: [String],
+    default: []
+  },
+  downVotes: {
+    type: [String],
+    default: []
+  },
+  followPosts:{
+    type: [String],
+    default: []
+  },
+  hidePosts:{
+    type: [String],
+    default: []
+  },
+  savedCategories:{
+    type: [String],
+    default: []
+  },
+  joinedCommunities: {
+    type: [String],
+    default: []
+  }, 
 
   resetPasswordToken: String,
   resetPasswordTokenExpires: Date
