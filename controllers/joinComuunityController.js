@@ -1,21 +1,20 @@
-const joinCommunityService = require('../services/joinCommunityService');
+const joinCommunityService = require('../services/joinCommunityService.js');
 
 const joinCommunityController = {
-    join: async (req, res) => {
-        try {
-            // Logic to join the community using joinCommunityService
-            const userId = req.user.id; // Assuming user ID is retrieved from the request object
-            const communityId = req.params.communityId; // Assuming community ID is retrieved from the request parameters
-            await joinCommunityService.joinCommunity(userId, communityId);
-
-            // Send a success response
-            res.status(200).json({ success: true, message: 'Successfully joined the community.' });
+    joinCommunity: async (req, res) => {
+        const {username, community} = req.body;
+        try{
+            const result = await joinCommunityService.join(username, community);
+            if(result.success) {
+                return res.status(200).json({message: result.message});
+            } else {
+                return res.status(400).json({error: result.message});
+            }
         } catch (error) {
-            console.error('Error joining the community:', error);
-            // Send an error response
-            res.status(500).json({ success: false, error: 'Internal Server Error' });
+            console.error('Error joining community:', error);
+            res.status(500).json({error: 'Internal server error'});
         }
     }
-};
+}
 
 module.exports = joinCommunityController;

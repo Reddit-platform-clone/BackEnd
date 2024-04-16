@@ -3,6 +3,16 @@
 const Post = require('../models/postModel.js');
 
 const subredditService = {
+    getAll: async () => {
+        try {
+            const post = await Post.find();
+            return post;
+        } catch (error) {
+            console.log('Error fetching posts:', error);
+            throw new Error('Failed to fetch post');
+        }
+    },
+
     getBest: async () => {
         // Logic to get best post
         try {
@@ -13,7 +23,7 @@ const subredditService = {
             posts.sort((a, b) => {
                 return b.upvotes - a.upvotes;
             });
-            return posts[0];
+            return posts;
         } catch(error) {
             console.error('Error fetching best post:', error);
             throw new Error('Failed to fetch best post');
@@ -33,7 +43,7 @@ const subredditService = {
                 return scoreB - scoreA;
             });
 
-            return posts[0];
+            return posts;
         } catch (error) {
             console.error('Error fetching hot post:', error);
             throw new Error('Failed to fetch hot post');
@@ -48,7 +58,7 @@ const subredditService = {
 
             posts.sort((a,b) => b.date_time - a.date_time);
 
-            return posts[0];
+            return posts;
         } catch (error) {
             console.error('Error fetching new posts:', error);
             throw new Error('Failed to fetch new posts');
@@ -68,7 +78,7 @@ const subredditService = {
                 return scoreB - scoreA;
             });
 
-            return posts[0];
+            return posts;
         } catch (error) {
             console.error('Error fetching hot post:', error);
             throw new Error('Failed to fetch hot post');
