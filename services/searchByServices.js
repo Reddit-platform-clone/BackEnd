@@ -2,7 +2,7 @@ const sort = require('../models/searchByModel.js');
 const Post = require('../models/postModel.js');
 const User = require('../models/userModel.js');
 const Comment = require('../models/commentModel.js');
-const Community = require('../schemas/communitySchema.js');
+const Community = require('../models/communityModel.js');
 const Hashtag = require('../models/hashtagModel.js');
 
 
@@ -40,9 +40,10 @@ const searchByService = {
     searchByComments: async (keyword) => {
         try {
             // Search for comments by content
-            const commentsResults = await Comment.find({
-                content: { $regex: keyword, $options: 'i' }
-            });
+            const commentsResults = await Comment.find(
+                { $text: { $search: keyword } }, // Search for the keyword
+                { score: { $meta: "textScore" } } // Sort by relevance score
+            ).sort({ score: { $meta: "textScore" } });
             return commentsResults;
         } catch (error) {
             console.error("Error searching by comments:", error);

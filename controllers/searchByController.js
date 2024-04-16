@@ -3,7 +3,7 @@ const searchByService = require('../services/searchByServices.js');
 const searchByController = {
     users: async (req, res) => {
         try {
-            const keyword = req.query.keyword;
+            const keyword = req.body.keyword;
             if (!keyword) {
                 return res.status(400).json({ error: "Keyword is required to search users" });
             }
@@ -19,7 +19,7 @@ const searchByController = {
     
     posts: async (req, res) => {
         try {
-            const keyword = req.query.keyword;
+            const keyword = req.body.keyword;
             if (!keyword) {
                 return res.status(400).json({ error: "Keyword is required to search posts" });
             }
@@ -35,7 +35,7 @@ const searchByController = {
     
     comments: async (req, res) => {
         try {
-            const keyword = req.query.keyword;
+            const keyword = req.body.keyword;
             if (!keyword) {
                 return res.status(400).json({ error: "Keyword is required to search comments" });
             }
@@ -51,7 +51,7 @@ const searchByController = {
 
     communities: async (req, res) => {
         try {
-            const keyword = req.query.keyword;
+            const keyword = req.body.keyword;
             if (!keyword) {
                 return res.status(400).json({ error: "Keyword is required to search communities" });
             }
@@ -67,7 +67,7 @@ const searchByController = {
 
     hashtags: async (req, res) => {
         try {
-            const keyword = req.query.keyword;
+            const keyword = req.body.keyword;
             if (!keyword) {
                 return res.status(400).json({ error: "Keyword is required to search hashtags" });
             }

@@ -33,9 +33,9 @@ const commentSchema = new mongoose.Schema({
     replyToID: {
         type: String,
         default: null
-    },
-    content: { type: String}
+    }
 });
+commentSchema.index({ content: 'text'});
 
 const Comment = mongoose.model('Comment', commentSchema);
 

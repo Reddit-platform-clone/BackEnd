@@ -5,7 +5,7 @@ const postSchema = new mongoose.Schema({
     content: { type: String },
     title: {type: String, required: true},
     userId: {type: String, required: true},
-    parentId: {type: Number, required: true},
+    parentId: {type: String, required: true},
     media: {type: JSON},
     downvotes: {type: Number,default:0},
     communityId: {type: String, required: true},
@@ -20,6 +20,8 @@ const postSchema = new mongoose.Schema({
 
 
 }, {timestamps: true});
+
+postSchema.index({ content: 'text', title: 'text'});
 
 const Post = mongoose.model('post', postSchema);
 
