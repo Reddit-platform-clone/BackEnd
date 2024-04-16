@@ -2,9 +2,21 @@ const joinCommunityService = require('../services/joinCommunityService.js');
 
 const joinCommunityController = {
     joinCommunity: async (req, res) => {
-        const {username, community} = req.body;
+        const {communityName} = req.body;
+        
+        let username = req.user;
+
+        if (req.user?.iat) {
+            username = req.user.username;
+        } else {
+            username = req.user;
+        }
+
+        console.log(username)
+        console.log(communityName);
+
         try{
-            const result = await joinCommunityService.join(username, community);
+            const result = await joinCommunityService.join(username, communityName);
             if(result.success) {
                 return res.status(200).json({message: result.message});
             } else {

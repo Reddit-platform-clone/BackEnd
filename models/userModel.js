@@ -70,6 +70,7 @@ const userSchema = {
   followPosts:[String],
   hidePosts:[String],
   savedCategories:[String],
+  joinedCommunities: [String],
 
   resetPasswordToken: String,
   resetPasswordTokenExpires: Date
