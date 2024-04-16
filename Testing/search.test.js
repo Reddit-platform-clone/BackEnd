@@ -1,28 +1,22 @@
 const supertest = require('supertest');
-const app = require('../app'); // Assuming your Express app is exported from app.js
+const app = require('../server'); // Assuming your Express app is exported from app.js
 const mongoose = require('mongoose');
 const faker = require('faker');
 
+require('dotenv').config();
 const User = require('../models/userModel');
 const Post = require('../models/postModel');
 const Comment = require('../models/commentModel');
 const Hashtag = require('../models/hashtagModel');
-const Community = require('../schemas/communitySchema');
+const Community = require('../models/communityModel');
 
 const request = supertest(app);
 
 beforeAll(async () => {
-    // Connect to MongoDB
-    await mongoose.connect('mongodb+srv://admin:admin4321@reddit-clone.af8eobe.mongodb.net/reddit-clone?retryWrites=true&w=majority&appName=Reddit-clone', {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-        useCreateIndex: true,
-        useFindAndModify: false
-    });
+    await mongoose.connect(process.env.MONGO_URI);
 });
 
 afterAll(async () => {
-    // Disconnect from MongoDB
     await mongoose.disconnect();
 });
 
@@ -34,7 +28,8 @@ describe('Search Functionality', () => {
         for (let i = 0; i < 10; i++) {
             const user = new User({
                 username: faker.internet.userName(),
-                // Other user properties
+                password: "secret",
+                email: faker.internet.email()
             });
             users.push(user);
         }
@@ -43,10 +38,16 @@ describe('Search Functionality', () => {
         // Generate random posts
         const posts = [];
         for (let i = 0; i < 10; i++) {
+            const userIndex = Math.floor(Math.random() * users.length);
             const post = new Post({
-                userId: users[Math.floor(Math.random() * users.length)]._id,
+                postId: faker.internet.userName(), // Ensure postId is unique for each post
+                userId: users[userIndex]._id, // Assign a random userId
                 content: faker.lorem.paragraph(),
-                // Other post properties
+                title: "post",
+                parentId: "mom",
+                communityId: "communitysecret",
+                numViews: 0,
+                isLocked: false
             });
             posts.push(post);
         }
@@ -56,10 +57,9 @@ describe('Search Functionality', () => {
         const comments = [];
         for (let i = 0; i < 10; i++) {
             const comment = new Comment({
-                userId: users[Math.floor(Math.random() * users.length)]._id,
-                postId: posts[Math.floor(Math.random() * posts.length)]._id,
+                userID: users[Math.floor(Math.random() * users.length)]._id,
+                postID: posts[Math.floor(Math.random() * posts.length)]._id,
                 content: faker.lorem.sentence(),
-                // Other comment properties
             });
             comments.push(comment);
         }
@@ -69,8 +69,7 @@ describe('Search Functionality', () => {
         const hashtags = [];
         for (let i = 0; i < 10; i++) {
             const hashtag = new Hashtag({
-                name: faker.lorem.word(),
-                // Other hashtag properties
+                hashtagString: faker.internet.userName()
             });
             hashtags.push(hashtag);
         }
@@ -80,8 +79,8 @@ describe('Search Functionality', () => {
         const communities = [];
         for (let i = 0; i < 10; i++) {
             const community = new Community({
-                name: faker.lorem.words(),
-                // Other community properties
+                communityName: faker.lorem.words(),
+                moderatorsUsernames: "moderatorUser"
             });
             communities.push(community);
         }
@@ -90,36 +89,46 @@ describe('Search Functionality', () => {
 
     it('should search users by keyword', async () => {
         const keyword = 'test';
-        const response = await request.get(`/search/users?keyword=${keyword}`);
-        expect(response.status).toBe(200);
-        // Add your assertions here for users search
+        const response = await supertest('http://localhost:5000/')
+            .get('searchBy/users')
+            .query({ keyword });
+
+        expect(response.statusCode).toBe(200);
     });
 
     it('should search posts by keyword', async () => {
         const keyword = 'test';
-        const response = await request.get(`/search/posts?keyword=${keyword}`);
-        expect(response.status).toBe(200);
-        // Add your assertions here for posts search
+        const response = await supertest('http://localhost:5000/')
+            .get('searchBy/posts')
+            .query({ keyword });
+
+        expect(response.statusCode).toBe(200);
     });
 
     it('should search comments by keyword', async () => {
         const keyword = 'test';
-        const response = await request.get(`/search/comments?keyword=${keyword}`);
-        expect(response.status).toBe(200);
-        // Add your assertions here for comments search
+        const response = await supertest('http://localhost:5000/')
+            .get('searchBy/comments')
+            .query({ keyword });
+
+        expect(response.statusCode).toBe(200);
     });
 
     it('should search communities by keyword', async () => {
         const keyword = 'test';
-        const response = await request.get(`/search/communities?keyword=${keyword}`);
-        expect(response.status).toBe(200);
-        // Add your assertions here for communities search
+        const response = await supertest('http://localhost:5000/')
+            .get('searchBy/communities')
+            .query({ keyword });
+
+        expect(response.statusCode).toBe(200);
     });
 
     it('should search hashtags by keyword', async () => {
         const keyword = 'test';
-        const response = await request.get(`/search/hashtags?keyword=${keyword}`);
-        expect(response.status).toBe(200);
-        // Add your assertions here for hashtags search
+        const response = await supertest('http://localhost:5000/')
+            .get('searchBy/hashtags')
+            .query({ keyword });
+
+        expect(response.statusCode).toBe(200);
     });
 });
