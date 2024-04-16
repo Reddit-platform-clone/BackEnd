@@ -14,15 +14,8 @@ const messageController = {
     username=req.user;
   }
 
-
       const { recipient, from, title, content } = req.body;
-      console.log('re');
-      console.log(recipient);
-      console.log('rq');
-      console.log(req);
-      console.log('user');
-      console.log(username);
-      console.log('ss');
+
       const result = await messageService.composeMessage({ username, recipient, from, title, content });
 
       if (result.success) {

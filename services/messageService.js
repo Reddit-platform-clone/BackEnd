@@ -20,21 +20,21 @@ const messageService = {
       if (username === recipient) {
         return { success: false, error: 'Sender and recipient cannot be the same.' };
     }
-      const senderExists = await UserModel.exists({ username: username });
-      const receiverExists = await UserModel.exists({ username: recipient });
+      const sender = await UserModel.findOne({ username: username });
+      const receiver = await UserModel.findOne({ username: recipient });
       
-      if ( !receiverExists) {
+      if ( !receiver) {
         return { success: false, error: 'receiver does not exist.' };
-    }   if (!senderExists) {
+    }   if (!sender) {
       
       return { success: false, error: `Sender  does not exist.` };
   }
 
-//ADEED IN THE FUTURE
-      // if (sender.blockedUsers.includes(receiver._id) || receiver.blockedUsers.includes(sender._id)) {
-      //     return { success: false, error: 'Message cannot be sent because of blocking.' };
-      // }
-      
+
+if ((sender.blockedUsers && sender.blockedUsers.includes(receiver.username)) || 
+(receiver.blockedUsers && receiver.blockedUsers.includes(sender.username))) {
+return { success: false, error: 'Message cannot be sent because of blocking.' };
+}    
     const message = new Message(messageData);
 
     await message.save();

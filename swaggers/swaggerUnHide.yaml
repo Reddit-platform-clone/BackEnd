@@ -15,12 +15,12 @@ paths:
           schema:
             type: object
             properties:
-              id:
+              type:
                 type: string
-                description: The fullname of the item to unhide
-              uh:
+                description: The typr(comment/post) to be hidden
+              entityId:
                 type: string
-                description: The modhash provided by the X-Modhash header
+                description: The ID of the post/comment  wants to hide the link
       responses:
         '200':
           description: Item unhidden successfully

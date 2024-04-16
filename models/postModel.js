@@ -1,23 +1,26 @@
 let mongoose = require('mongoose');
 
 const postSchema = new mongoose.Schema({
-    post_id: {type: Number, required: true, unique: true},
-    content: { type: String},
-    user_id: {type: String, required: true},
-    date_time: {type: Date, default: Date.now},
-    parent_id: {type: Number, required: true},
+    postId: {type: String, unique: true},
+    content: { type: String },
+    title: {type: String, required: true},
+    userId: {type: String, required: true},
+    parentId: {type: Number, required: true},
     media: {type: JSON},
-    downvotes: {type: Number},
-    subreddit_id: {type: Number, required: true},
-    upvotes: {type: Number},
-    num_comments: {type: Number, required: true},
+    downvotes: {type: Number,default:0},
+    communityId: {type: String, required: true},
+    communityName: {type: String},
+    communityImage:{type:JSON},
+    upvotes: {type: Number,default:0},
+    numComments: {type: Number,default:0},
     scheduled: {type: Boolean},
-    is_spoiler: {type: Boolean},
-    num_views: {type: Number, required: true},
-    is_locked: {type: Boolean, required: true} 
-});
+    isSpoiler: {type: Boolean},
+    numViews: {type: Number, required: true},
+    isLocked: {type: Boolean, required: true},
 
-postSchema.index({ content: 'text', title: 'text' });
+
+}, {timestamps: true});
+
 const Post = mongoose.model('post', postSchema);
 
 module.exports = Post;

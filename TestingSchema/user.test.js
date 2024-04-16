@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const User = require('../models/userModel');
 const e = require('express');
 const exp = require('constants');
+console.log(process.env.MONGO_URI);
 
 beforeAll(async () => {
   await mongoose.connect(process.env.MONGO_URI, {
@@ -175,7 +176,6 @@ describe('User Model Test', () => {
     await User.create(user1, user2, user3);
 
     const users = await User.find({ interests: 'anime' }, 'username');
-    console.log(users);
 
     expect(users.length).toBe(2);
   });

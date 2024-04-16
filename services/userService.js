@@ -2,33 +2,45 @@ require('dotenv').config();
 
 const userModel = require('../models/userModel.js');
 const reportModel = require('../models/profileReportModel.js');
+const settingsModel = require('../models/settingsMode.js');
+const postModel = require('../models/postModel.js');
+const commentModel = require('../models/commentModel.js');
 const utils = require('../utils/helpers.js');
-const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
+const Communities = require('../models/communityModel.js');
 
 const userService = {
-  logIn: async (username, password) => {
+  logIn: async (emailOrUsername, password) => {
     // logic to login registered users
-    const user = await userModel.findOne({ username: username });
-    if (!user) throw new Error('invalid username or password'); 
+    let user;
+    if (utils.isValidEmail(emailOrUsername)){
+      user = await userModel.findOne({ email: emailOrUsername });
+      if (!user) throw new Error('invalid email'); 
+    } else {
+      user = await userModel.findOne({ username: emailOrUsername });
+      if (!user) throw new Error('invalid username')
+    }
+  
+  const isValid = await utils.validatePassword(password, user.password);
+  if (!isValid) throw new Error('invalid email or password');
+  
+  const token = jwt.sign({ username: user.username }, process.env.SECRET_ACCESS_TOKEN);
+  
+  return { token: token };
+},
 
-    // const isValid = await bcrypt.compare(password, user.password);
-    const isValid = await utils.validatePassword(password, user.password);
-    if (!isValid) throw new Error('invalid username or password');
-
-    const token = jwt.sign({ username: user.username }, process.env.SECRET_ACCESS_TOKEN);
-
-    return { token: token };
-  },
-
-  singUp: async (username, password) => {
-    // logic to register new users
+singUp: async (username, email, password) => {
+  // logic to register new users
     const userExists = await userModel.findOne({ username: username });
     if (userExists) throw new Error('invalid username or password');
 
+    const emailExists = await userModel.findOne({ email: email });
+    if (emailExists) throw new Error ('this email is already linked to an account')
+
     // const hashedPassword = await bcrypt.hash(password, 10);
     const hashedPassword = await utils.hashPassword(password);
-    const userData = { username: username, password: hashedPassword };
+    const userData = { username: username, password: hashedPassword, email: email };
 
     const token = jwt.sign({ username: userData.username }, process.env.SECRET_ACCESS_TOKEN);
 
@@ -38,20 +50,80 @@ const userService = {
     return { token: token };
   },
 
-  logInForgetPassword: async (username) => {
+  verifyToken: async (token) => {
+    try {
+      userData = await utils.verifyGoogleToken(token);
+      
+      let user = await userModel.findOne({ email: userData.email});
+      let userToken;
+      if(user) {
+        if (!user.password) {
+          const pass = crypto.randomBytes(10).toString('Hex');
+          const hashedPass = await utils.hashPassword(pass);
+          user.password = hashedPass;
+          await user.save();
+        }
+        userToken = jwt.sign({ username: user.username }, process.env.SECRET_ACCESS_TOKEN);
+        return { token: userToken };
+      }
+      const username = utils.generateRandomUsername();
+      const password = crypto.randomBytes(10).toString('Hex');
+      const hashedPassword = await utils.hashPassword(password);
+  
+      const newEntry = { username: username, email: userData.email, password: hashedPassword };
+  
+      userToken = jwt.sign({ username: newEntry.username }, process.env.SECRET_ACCESS_TOKEN);
+      const newUser = new userModel(newEntry);
+      await newUser.save();
+      
+      return { token: userToken };
+    } catch (err) {
+      return (err.message)
+    }
+  },
+
+  logInForgetPassword: async (emailOrUsername) => {
     // logic to reset password
+    let user;
+    let userEmail;
+    if (utils.isValidEmail(emailOrUsername)){
+      user = await userModel.findOne({ email: emailOrUsername });
+      if (!user) throw new Error('invalid email'); 
+
+      userEmail = emailOrUsername;
+    } else {
+      user = await userModel.findOne({ username: emailOrUsername });
+      if (!user) throw new Error('invalid username')
+
+      userEmail = user.email;
+    }
+    const resetToken = crypto.randomBytes(64).toString('hex');
+    user.resetPasswordToken = resetToken;
+    user.resetPasswordTokenExpires = Date.now() + 5 * 60 * 1000;
+    await user.save();
+
+    return { email: userEmail, resetToken: resetToken }
   },
 
-  logInForgetUsername: async (email) => {
-    // logic to reset username
-  },
-
-  verifyEmail: async (email) => {
-    // logic to verify email
-  },
-
-  resetPassword: async (password) => {
+  resetPassword: async (token, password) => {
     // logic to reset password
+    const user = await userModel.findOne({ resetPasswordToken: token });
+    if (!user) throw new Error('User not found')
+
+    if(Date.now() > user.resetPasswordTokenExpires){
+      user.resetPasswordToken = undefined;
+      user.resetPasswordTokenExpires = undefined;
+      await user.save();
+      throw new Error('link expired')
+    }
+
+    const hashedPassword = await utils.hashPassword(password);
+    user.password = hashedPassword;
+    user.resetPasswordToken = undefined;
+    user.resetPasswordTokenExpires = undefined;
+    await user.save();
+
+    return { message: 'password updated' }
   },
 
   removeFriend: async (username, usernameToRemove) => {
@@ -127,7 +199,7 @@ const userService = {
   checkUsernameAvailability: async (username) => {
     // logic to check username validity
     const user = await userModel.findOne({ username: username });
-    if (user) throw new Error('Username is not available');
+    if (user) return { message: 'Username is not available' };
     return { message: 'Username is available' };
   },
 
@@ -136,35 +208,106 @@ const userService = {
     const user = await userModel.findOne({ username: username });
     if (!user) throw new Error('User does not exist');
 
-    return { about: user.about}
+    return { about: user.about }
   },
 
   getUserOverview: async (username) => {
     // logic to get user details
+    const user = await userModel.findOne({ username: username });
+    if (!user) throw new Error('User does not exist');
+
+    return{ 
+      username: user.username,
+      profilePicture: user.profilePicture,
+      follwers: user.followers,
+      about: user.about,
+      gender: user.gender,
+      links: user.socialLinks,
+      communitiesJoined: user.joinedCommunities
+    };
   },
 
   getUserSubmitted: async (username) => {
     // logic to get user details
+    const user = await userModel({ username: username })
+    if (!user) throw new Error('User does not exist')
+
+    const userPosts = await postModel.find({ userId: username });
+    if (!userPosts) return { message: 'User has no posts' };
+
+    return { posts: userPosts };
   },
 
   getUserComments: async (username) => {
-    // logic to get user details
+    // logic to get user 
+    const user = await userModel({ username: username })
+    if (!user) throw new Error('User does not exist')
+
+    const userComments = await commentModel.find({ userID: username });
+    if (!userComments) return { message: 'user has no comments' };
+
+    return { userComments };
   },
 
   getUserUpvoted: async (username) => {
     // logic to get user details
+    const user = await userModel.findOne({ username: username });
+    if (!user) throw new Error('User not found');
+
+    return { upvotes: user.upVotes };
   },
 
   getUserDownvoted: async (username) => {
     // logic to get user details
+    const user = await userModel.findOne({ username: username });
+    if (!user) throw new Error('User not found');
+
+    return { upvotes: user.downVotes };
   },
   
-  getIdentity: async () => {
+  getUserIdentity: async (username) => {
     // logic to get user identity
+    const user = await userModel.findOne({ username: username });
+    if (!user) throw new Error('User not found');
+
+    return { user };
   },
 
-  getPreferences: async () => {
-    // logic to get user preferences
+  getPrefs: async (username) => {
+    // logic to get user identity
+    const user = await userModel.findOne({ username: username });
+    if (!user) throw new Error('User not found');
+
+    const settings = await settingsModel.findOneAndUpdate({ username: username }, {}, { new: true, upsert: true });
+
+    return { settings: settings };
+  },
+
+  updatePrefs: async (username, settings) => {
+    // logic to get update preferences
+    const user = await userModel.findOne({ username: username });
+    if (!user) throw new Error('User not found');
+
+    const userSettings = await settingsModel.findOneAndUpdate({ username: username }, settings, { new: true, upsert: true, runValidators: true });
+
+    return { settings: userSettings };
+  },
+
+  savePost: async (username, postId) => {
+    const user = await userModel.findOne({username: username});
+    user.savedPosts.push(postId);
+    user.save();
+    
+    return { message: 'Post saved successfully'};
+  },
+
+  unsavePost: async (username, postId) => {
+    const user = await userModel.findOne({username: username});
+    const postIndex = user.savedPosts.indexOf(postId);
+    user.savedPosts.splice(postIndex,1);
+    user.save();
+
+    return { message: 'Post unsaved successfully'};
   }
 };
 

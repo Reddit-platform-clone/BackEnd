@@ -2,6 +2,15 @@
 const subredditService = require('../services/subredditService.js');
 
 const subredditController = {
+    getAllPosts: async (req, res) => {
+        try {
+            const posts = await subredditService.getAll();
+            res.json({success: true, data: posts});
+        } catch (error) {
+            res.status(500).json({success: false, error: error.message});
+        }
+    },
+
     getBestPost: async (req, res) => {
         try {
             const bestPost = await subredditService.getBest();

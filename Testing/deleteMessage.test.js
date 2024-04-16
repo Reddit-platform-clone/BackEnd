@@ -1,6 +1,6 @@
 
 const request = require('supertest');
-const app = require('../server'); 
+// const app = require('../server'); 
 
 describe('DELETE /message/del_msg', () => {
   it('should delete a  message', async () => {
@@ -9,8 +9,8 @@ describe('DELETE /message/del_msg', () => {
         _id: "66024a20b98ea4302462f5ad"
     };
 
-    const response = await request(app)
-      .delete('/message/del_msg')
+    const response = await request('http://localhost:5000/')
+      .delete('message/del_msg')
       .set('Authorization', token)
       .send(messageData);
 

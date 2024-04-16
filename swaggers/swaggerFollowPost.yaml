@@ -1,0 +1,61 @@
+swagger: '2.0'
+info:
+  version: '1.0.0'
+  title: SERAKEL API
+paths:
+  /api/follow_post:
+    post:
+      summary: Follow a post
+      description: Allows a user to follow a specific post
+      parameters:
+        - in: body
+          name: followDetails
+          description: Details for following a post
+          required: true
+          schema:
+            type: object
+            properties:
+              
+              postId:
+                type: string
+                description: The ID of the post to be followed
+      responses:
+        '200':
+          description: Post followed successfully
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Indicates whether the operation was successful
+              message:
+                type: string
+                description: Success message indicating that the post was followed successfully
+        '500':
+          description: Failed to follow post
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: Indicates whether the operation was successful
+              message:
+                type: string
+                description: Error message
+      tags:
+        - Follows
+      operationId: followPost
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      security:
+        - AuthorizationCode: []
+securityDefinitions:
+  AuthorizationCode:
+    type: oauth2
+    # authorizationUrl: "https://www.example.com/oauth2/authorize"
+    # tokenUrl: "https://www.example.com/oauth2/token"
+    flow: authorizationCode
+    scopes:
+      follow_post: Allow following a post

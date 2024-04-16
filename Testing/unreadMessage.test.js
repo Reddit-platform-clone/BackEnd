@@ -1,6 +1,5 @@
-
 const request = require('supertest');
-const app = require('../server'); 
+// const app = require('../server'); 
 
 describe('POST /api/unread_message', () => {
   it('should successfully read all messages', async () => {
@@ -10,8 +9,8 @@ describe('POST /api/unread_message', () => {
     };
 
 
-    const response = await request(app)
-      .post('/api/unread_message')
+    const response = await request('http://localhost:5000/')
+      .post('api/unread_message')
       .set('Authorization', token).send(messageData);
     expect(response.body).toHaveProperty('message', 'Message unread successfully.');
     expect(response.statusCode).toBe(200);

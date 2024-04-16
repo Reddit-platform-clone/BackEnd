@@ -1,13 +1,17 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
+const mongoose = require('mongoose');
 const { swaggerUi, specs, router } = require('./swaggerConfig');
 require('dotenv').config();
-const mongoose = require('mongoose');
-const Post = require('./models/postModel');
 
-mongoose.connect(process.env.MONGO_URI);
+mongoose.connect(process.env.MONGO_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useCreateIndex: true
+});
 mongoose.connection.once('open', () => {
   console.log('Connected to MongoDB!');
 })
@@ -16,6 +20,7 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 app.use(bodyParser.json());
+app.use(cors());
 
 app.use('/api-docs', router);
 

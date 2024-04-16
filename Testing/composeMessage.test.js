@@ -1,5 +1,5 @@
 const request = require('supertest');
-const app = require('../server'); 
+// const app = require('../server'); 
 
 describe('POST /message/compose', () => {
   it('should compose a new message', async () => {
@@ -10,8 +10,8 @@ describe('POST /message/compose', () => {
         content: 'Test Content'
     };
 
-    const response = await request(app)
-      .post('/message/compose')
+    const response = await request('http://localhost:5000/')
+      .post('message/compose')
       .set('Authorization', token)
       .send(messageData);
 

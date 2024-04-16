@@ -1,10 +1,10 @@
 const request = require('supertest');
-const app = require('../server');
+// const app = require('../server');
 
 describe('POST /login', () => {
     it('should login an existing user', async () => {
-        const response = await request(app)
-            .post('/login')
+        const response = await request('http://localhost:5000/')
+            .post('login')
             .send({
                 username: 'kofta 3alfa7m',
                 password: '145'
@@ -14,8 +14,8 @@ describe('POST /login', () => {
     }),
 
     it('should not login a non-existing user', async () => {
-        const response = await request(app)
-            .post('/login')
+        const response = await request('http://localhost:5000/')
+            .post('login')
             .send({
                 username: 'kofta felforn',
                 password: '145'
@@ -24,8 +24,8 @@ describe('POST /login', () => {
     }),
 
     it('should not login a user with wrong password', async () => {
-        const response = await request(app)
-            .post('/login')
+        const response = await request('http://localhost:5000/')
+            .post('login')
             .send({
                 username: 'kofta 3alfa7m',
                 password: '123'
@@ -34,8 +34,8 @@ describe('POST /login', () => {
     }),
 
     it('should not login a user with missing username', async () => {
-        const response = await request(app)
-            .post('/login')
+        const response = await request('http://localhost:5000/')
+            .post('login')
             .send({
                 password: '123'
             });
@@ -43,8 +43,8 @@ describe('POST /login', () => {
     }),
 
     it('should not login a user with missing password', async () => {
-        const response = await request(app)
-            .post('/login')
+        const response = await request('http://localhost:5000/')
+            .post('login')
             .send({
                 username: 'kofta 3alfa7m'
             });

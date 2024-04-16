@@ -1,10 +1,8 @@
 const mongoose = require('mongoose');
-require('dotenv').config();
 
 const userSchema = {
   username: {
     type: String,
-    required: true,
     unique: true
   },
 
@@ -14,7 +12,8 @@ const userSchema = {
   },
 
   email: {
-    type: String
+    type: String,
+    unique: true
   },
 
   dateOfBirth: {
@@ -22,11 +21,12 @@ const userSchema = {
   },
 
   displayName: {
-    type: String
+    type: String,
   },
 
   profilePicture: {
     type: String,
+    default: 'soora gamda fashkh'
   },
 
   followers: {
@@ -45,7 +45,8 @@ const userSchema = {
   },
 
   about: {
-    type: String
+    type: String,
+    default: 'user gamed mot'
   },
 
   interests: {
@@ -61,7 +62,43 @@ const userSchema = {
   socialLinks: {
     type: [String],
     default: []
-  }
+  },
+
+  displayPic: {
+    type: String
+  },
+
+  savedPosts: {
+    type: [String],
+    default: []
+  },
+  upVotes: {
+    type: [String],
+    default: []
+  },
+  downVotes: {
+    type: [String],
+    default: []
+  },
+  followPosts:{
+    type: [String],
+    default: []
+  },
+  hidePosts:{
+    type: [String],
+    default: []
+  },
+  savedCategories:{
+    type: [String],
+    default: []
+  },
+  joinedCommunities: {
+    type: [String],
+    default: []
+  }, 
+
+  resetPasswordToken: String,
+  resetPasswordTokenExpires: Date
 };
 
 const User = mongoose.model('User', userSchema);

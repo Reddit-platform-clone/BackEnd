@@ -1,4 +1,4 @@
-const user = require('../models/moderationModel.js');
+const communityModel = require('../models/communityModel.js');
 
 const moderationService = {
     approve: async (id) => {
@@ -29,8 +29,16 @@ const moderationService = {
         // logic to delete subreddit icon
     },
 
-    createSubreddit: async (name) => {
+    createCommunity: async (creator, details) => {
         // logic to create a subreddit
+        const communityTitle = details.communityName;
+        let community = await communityModel.findOne({ communityName: communityTitle });
+        if (community) throw new Error('community title not available');
+        community = new communityModel(details);
+        await community.moderatorsUsernames.push(creator);
+        await community.save();
+
+        return { communityDetails: community };
     },
 
     uploadSubredditIcon: async (id) => {   // custom
