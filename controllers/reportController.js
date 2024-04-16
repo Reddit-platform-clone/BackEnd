@@ -18,7 +18,7 @@ else{
   
   if (result.success) {
   
-  res.status(200).json({ message: 'Thank you for reporting message 4. We will review it soon' });
+  res.status(200).json({ message: 'Thank you for reporting. We will review it soon' });
 } else {
   res.status(400).json({ errors: result.errors, message: result.error });
 }
