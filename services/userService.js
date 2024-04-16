@@ -8,6 +8,7 @@ const commentModel = require('../models/commentModel.js');
 const utils = require('../utils/helpers.js');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
+const Communities = require('../models/communityModel.js');
 
 const userService = {
   logIn: async (emailOrUsername, password) => {
@@ -198,7 +199,7 @@ singUp: async (username, email, password) => {
   checkUsernameAvailability: async (username) => {
     // logic to check username validity
     const user = await userModel.findOne({ username: username });
-    if (user) throw new Error('Username is not available');
+    if (user) return { message: 'Username is not available' };
     return { message: 'Username is available' };
   },
 
@@ -221,7 +222,8 @@ singUp: async (username, email, password) => {
       follwers: user.followers,
       about: user.about,
       gender: user.gender,
-      links: user.socialLinks
+      links: user.socialLinks,
+      communitiesJoined: user.joinedCommunities
     };
   },
 
