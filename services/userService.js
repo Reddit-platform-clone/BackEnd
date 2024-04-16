@@ -78,7 +78,7 @@ singUp: async (username, email, password) => {
       
       return { token: userToken };
     } catch (err) {
-      return (err.message)
+      throw new Error(err.message)
     }
   },
 
