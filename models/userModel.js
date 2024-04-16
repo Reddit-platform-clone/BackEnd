@@ -64,13 +64,17 @@ const userSchema = {
     default: []
   },
 
+  displayPic: {
+    type: String
+  },
+
   savedPosts: [String],
   upVotes: [String],
   downVotes: [String],
   followPosts:[String],
   hidePosts:[String],
   savedCategories:[String],
-  joinedCommunities: [String],
+  joinedCommunities: [String], 
 
   resetPasswordToken: String,
   resetPasswordTokenExpires: Date
