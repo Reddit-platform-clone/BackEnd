@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const createPostController = require('../controllers/createPostController.js');
-const userAuthentication = require('../middleware/userAuthMiddleware.js');
+const authMiddleware = require('../middleware/userAuthMiddleware.js');
 
-router.post('/createPost/create', userAuthentication.authorizeAccess ,createPostController.createPost);
+
+router.post('/createPost/create', authMiddleware.authorizeationToken, createPostController.createPost);
 module.exports = router;
