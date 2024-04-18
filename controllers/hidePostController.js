@@ -1,5 +1,5 @@
 
-const hidePostService = require('../services/hidePostService');
+const hidePostService = require('../services/postService');
 
 
 

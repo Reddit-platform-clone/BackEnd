@@ -3,6 +3,7 @@ const router = express.Router();
 const voteController = require('../controllers/voteController');
 
 const userAuthentication = require('../middleware/userAuthMiddleware.js');
+const userAuthentication = require('../middleware/userAuthMiddleware.js');
 
 router.post('/api/vote',userAuthentication.authorizeationToken, voteController.castVote);
 
