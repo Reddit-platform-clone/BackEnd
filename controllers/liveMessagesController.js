@@ -17,9 +17,11 @@ const liveMessagesController = {
       username=req.user;
     }
   
-        const { recipient, from, content } = req.body;
+        const { recipient, content } = req.body;
+        console.log("ddddd")
+        console.log(req.user)
   
-        const result = await messageService.composeMessage({ username, recipient, from, title, content });
+        const result = await messageService.composeMessage({ username, recipient, content });
   
         if (result.success) {
             res.status(200).json({ message: result.message });

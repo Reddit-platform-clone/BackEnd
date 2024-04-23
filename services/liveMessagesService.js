@@ -1,4 +1,5 @@
 
+const Converstaion = require('../models/conversationModel'); 
 const Message = require('../models/messageModel'); 
 const jwt = require('jsonwebtoken');
 const { validationResult } = require('express-validator');
@@ -8,7 +9,7 @@ const { getReceiverSocketId, io } = require("../utils/WebSockets");
 const liveMessagesService = {
   composeMessage: async (messageData) => {
     try {
-     
+     console.log(messageData)
       const errors = validationResult(messageData);
       if (!errors.isEmpty()) {
           return { success: false, errors: errors.array() };
@@ -21,6 +22,7 @@ const liveMessagesService = {
     }
       const sender = await UserModel.findOne({ username: username });
       const receiver = await UserModel.findOne({ username: recipient });
+      console.log(username);
       
       if ( !receiver) {
         return { success: false, error: 'receiver does not exist.' };
@@ -42,10 +44,30 @@ if (receiverSocketId) {
 
 
 }
+messageData.type='live';
     const message = new Message(messageData);
 
     await message.save();
 
+//      check= await  Converstaion.findOne({
+//         $or: [
+//           { users: { $elemMatch: { $eq: username, $eq: recipient } } },
+//           { users: { $elemMatch: { $eq: recipient, $eq: username } } }
+//         ]
+//       });
+//     if(check){
+//         const converstaion=new Converstaion(
+//         {users:[username,recipient],
+//         messagesId: [message._id]
+        
+        
+//     });
+//     converstaion.save();
+// }
+// else{
+//   await check.messageId.push(message._id);
+//   check.save();
+// }
       
 
     return { success: true, message: 'Message sent successfully.' };
@@ -57,4 +79,3 @@ if (receiverSocketId) {
 
   module.exports = liveMessagesService;
   //sent delivered
-  
