@@ -79,6 +79,22 @@ const searchByController = {
             console.error("Error searching by hashtags:", error);
             return res.status(500).json({ error: "Internal server error" });
         }
+    },
+
+    all: async (req, res) => {
+        try {
+            const keyword = req.body.keyword;
+            if (!keyword) {
+                return res.status(400).json({ error: "Keyword is required to search hashtags" });
+            }
+
+            const allResults = await searchByService.searchByAll(keyword);
+
+            return res.status(200).json(allResults);
+        } catch (error) {
+            console.error("Error searching All:", error);
+            return res.status(500).json({ error: "Internal server error" });
+        }
     }
 };
 

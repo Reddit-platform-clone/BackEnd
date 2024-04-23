@@ -7,7 +7,7 @@ const Hashtag = require('../models/hashtagModel.js');
 
 
 const searchByService = {
-    searchByUsers: async (keyword) => {
+    async searchByUsers(keyword) {
         try {
             // Search for users by username or displayName
             const usersResults = await User.find({
@@ -23,7 +23,7 @@ const searchByService = {
         }
     },
     
-    searchByPosts: async (keyword) => {
+    async searchByPosts(keyword) {
         try {
             // Perform text search on the 'content' and 'title' fields
             const postsResults = await Post.find(
@@ -37,7 +37,7 @@ const searchByService = {
         }
     },
     
-    searchByComments: async (keyword) => {
+    async searchByComments(keyword) {
         try {
             // Search for comments by content
             const commentsResults = await Comment.find(
@@ -51,7 +51,7 @@ const searchByService = {
         }
     },
 
-    searchByCommunities: async (keyword) => {
+    async searchByCommunities(keyword) {
         try {
             // Search for communities by name or description
             const communitiesResults = await Community.find({
@@ -68,7 +68,7 @@ const searchByService = {
         }
     },
 
-    searchByHashtags: async (keyword) => {
+    async searchByHashtags(keyword) {
         try {
             // Search for hashtags by name
             const hashtagsResults = await Hashtag.find({
@@ -79,7 +79,34 @@ const searchByService = {
             console.error("Error searching by hashtags:", error);
             throw new Error("Failed to search for hashtags");
         }
+    },
+
+    async searchByAll(keyword) {
+        try {
+            const usersResults = await this.searchByUsers(keyword);
+            const postsResults = await this.searchByPosts(keyword);
+            const hashtagsResults = await this.searchByHashtags(keyword);
+            const communitiesResults = await this.searchByCommunities(keyword);
+            const commentsResults = await this.searchByComments(keyword);
+
+            // Combine and sort results
+            let allResults = [
+                ...usersResults,
+                ...postsResults,
+                ...hashtagsResults,
+                ...communitiesResults,
+                ...commentsResults
+            ];
+
+            allResults.sort((a, b) => b.score - a.score);
+
+            return allResults;
+        } catch (error) {
+            console.error("Error searching by all:", error);
+            throw new Error("Failed to search for all entities");
+        }
     }
 };
 
 module.exports = searchByService;
+
