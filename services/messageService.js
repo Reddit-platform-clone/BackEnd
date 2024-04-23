@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 const { validationResult } = require('express-validator');
 const UserModel = require('../models/userModel'); 
 const mongoose = require('mongoose');
-
+const { getReceiverSocketId, io } = require("../utils/WebSockets");
 const messageService = {
   composeMessage: async (messageData) => {
     try {
@@ -34,7 +34,15 @@ const messageService = {
 if ((sender.blockedUsers && sender.blockedUsers.includes(receiver.username)) || 
 (receiver.blockedUsers && receiver.blockedUsers.includes(sender.username))) {
 return { success: false, error: 'Message cannot be sent because of blocking.' };
-}    
+}   
+const receiverSocketId = getReceiverSocketId(receiver.username);
+if (receiverSocketId) {
+  
+  io.to(receiverSocketId).emit("newMessage", messageData);
+  messageData.status="delivered"
+
+
+}
     const message = new Message(messageData);
 
     await message.save();
