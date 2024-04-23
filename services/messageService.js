@@ -188,6 +188,7 @@ return { success: false, error: 'Message cannot be sent because of blocking.' };
   },
   markMessageUnread: async (userID,messageId) => {
     try{
+      
     if(!messageId){
        return { success: false, error:'message Id is null.'};
     }
@@ -214,6 +215,39 @@ return { success: false, error: 'Message cannot be sent because of blocking.' };
       { runValidators: true }
       );
       return { success: true, message: 'Message unread successfully.' };}catch (error) {
+        console.error('Error unread message:', error);
+        return { success: false, error: 'Failed to mark unread message.' };
+    }
+  },
+  markMessageRead: async (userID,messageId) => {
+    try{
+      console.log(messageId)
+    if(!messageId){
+       return { success: false, error:'message Id is null.'};
+    }
+    const message = await Message.findOne({_id: messageId});
+    if (!message) {
+       return { success: false, error:'Message not found.'};
+    }
+
+    
+    const user = await UserModel.findOne({ username: userID });
+    if (!user) {
+       return { success: false, error:'User not found.'};
+    }
+   
+    if (message.recipient !== userID) {
+       return { success: false, error:'You are not authorized to read this message.'};
+    }
+    if (message.status !== 'delivered') {
+       return { success: false, error:'message is not delivered'};
+    }
+    await Message.findOneAndUpdate(
+      { _id: messageId },
+      { $set: { status: 'read' } },
+      { runValidators: true }
+      );
+      return { success: true, message: 'Message read successfully.' };}catch (error) {
         console.error('Error read message:', error);
         return { success: false, error: 'Failed to mark read message.' };
     }
