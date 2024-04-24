@@ -35,7 +35,12 @@ const messageSchema = new mongoose.Schema({
     reportDetails : {
         type: String,
         default: null
-    }
+    },
+    type : {
+        type:String,
+        enum: ['compose', 'live'], 
+        default: "compose"
+    },
 });
 
 

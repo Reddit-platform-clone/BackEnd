@@ -18,9 +18,7 @@ const liveMessagesController = {
     }
   
         const { recipient, content } = req.body;
-        console.log("ddddd")
-        console.log(req.user)
-  
+       
         const result = await messageService.composeMessage({ username, recipient, content });
   
         if (result.success) {
@@ -38,7 +36,8 @@ const liveMessagesController = {
     getInboxMessages: async (req, res) => {
       try {
         let username =req.user;
-        // console.log(req.user.iat);
+        const {_id}= req.body;
+        
         if (req.user?.iat){
           username=req.user.username;
         }
@@ -46,7 +45,7 @@ const liveMessagesController = {
       username=req.user;
     }
     
-        const inboxMessages = await messageService.getInboxMessages(username);
+        const inboxMessages = await messageService.getInboxMessages(username,_id);
        
         if (inboxMessages.success) {
          
