@@ -51,7 +51,8 @@ const message = new Message(messageData);
 await message.save();
 
 if(receiverSocketId && sendrSocketId){
-  io.to(receiverSocketId).to(sendrSocketId).emit("newMessage", message);
+  io.to(receiverSocketId).emit("newMessage", message);
+  io.to(sendrSocketId).emit("newMessage", message);
 }
    
    
