@@ -10,6 +10,7 @@ router.post('/api/community/join',userAuthentication.authorizeationToken, commun
 router.get('/api/community/list', userAuthentication.authorizeationToken, communityController.listCommunities);
 router.post('/api/community/leave', userAuthentication.authorizeationToken, communityController.leaveCommunity);
 router.post('/api/community/create', userAuthentication.authorizeationToken, communityController.createCommunity);
+router.get('/api/community/getPosts', userAuthentication.authorizeationToken, communityController.communityPosts)
 
 module.exports = router;
 

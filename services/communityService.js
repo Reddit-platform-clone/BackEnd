@@ -1,5 +1,6 @@
 const Community = require('../models/communityModel.js');
 const User = require('../models/userModel.js');
+const Post = require('../models/postModel.js')
 
 const communityService = {
     join: async (username, communityName) => {
@@ -83,7 +84,27 @@ const communityService = {
         } catch (error) {
             return { success: false, message: error.message };
         }
-    }
+    }, 
+
+    commuintyPosts: async(communityName) => {
+        console.log(communityName)
+        try {
+            const existingCommunity = await Community.findOne({communityName: communityName}).populate('posts', '_id')
+            console.log(existingCommunity.communityName)
+            if (!existingCommunity) {
+                return {success: false, message: 'community doesnot exist'}
+            }
+
+            const postIds = existingCommunity.posts.map(post => post._id)
+            console.log(postIds)
+            const posts = await Post.find({ _id: {$in: postIds}})
+            console.log(posts)
+            return {success: true, data: posts}
+        } catch (error) {
+            console.error("Error fetching posts from community: ", error);
+            throw new Error("Failed to fetch posts from community")
+        }
+    } 
 };
 
 module.exports = communityService;
