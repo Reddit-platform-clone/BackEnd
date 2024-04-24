@@ -3,7 +3,6 @@ const express = require('express');
 const router = express.Router();
 const notificationContoller = require('../controllers/notificationController.js');
 const userAuthentication = require('../middleware/userAuthMiddleware.js');
-const userAuthentication = require('../middleware/userAuthMiddleware.js');
 
 router.get('/api/live/thread', userAuthentication.authorizeationToken,notificationContoller.getThread);
 router.post('/api/live/create', userAuthentication.authorizeationToken,notificationContoller.getCreate);

@@ -3,9 +3,6 @@ const express = require('express');
 const router = express.Router();
 const messageController = require('../controllers/messageController.js');
 const userAuthentication = require('../middleware/userAuthMiddleware.js');
-const messageController = require('../controllers/messageController.js');
-const userAuthentication = require('../middleware/userAuthMiddleware.js');
-const messageController = require('../controllers/messageController');
 const authenticateToken = require('../middleware/authMiddleware');
 
 router.post('/api/message/compose',userAuthentication.authorizeationToken, messageController.compose);
