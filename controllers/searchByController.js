@@ -3,11 +3,15 @@ const searchByService = require('../services/searchByServices.js');
 const searchByController = {
     users: async (req, res) => {
         try {
-            // Implement logic to search by users
-            const usersResults = await User.find({ /* search criteria */ });
+            const keyword = req.body.keyword;
+            if (!keyword) {
+                return res.status(400).json({ error: "Keyword is required to search users" });
+            }
 
-            // Return users results
-            return res.status(200).json(usersResults);
+            const usersResults = await searchByService.searchByUsers(keyword);
+            const userSuggestions = usersResults.slice(0, 10);
+
+            return res.status(200).json({usersResults, userSuggestions});
         } catch (error) {
             console.error("Error searching by users:", error);
             return res.status(500).json({ error: "Internal server error" });
@@ -16,19 +20,15 @@ const searchByController = {
     
     posts: async (req, res) => {
         try {
-            // Logic to search by posts
-            let posts = await Post.find({ /* search criteria */ });
+            const keyword = req.body.keyword;
+            if (!keyword) {
+                return res.status(400).json({ error: "Keyword is required to search posts" });
+            }
 
-            // Logic for Trending Today
-            const today = new Date();
-            today.setHours(0, 0, 0, 0); // Set time to the beginning of today
-            posts = posts.filter(post => post.createdAt >= today); // Filter posts created today
+            const postsResults = await searchByService.searchByPosts(keyword);
+            const postSuggestions = postsResults.slice(0, 10);
 
-            // Logic for Sorting (Assuming sorting by date in descending order)
-            posts.sort((a, b) => b.createdAt - a.createdAt); // Sort posts by date in descending order
-
-            // return posts results
-            return res.status(200).json(posts);
+            return res.status(200).json({postsResults, postSuggestions});
         } catch (error) {
             console.error("Error searching by posts:", error);
             return res.status(500).json({ error: "Internal Server Error" });
@@ -37,13 +37,15 @@ const searchByController = {
     
     comments: async (req, res) => {
         try {
-            // Implement logic to search by comments
-            const commentsResults = await Comment.find({ /* search criteria */ });
+            const keyword = req.body.keyword;
+            if (!keyword) {
+                return res.status(400).json({ error: "Keyword is required to search comments" });
+            }
 
-            // Implement logic for sorting
+            const commentsResults = await searchByService.searchByComments(keyword);
+            const commentSuggestions = commentsResults.slice(0, 10);
 
-            // Return comments results
-            return res.status(200).json(commentsResults);
+            return res.status(200).json({commentsResults, commentSuggestions});
         } catch (error) {
             console.error("Error searching by comments:", error);
             return res.status(500).json({ error: "Internal server error" });
@@ -52,11 +54,16 @@ const searchByController = {
 
     communities: async (req, res) => {
         try {
-            // Implement logic to search by communities
-            const communitiesResults = await Community.find({ /* search criteria */ });
+            const keyword = req.body.keyword;
+            if (!keyword) {
+                return res.status(400).json({ error: "Keyword is required to search communities" });
+            }
 
-            // Return communities results
-            return res.status(200).json(communitiesResults);
+            const communitiesResults = await searchByService.searchByCommunities(keyword);
+            const communitiesSuggestions = communitiesResults.slice(0, 10);
+        
+
+            return res.status(200).json({communitiesResults, communitiesSuggestions});
         } catch (error) {
             console.error("Error searching by communities:", error);
             return res.status(500).json({ error: "Internal server error" });
@@ -65,17 +72,37 @@ const searchByController = {
 
     hashtags: async (req, res) => {
         try {
-            // Implement logic to search by hashtags
-            const hashtagsResults = await Hashtag.find({ /* search criteria */ });
+            const keyword = req.body.keyword;
+            if (!keyword) {
+                return res.status(400).json({ error: "Keyword is required to search hashtags" });
+            }
 
-            // Return hashtags results
-            return res.status(200).json(hashtagsResults);
+            const hashtagsResults = await searchByService.searchByHashtags(keyword);
+            const hashtagSuggestions = hashtagsResults.slice(0, 10);
+
+            return res.status(200).json({hashtagsResults,hashtagSuggestions});
         } catch (error) {
             console.error("Error searching by hashtags:", error);
             return res.status(500).json({ error: "Internal server error" });
         }
+    },
+
+    all: async (req, res) => {
+        try {
+            const keyword = req.body.keyword;
+            if (!keyword) {
+                return res.status(400).json({ error: "Keyword is required to search hashtags" });
+            }
+
+            const allResults = await searchByService.searchByAll(keyword);
+            const allSuggestions = allResults.slice(0, 10);
+
+            return res.status(200).json({allResults, allSuggestions});
+        } catch (error) {
+            console.error("Error searching All:", error);
+            return res.status(500).json({ error: "Internal server error" });
+        }
     }
 };
-
 
 module.exports = searchByController;
