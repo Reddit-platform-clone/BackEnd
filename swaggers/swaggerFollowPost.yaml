@@ -15,9 +15,7 @@ paths:
           schema:
             type: object
             properties:
-              userId:
-                type: string
-                description: The ID of the user who wants to follow the post
+              
               postId:
                 type: string
                 description: The ID of the post to be followed

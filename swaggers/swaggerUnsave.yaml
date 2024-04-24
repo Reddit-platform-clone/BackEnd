@@ -15,15 +15,12 @@ paths:
           schema:
             type: object
             properties:
-              userId:
+              type:
                 type: string
-                description: The ID of the user saving the post or comment
-              thingType:
+                description: The typr(comment/post) to be hidden
+              entityId:
                 type: string
-                description: The type of thing to unsave (e.g., 'post', 'comment')
-              thingId:
-                type: string
-                description: The ID of the post or comment to unsave
+                description: The ID of the post/comment  wants to hide the link
       responses:
         '200':
           description: Post or comment unsaved successfully

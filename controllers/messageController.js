@@ -14,15 +14,8 @@ const messageController = {
     username=req.user;
   }
 
-
       const { recipient, from, title, content } = req.body;
-      console.log('re');
-      console.log(recipient);
-      console.log('rq');
-      console.log(req);
-      console.log('user');
-      console.log(username);
-      console.log('ss');
+
       const result = await messageService.composeMessage({ username, recipient, from, title, content });
 
       if (result.success) {
@@ -97,7 +90,7 @@ const messageController = {
     username=req.user;
   }
       
-  messageId=req.body
+  const {messageId} = req.body
 
       
       const result=await messageService.deleteMessage( username ,messageId);
@@ -171,7 +164,7 @@ const messageController = {
   markMessageUnread: async (req, res) => {
     try {
       
-      const messageId = req.body;
+      const {messageId} = req.body;
       
       let username =req.user;
       // console.log(req.user.iat);
@@ -182,10 +175,9 @@ const messageController = {
     username=req.user;
   }
    
-      console.log(username);
-      console.log(messageId);
+     
       const result =await messageService.markMessageUnread( username ,messageId);
-console.log('ssssssss');
+
       if (result.success) {
       res.status(200).json({ message: 'Message unread successfully.' });
     } else {
@@ -195,6 +187,34 @@ console.log('ssssssss');
       
       console.error('Failed to unread the message:', error);
       res.status(500).json({ error: 'Failed to unread the message.' });
+    }
+  },
+  markMessageRead: async (req, res) => {
+    try {
+      
+      const {messageId} = req.body;
+      
+      let username =req.user;
+      // console.log(req.user.iat);
+      if (req.user?.iat){
+        username=req.user.username;
+      }
+  else{
+    username=req.user;
+  }
+   
+
+      const result =await messageService.markMessageRead( username ,messageId);
+
+      if (result.success) {
+      res.status(200).json({ message: 'Message read successfully.' });
+    } else {
+      res.status(400).json({ errors: result.errors, message: result.error });
+  }
+    } catch (error) {
+      
+      console.error('Failed to read the message:', error);
+      res.status(500).json({ error: 'Failed to read the message.' });
     }
   },
   markAllMessagesRead: async (req, res) => {

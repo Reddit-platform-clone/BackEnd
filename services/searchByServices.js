@@ -2,7 +2,7 @@ const sort = require('../models/searchByModel.js');
 const User = require('../models/userModel.js');
 const Post = require('../models/postModel.js');
 const Comment = require('../models/commentModel.js');
-const Community = require('../schemas/communitySchema.js');
+const Community = require('../models/communityModel.js');
 const Hashtag = require('../models/hashtagModel.js');
 
 

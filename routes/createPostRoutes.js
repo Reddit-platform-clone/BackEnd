@@ -3,5 +3,5 @@ const router = express.Router();
 const createPostController = require('../controllers/createPostController.js');
 
 
-router.post('/createPost/create', createPostController.createPost);
+router.post('/api/createPost/create', createPostController.createPost);
 module.exports = router;

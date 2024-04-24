@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 const { validationResult } = require('express-validator');
 const UserModel = require('../models/userModel'); 
 const mongoose = require('mongoose');
-
+const { getReceiverSocketId, io } = require("../utils/WebSockets");
 const messageService = {
   composeMessage: async (messageData) => {
     try {
@@ -34,7 +34,15 @@ const messageService = {
 if ((sender.blockedUsers && sender.blockedUsers.includes(receiver.username)) || 
 (receiver.blockedUsers && receiver.blockedUsers.includes(sender.username))) {
 return { success: false, error: 'Message cannot be sent because of blocking.' };
-}    
+}   
+const receiverSocketId = getReceiverSocketId(receiver.username);
+if (receiverSocketId) {
+  
+  io.to(receiverSocketId).emit("newMessage", messageData);
+  messageData.status="delivered"
+
+
+}
     const message = new Message(messageData);
 
     await message.save();
@@ -59,16 +67,26 @@ return { success: false, error: 'Message cannot be sent because of blocking.' };
     }
 
     
-    const inboxMessages = await Message.find({ recipient: sentUsername });
+    const inboxMessages = await Message.find({ recipient: sentUsername,type:'compose' });
 
-    
+    for(const messagei of inboxMessages){
+      if (messagei.status === 'sent') {
+        messagei.status ='delivered';
+        await Message.updateOne(
+          { _id: messagei._id },
+          { $set: { status: 'delivered' } },
+          { runValidators: true }
+        );
+
+      }
+    }
     if (!inboxMessages || inboxMessages.length === 0) {
       
       return { success: true, message: [] };
     }
 
     return { success: true, message: inboxMessages };
-    // return inboxMessages;
+   
   
   }catch (error) {
       console.error('Error get message:', error);
@@ -84,7 +102,7 @@ return { success: false, error: 'Message cannot be sent because of blocking.' };
     }
 
     
-    const inboxMessages = await Message.find({ recipient: sentUsername, status: 'delivered' });
+    const inboxMessages = await Message.find({ recipient: sentUsername, status: 'delivered' ,type:'compose'});
 
    
     if (!inboxMessages || inboxMessages.length === 0) {
@@ -172,7 +190,7 @@ return { success: false, error: 'Message cannot be sent because of blocking.' };
     }
 
     
-    const inboxMessages = await Message.find({ username: sentUsername});
+    const inboxMessages = await Message.find({ username: sentUsername ,type:'compose'});
     
 
    
@@ -188,6 +206,7 @@ return { success: false, error: 'Message cannot be sent because of blocking.' };
   },
   markMessageUnread: async (userID,messageId) => {
     try{
+      
     if(!messageId){
        return { success: false, error:'message Id is null.'};
     }
@@ -214,6 +233,39 @@ return { success: false, error: 'Message cannot be sent because of blocking.' };
       { runValidators: true }
       );
       return { success: true, message: 'Message unread successfully.' };}catch (error) {
+        console.error('Error unread message:', error);
+        return { success: false, error: 'Failed to mark unread message.' };
+    }
+  },
+  markMessageRead: async (userID,messageId) => {
+    try{
+      console.log(messageId)
+    if(!messageId){
+       return { success: false, error:'message Id is null.'};
+    }
+    const message = await Message.findOne({_id: messageId});
+    if (!message) {
+       return { success: false, error:'Message not found.'};
+    }
+
+    
+    const user = await UserModel.findOne({ username: userID });
+    if (!user) {
+       return { success: false, error:'User not found.'};
+    }
+   
+    if (message.recipient !== userID) {
+       return { success: false, error:'You are not authorized to read this message.'};
+    }
+    if (message.status !== 'delivered') {
+       return { success: false, error:'message is not delivered'};
+    }
+    await Message.findOneAndUpdate(
+      { _id: messageId },
+      { $set: { status: 'read' } },
+      { runValidators: true }
+      );
+      return { success: true, message: 'Message read successfully.' };}catch (error) {
         console.error('Error read message:', error);
         return { success: false, error: 'Failed to mark read message.' };
     }
@@ -225,7 +277,7 @@ return { success: false, error: 'Message cannot be sent because of blocking.' };
     if (!user) {
        return { success: false, error:'User not found.'};
     }
-    const message = await Message.find({recipient: userID,status:'delivered'});
+    const message = await Message.find({recipient: userID,status:'delivered',type:'compose'});
    
     if (!message || message.length === 0) {
       return { success: false, message: 'No Messages to read .' };

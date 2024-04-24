@@ -15,11 +15,20 @@ const reportProfileSchema = new mongoose.Schema({
     },
     description: {
         type: String,
-        default: ''
+        default: '',
+        required:false
     },
     date: {
         type: Date,
         default: Date.now
+    },
+    entityId:{
+        type:String,
+        required:true
+    },
+    type:{
+        type:String,
+        required:true
     }
 });
 

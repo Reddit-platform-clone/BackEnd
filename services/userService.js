@@ -3,9 +3,12 @@ require('dotenv').config();
 const userModel = require('../models/userModel.js');
 const reportModel = require('../models/profileReportModel.js');
 const settingsModel = require('../models/settingsMode.js');
+const postModel = require('../models/postModel.js');
+const commentModel = require('../models/commentModel.js');
 const utils = require('../utils/helpers.js');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
+const Communities = require('../models/communityModel.js');
 
 const userService = {
   logIn: async (emailOrUsername, password) => {
@@ -75,7 +78,7 @@ singUp: async (username, email, password) => {
       
       return { token: userToken };
     } catch (err) {
-      return (err.message)
+      throw new Error(err.message)
     }
   },
 
@@ -196,7 +199,7 @@ singUp: async (username, email, password) => {
   checkUsernameAvailability: async (username) => {
     // logic to check username validity
     const user = await userModel.findOne({ username: username });
-    if (user) throw new Error('Username is not available');
+    if (user) return { message: 'Username is not available' };
     return { message: 'Username is available' };
   },
 
@@ -205,27 +208,61 @@ singUp: async (username, email, password) => {
     const user = await userModel.findOne({ username: username });
     if (!user) throw new Error('User does not exist');
 
-    return { about: user.about}
+    return { about: user.about }
   },
 
   getUserOverview: async (username) => {
     // logic to get user details
+    const user = await userModel.findOne({ username: username });
+    if (!user) throw new Error('User does not exist');
+
+    return{ 
+      username: user.username,
+      profilePicture: user.profilePicture,
+      follwers: user.followers,
+      about: user.about,
+      gender: user.gender,
+      links: user.socialLinks,
+      communitiesJoined: user.joinedCommunities
+    };
   },
 
   getUserSubmitted: async (username) => {
     // logic to get user details
+    const user = await userModel({ username: username })
+    if (!user) throw new Error('User does not exist')
+
+    const userPosts = await postModel.find({ userId: username });
+    if (!userPosts) return { message: 'User has no posts' };
+
+    return { posts: userPosts };
   },
 
   getUserComments: async (username) => {
-    // logic to get user details
+    // logic to get user 
+    const user = await userModel({ username: username })
+    if (!user) throw new Error('User does not exist')
+
+    const userComments = await commentModel.find({ userID: username });
+    if (!userComments) return { message: 'user has no comments' };
+
+    return { userComments };
   },
 
   getUserUpvoted: async (username) => {
     // logic to get user details
+    const user = await userModel.findOne({ username: username });
+    if (!user) throw new Error('User not found');
+
+    return { upvotes: user.upVotes };
   },
 
   getUserDownvoted: async (username) => {
     // logic to get user details
+    const user = await userModel.findOne({ username: username });
+    if (!user) throw new Error('User not found');
+
+    return { upvotes: user.downVotes };
   },
   
   getUserIdentity: async (username) => {
@@ -254,6 +291,23 @@ singUp: async (username, email, password) => {
     const userSettings = await settingsModel.findOneAndUpdate({ username: username }, settings, { new: true, upsert: true, runValidators: true });
 
     return { settings: userSettings };
+  },
+
+  savePost: async (username, postId) => {
+    const user = await userModel.findOne({username: username});
+    user.savedPosts.push(postId);
+    user.save();
+    
+    return { message: 'Post saved successfully'};
+  },
+
+  unsavePost: async (username, postId) => {
+    const user = await userModel.findOne({username: username});
+    const postIndex = user.savedPosts.indexOf(postId);
+    user.savedPosts.splice(postIndex,1);
+    user.save();
+
+    return { message: 'Post unsaved successfully'};
   }
 };
 
