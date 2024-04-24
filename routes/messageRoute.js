@@ -11,6 +11,7 @@ router.delete('/api/message/del_msg',authenticateToken, messageController.delete
 router.post('/api/report_msg',authenticateToken, messageController.reportMessage);
 router.get('/api/message/sent',authenticateToken, messageController.getSentMessages);
 router.post('/api/unread_message',authenticateToken, messageController.markMessageUnread);
+router.post('/api/read_message',authenticateToken, messageController.markMessageRead);
 router.post('/api/read_all_messages',authenticateToken, messageController.markAllMessagesRead);
 router.get('/api/get_user_mentions', messageController.getUserMentions);
 module.exports = router;
