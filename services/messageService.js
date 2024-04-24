@@ -67,16 +67,26 @@ if (receiverSocketId) {
     }
 
     
-    const inboxMessages = await Message.find({ recipient: sentUsername });
+    const inboxMessages = await Message.find({ recipient: sentUsername,type:'compose' });
 
-    
+    for(const messagei of inboxMessages){
+      if (messagei.status === 'sent') {
+        messagei.status ='delivered';
+        await Message.updateOne(
+          { _id: messagei._id },
+          { $set: { status: 'delivered' } },
+          { runValidators: true }
+        );
+
+      }
+    }
     if (!inboxMessages || inboxMessages.length === 0) {
       
       return { success: true, message: [] };
     }
 
     return { success: true, message: inboxMessages };
-    // return inboxMessages;
+   
   
   }catch (error) {
       console.error('Error get message:', error);
@@ -92,7 +102,7 @@ if (receiverSocketId) {
     }
 
     
-    const inboxMessages = await Message.find({ recipient: sentUsername, status: 'delivered' });
+    const inboxMessages = await Message.find({ recipient: sentUsername, status: 'delivered' ,type:'compose'});
 
    
     if (!inboxMessages || inboxMessages.length === 0) {
@@ -180,7 +190,7 @@ if (receiverSocketId) {
     }
 
     
-    const inboxMessages = await Message.find({ username: sentUsername});
+    const inboxMessages = await Message.find({ username: sentUsername ,type:'compose'});
     
 
    
@@ -267,7 +277,7 @@ if (receiverSocketId) {
     if (!user) {
        return { success: false, error:'User not found.'};
     }
-    const message = await Message.find({recipient: userID,status:'delivered'});
+    const message = await Message.find({recipient: userID,status:'delivered',type:'compose'});
    
     if (!message || message.length === 0) {
       return { success: false, message: 'No Messages to read .' };

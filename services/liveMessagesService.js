@@ -9,7 +9,7 @@ const { getReceiverSocketId, io } = require("../utils/WebSockets");
 const liveMessagesService = {
   composeMessage: async (messageData) => {
     try {
-     console.log(messageData)
+     
       const errors = validationResult(messageData);
       if (!errors.isEmpty()) {
           return { success: false, errors: errors.array() };
@@ -37,39 +37,46 @@ if ((sender.blockedUsers && sender.blockedUsers.includes(receiver.username)) ||
 return { success: false, error: 'Message cannot be sent because of blocking.' };
 }   
 const receiverSocketId = getReceiverSocketId(receiver.username);
-console.log(receiverSocketId);
-console.log(receiver.username);
+const sendrSocketId = getReceiverSocketId(sender.username);
+messageData.type='live';
 if (receiverSocketId) {
   
-  io.to(receiverSocketId).emit("newMessage", messageData);
+ 
   messageData.status="delivered"
 
 
 }
-messageData.type='live';
-    const message = new Message(messageData);
+const message = new Message(messageData);
 
-    await message.save();
+await message.save();
 
-//      check= await  Converstaion.findOne({
-//         $or: [
-//           { users: { $elemMatch: { $eq: username, $eq: recipient } } },
-//           { users: { $elemMatch: { $eq: recipient, $eq: username } } }
-//         ]
-//       });
-//     if(check){
-//         const converstaion=new Converstaion(
-//         {users:[username,recipient],
-//         messagesId: [message._id]
+if(receiverSocketId && sendrSocketId){
+  io.to(receiverSocketId).emit("newMessage", message);
+  io.to(sendrSocketId).emit("newMessage", message);
+}
+   
+   
+     check= await  Converstaion.findOne({
+        $or: [
+          { users: { $elemMatch: { $eq: username, $eq: recipient } } },
+          { users: { $elemMatch: { $eq: recipient, $eq: username } } }
+        ]
+      });
+    if(!check){
+
+        const converstaion=new Converstaion(
+        {users:[username,recipient],
+          messagesId: [message._id]
         
         
-//     });
-//     converstaion.save();
-// }
-// else{
-//   await check.messageId.push(message._id);
-//   check.save();
-// }
+    });
+    converstaion.save();
+}
+else{
+
+  await check.messagesId.push(message._id);
+  check.save();
+}
       
 
     return { success: true, message: 'Message sent successfully.' };
@@ -77,7 +84,105 @@ messageData.type='live';
       console.error('Error composing message:', error);
       return { success: false, error: 'Failed to send message.' };
   }
-  },};
+  },
+  getInboxMessages: async (sentUsername,_id) => {
+    
+    try {
+      
+    const user = await UserModel.findOne({ username: sentUsername });
+    if (!user) {
+     ;
+      return { success: false, error:'User not found.'};
+    }
+    const messages=[]
+const conversation= await Converstaion.findOne({_id:_id });
+if(!conversation){
+  return { success: false, error: `Conversation  does not exist.` };
+}
+let check=0;
+for(const user of conversation.users){
+
+if(user == sentUsername){
+  check=1
+}
+
+}
+if(check==0){
+  return { success: false, error: `user is not authorized to open conversation.` };
+}
+for (const messageId of conversation.messagesId) {
+
+  const message = await Message.findOne({_id:messageId});
+
+ 
+  if (message) {
+    messages.push(message);
+  }
+}
+
+    return { success: true, message: messages };
+    
+  }catch (error) {
+      console.error('Error get message:', error);
+      return { success: false, error: 'Failed to get message.' };
+  }
+  },
+
+  deleteMessage: async (userID,messageId,_id) => {
+    try {
+    if(!messageId){
+       return { success: false, error:'message Id is null.'};
+    }
+    const message = await Message.findOne({_id: messageId});
+    if (!message) {
+       return { success: false, error:'Message not found.'};
+    }
+
+    
+    const user = await UserModel.findOne({ username: userID });
+    if (!user) {
+       return { success: false, error:'User not found.'};
+    }
+    if (message.username !== user.username) {
+       return { success: false, error:'You are not authorized to delete this message.'};
+    }
+    const conversation= await Converstaion.findOne({_id:_id });
+    if(!conversation){
+      return { success: false, error: `Conversation  does not exist.` };
+    }
+    let check=0;
+    for(const user of conversation.users){
+    
+    if(user == userID){
+      check=1
+    }
+    
+    }
+    if(check==0){
+      return { success: false, error: `user is not authorized to open conversation.` };
+    }
+    conversation.messagesId.pull(messageId);
+    conversation.save();
+    const sender = await UserModel.findOne({ username: message.username });
+    const receiver = await UserModel.findOne({ username: message.recipient });
+    await Message.findOneAndDelete({_id: messageId});
+  
+const receiverSocketId = getReceiverSocketId(receiver.username);
+const sendrSocketId = getReceiverSocketId(sender.username);
+if(receiverSocketId && sendrSocketId){
+  io.to(receiverSocketId).to(sendrSocketId).emit("messageDeleted", messageId);
+}
+
+    return { success: true, message: 'Message deleted successfully' };
+  }catch (error) {
+      console.error('Error del message:', error);
+      return { success: false, error: 'Failed to del message.' };
+  }
+  },
+
+
+
+};
 
   module.exports = liveMessagesService;
-  //sent delivered
+
