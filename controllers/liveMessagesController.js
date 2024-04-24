@@ -70,10 +70,10 @@ const liveMessagesController = {
         username=req.user;
       }
           
-      const {messageId} = req.body
+      const {messageId,conversation} = req.body
     
           
-          const result=await messageService.deleteMessage( username ,messageId);
+          const result=await messageService.deleteMessage( username ,messageId,conversation);
     
           if (result.success) {
           res.status(200).json({ message: 'Message deleted successfully.' });

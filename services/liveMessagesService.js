@@ -153,7 +153,7 @@ for (const messageId of conversation.messagesId) {
     let check=0;
     for(const user of conversation.users){
     
-    if(user == sentUsername){
+    if(user == userID){
       check=1
     }
     
@@ -163,9 +163,10 @@ for (const messageId of conversation.messagesId) {
     }
     conversation.messagesId.pull(messageId);
     conversation.save();
-    
+    const sender = await UserModel.findOne({ username: message.username });
+    const receiver = await UserModel.findOne({ username: message.recipient });
     await Message.findOneAndDelete({_id: messageId});
-
+  
 const receiverSocketId = getReceiverSocketId(receiver.username);
 const sendrSocketId = getReceiverSocketId(sender.username);
 if(receiverSocketId && sendrSocketId){
