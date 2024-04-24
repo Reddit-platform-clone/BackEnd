@@ -1,8 +1,9 @@
 const express = require('express');
 
 const router = express.Router();
-const hideController = require('../controllers/hideController');
-const authenticateToken = require('../middleware/authMiddleware');
-router.post('/api/hide',authenticateToken, hideController.hideLink);
-router.post('/api/unhide',authenticateToken, hideController.unhideLink);
+const hideController = require('../controllers/hideController.js');
+const userAuthentication = require('../middleware/userAuthMiddleware.js');
+
+router.post('/api/hide',userAuthentication.authorizeationToken, hideController.hideLink);
+router.post('/api/unhide',userAuthentication.authorizeationToken, hideController.unhideLink);
 module.exports = router;

@@ -2,8 +2,9 @@ const express = require('express');
 
 const router = express.Router();
 const saveController = require('../controllers/saveController');
-const authenticateToken = require('../middleware/authMiddleware');
-router.post('/api/save',authenticateToken, saveController.savePostOrComment);
-router.post('/api/unsave',authenticateToken, saveController.unsavePostOrComment);
+const userAuthentication = require('../middleware/userAuthMiddleware.js');
+
+router.post('/api/save',userAuthentication.authorizeationToken, saveController.savePostOrComment);
+router.post('/api/unsave',userAuthentication.authorizeationToken, saveController.unsavePostOrComment);
 
 module.exports = router;

@@ -2,8 +2,9 @@ const express = require('express');
 
 const router = express.Router();
 const reportController = require('../controllers/reportController');
-const authenticateToken = require('../middleware/authMiddleware');
+const userAuthentication = require('../middleware/userAuthMiddleware.js');
+const userAuthentication = require('../middleware/userAuthMiddleware.js');
 
-router.post('/api/report',authenticateToken, reportController.reportThing);
+router.post('/api/report',userAuthentication.authorizeationToken, reportController.reportThing);
 
 module.exports = router;

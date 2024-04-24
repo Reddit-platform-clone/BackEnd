@@ -1,4 +1,4 @@
-postService=require("../services/postService")
+const postService = require('../services/postService');
 
 const postController = {
 
