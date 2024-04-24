@@ -16,6 +16,7 @@ const searchByService = {
                     { displayName: { $regex: keyword, $options: 'i' } }
                 ]
             });
+            
             return usersResults;
         } catch (error) {
             console.error("Error searching by users:", error);
@@ -30,6 +31,7 @@ const searchByService = {
                 { $text: { $search: keyword } }, // Search for the keyword
                 { score: { $meta: "textScore" } } // Sort by relevance score
             ).sort({ score: { $meta: "textScore" } }); // Sort results by relevance score
+
             return postsResults;
         } catch (error) {
             console.error("Error searching by posts:", error);
@@ -44,6 +46,7 @@ const searchByService = {
                 { $text: { $search: keyword } }, // Search for the keyword
                 { score: { $meta: "textScore" } } // Sort by relevance score
             ).sort({ score: { $meta: "textScore" } });
+
             return commentsResults;
         } catch (error) {
             console.error("Error searching by comments:", error);
@@ -61,6 +64,7 @@ const searchByService = {
                     { communityName: { $regex: keyword, $options: 'i' } },
                 ]
             });
+
             return communitiesResults;
         } catch (error) {
             console.error("Error searching by communities:", error);
@@ -74,6 +78,7 @@ const searchByService = {
             const hashtagsResults = await Hashtag.find({
                 hashtagString: { $regex: keyword, $options: 'i' }
             });
+
             return hashtagsResults;
         } catch (error) {
             console.error("Error searching by hashtags:", error);
@@ -99,7 +104,6 @@ const searchByService = {
             ];
 
             allResults.sort((a, b) => b.score - a.score);
-
             return allResults;
         } catch (error) {
             console.error("Error searching by all:", error);

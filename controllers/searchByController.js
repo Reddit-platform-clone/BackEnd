@@ -9,8 +9,9 @@ const searchByController = {
             }
 
             const usersResults = await searchByService.searchByUsers(keyword);
+            const userSuggestions = usersResults.slice(0, 10);
 
-            return res.status(200).json(usersResults);
+            return res.status(200).json({usersResults, userSuggestions});
         } catch (error) {
             console.error("Error searching by users:", error);
             return res.status(500).json({ error: "Internal server error" });
@@ -25,8 +26,9 @@ const searchByController = {
             }
 
             const postsResults = await searchByService.searchByPosts(keyword);
+            const postSuggestions = postsResults.slice(0, 10);
 
-            return res.status(200).json(postsResults);
+            return res.status(200).json({postsResults, postSuggestions});
         } catch (error) {
             console.error("Error searching by posts:", error);
             return res.status(500).json({ error: "Internal Server Error" });
@@ -41,8 +43,9 @@ const searchByController = {
             }
 
             const commentsResults = await searchByService.searchByComments(keyword);
+            const commentSuggestions = commentsResults.slice(0, 10);
 
-            return res.status(200).json(commentsResults);
+            return res.status(200).json({commentsResults, commentSuggestions});
         } catch (error) {
             console.error("Error searching by comments:", error);
             return res.status(500).json({ error: "Internal server error" });
@@ -57,8 +60,10 @@ const searchByController = {
             }
 
             const communitiesResults = await searchByService.searchByCommunities(keyword);
+            const communitiesSuggestions = communitiesResults.slice(0, 10);
+        
 
-            return res.status(200).json(communitiesResults);
+            return res.status(200).json({communitiesResults, communitiesSuggestions});
         } catch (error) {
             console.error("Error searching by communities:", error);
             return res.status(500).json({ error: "Internal server error" });
@@ -73,8 +78,9 @@ const searchByController = {
             }
 
             const hashtagsResults = await searchByService.searchByHashtags(keyword);
+            const hashtagSuggestions = hashtagsResults.slice(0, 10);
 
-            return res.status(200).json(hashtagsResults);
+            return res.status(200).json({hashtagsResults,hashtagSuggestions});
         } catch (error) {
             console.error("Error searching by hashtags:", error);
             return res.status(500).json({ error: "Internal server error" });
@@ -89,8 +95,9 @@ const searchByController = {
             }
 
             const allResults = await searchByService.searchByAll(keyword);
+            const allSuggestions = allResults.slice(0, 10);
 
-            return res.status(200).json(allResults);
+            return res.status(200).json({allResults, allSuggestions});
         } catch (error) {
             console.error("Error searching All:", error);
             return res.status(500).json({ error: "Internal server error" });
