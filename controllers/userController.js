@@ -52,7 +52,7 @@ const userController = {
 
       res.status(200).json(result);
     } catch(err) {
-      res.status(400).send({ error: err.message });
+      res.status(400).send({ message: err.message });
     }
   },
 
@@ -86,7 +86,7 @@ const userController = {
 
       res.status(200).json(result);
     } catch(err) {
-      res.status(400).json({ error: err.message });
+      res.status(400).json({ message: err.message });
     }
   },
 

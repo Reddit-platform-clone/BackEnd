@@ -14,9 +14,6 @@ router.post('/api/block_user', authMiddleware.authorizeationToken, userControlle
 router.post('/api/report_user', authMiddleware.authorizeationToken, userController.reportUser);
 router.delete('/api/v1/me/friends/:username', authMiddleware.authorizeationToken, userController.removeFriend);
 
-router.post('/api/r/:subreddit/api/friend', userController.createRelationship);
-router.post('/api/r/:subreddit/api/unfriend', userController.removeRelationship);
-
 router.get('/api/v1/me/friends/:username', authMiddleware.authorizeationToken, userController.getFriendInfo);
 router.get('/api/username_available/:username', userController.checkUsernameAvailability);
 

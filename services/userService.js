@@ -285,7 +285,7 @@ singUp: async (username, email, password) => {
 
   updatePrefs: async (username, settings) => {
     // logic to get update preferences
-    userFields = ['email', 'password', 'gender', 'displayName', 'profilePicture', 'profileBanner', 'blockedUsers', 'mutedCommunities'];
+    userFields = ['email', 'password', 'gender', 'displayName', 'about', 'socialLinks', 'profilePicture', 'blockedUsers', 'mutedCommunities'];
     profileSettings = {}
     for (let i in settings) {
       if (userFields.includes(i)) profileSettings[i] = settings[i];
