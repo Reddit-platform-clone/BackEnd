@@ -6,7 +6,33 @@ const communityController = {
             const communities = await communityService.listCommunities();
             res.json({success: true, data: communities});
         } catch (error) {
-            res.status(500).json({succes: false, error: error.message})
+            res.status(500).json({success: false, error: error.message})
+        }
+    },
+
+    createCommunity: async (req, res) => {
+        const communityData = req.body;
+        let username = req.user;
+
+        if (req.user?.iat) {
+            username = req.user.username;
+        } else {
+            username = req.user;
+        }
+
+        console.log(username);
+
+        try {
+            const result = await communityService.create(username, communityData)
+            if(result.success) {
+                return res.status(200).json({message: result.message})
+            } else {
+                return res.status(400).json({message: result.message})
+            }
+
+        } catch (error) {
+            console.error('Error creating community:', error);
+            res.status(500).json({error: 'Internal server error'});
         }
     },
 
@@ -55,7 +81,7 @@ const communityController = {
             } else {
                 return res.status(400).json({error: result.message});
             } 
-        } catch {
+        } catch (error){
             console.error('Error leaving community:', error);
             res.status(500).json({error: 'Internal server error'});
         }

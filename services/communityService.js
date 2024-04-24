@@ -66,6 +66,23 @@ const communityService = {
             console.error('Error fetching communities', error);
             throw new Error('Failed to fetch communities');
         }
+    },
+
+    create: async (username, communityData) => {
+        try {
+            console.log(communityData)
+            const existingCommunity = await Community.findOne({ communityName: communityData.communityName })
+            if (existingCommunity) {
+                return { success: false, message: 'Community name already exists' };
+            }
+
+            const newCommunity = new Community(communityData);
+            await newCommunity.save();
+
+            return { success: true, message: 'Community created successfully'};
+        } catch (error) {
+            return { success: false, message: error.message };
+        }
     }
 };
 
