@@ -169,14 +169,6 @@ singUp: async (username, email, password) => {
     return { message: 'User blocked successfully' };
   },
 
-  createRelationship: async (username) => {
-    // logic to create relationships
-  },
-
-  removeRelationship: async (username) => {
-    // logic to create relationships
-  },
-
   getFriendInfo: async (username, friendUsername) => {
     // logic to get user info
     const user = await userModel.findOne({ username: username });
