@@ -37,6 +37,8 @@ if ((sender.blockedUsers && sender.blockedUsers.includes(receiver.username)) ||
 return { success: false, error: 'Message cannot be sent because of blocking.' };
 }   
 const receiverSocketId = getReceiverSocketId(receiver.username);
+console.log(receiverSocketId);
+console.log(receiver.username);
 if (receiverSocketId) {
   
   io.to(receiverSocketId).emit("newMessage", messageData);
