@@ -8,6 +8,9 @@ const settingsSchema = new mongoose.Schema({
     },
 
     // account settings
+    contetnLanguage: String,
+    localCustomization: String,
+
     optIntoBeta: {
         type: Boolean,
         default: false
@@ -16,6 +19,28 @@ const settingsSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
+
+    // profile
+    NSFW:{
+        type: Boolean,
+        default: false
+    },
+
+    allowPeopleToFollowYou:{
+        type: Boolean,
+        default: false
+    },
+
+    contentVisibility:{
+        type: Boolean,
+        default: false
+    },
+
+    showActiveCommunities:{
+        type: Boolean,
+        default: false
+    },
+
 
     // privacy and security
     showInSearch: {
@@ -228,7 +253,7 @@ const settingsSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-}, { strict: 'throw' });
+});
 
 const Settings = mongoose.model('Settings', settingsSchema);
 

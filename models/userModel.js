@@ -29,6 +29,8 @@ const userSchema = {
     default: 'soora gamda fashkh'
   },
 
+  profileBanner: String,
+
   followers: {
     type: [String],
     default: []
@@ -54,10 +56,7 @@ const userSchema = {
     default: []
   },
 
-  gender: {
-    type: String,
-    enum: ['Male', 'Female']
-  },
+  gender: String,
 
   socialLinks: {
     type: [String],
@@ -96,6 +95,11 @@ const userSchema = {
     type: [String],
     default: []
   }, 
+
+  mutedCommunities: {
+    type: [String],
+    default: []
+  },
 
   resetPasswordToken: String,
   resetPasswordTokenExpires: Date
