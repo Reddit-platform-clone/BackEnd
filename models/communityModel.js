@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Post = require('./postModel.js')
 
 const communitySchema = new mongoose.Schema({
     communityName: { type: String, unique: true, required: true },
@@ -9,7 +10,8 @@ const communitySchema = new mongoose.Schema({
     banned: { type: [String], default: [] },
     moderatorsUsernames: { type:[String], required:true },
     members: { type: [String], default: [] },
-    displayPic: {type: String}
+    displayPic: {type: String},
+    posts: {type: [mongoose.Schema.Types.ObjectId], ref: 'post'}
 }, { strict: 'throw', timestamps: true });
 
 const Communities = mongoose.model('Communities', communitySchema);

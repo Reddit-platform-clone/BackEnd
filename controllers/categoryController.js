@@ -37,7 +37,7 @@ const categoryController = {
     },
     today: async (req, res) => {
         try {
-            // Fetch posts from today from the category service
+            // Fetch posts trending today from the category service
             const todayPosts = categoryService.getTodayPosts();
             // Assume todayPosts contains an array of post objects
             res.status(200).json({ success: true, data: todayPosts });

@@ -1,5 +1,6 @@
 const Post = require('../models/postModel');
 const User = require('../models/userModel');
+const Community = require('../models/communityModel.js')
 const { v4: uuidv4 } = require('uuid'); // Import the uuid library
 
 const createPostService = {
@@ -16,6 +17,10 @@ const createPostService = {
 
             // Save the new post object to the database
             const savedPost = await newPost.save();
+
+            const community = await Community.findOne({communityName: postData.communityName})
+            community.posts.push(savedPost._id)
+            await community.save()
 
             // Return the saved post object
             return savedPost;
