@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const { validationResult } = require('express-validator');
 const mongoose = require('mongoose');
 const UserModel= require('../models/userModel');
+const Mention=require('../models/mentionModel');
 const commentService = {
     postComment: async (data) => {
         
@@ -46,6 +47,12 @@ const commentService = {
 
        commentSave= await comment.save();
     if(commentSave){
+        const mentionRegex = /@(\w+)/g;
+        const mentions = data.content.match(mentionRegex);
+        if (mentions) {
+            let mentiondata=mentions.map(mention => mention.substring(1));
+            console.log(mentiondata);
+        }
         return { success: true, message: 'comment sent successfully.' };
 
     }

@@ -127,6 +127,30 @@ for (const messageId of conversation.messagesId) {
       return { success: false, error: 'Failed to get message.' };
   }
   },
+  getConverstaions: async (sentUsername) => {
+    
+    try {
+      
+    const user = await UserModel.findOne({ username: sentUsername });
+    if (!user) {
+     ;
+      return { success: false, error:'User not found.'};
+    }
+    const messages=[]
+ 
+const conversation= await Converstaion.find({ users: { $elemMatch: { $eq: sentUsername } }});
+if(!conversation){
+  return { success: true, message: [] };
+}
+
+
+    return { success: true, message: conversation };
+    
+  }catch (error) {
+      console.error('Error get message:', error);
+      return { success: false, error: 'Failed to get message.' };
+  }
+  },
 
   deleteMessage: async (userID,messageId,_id) => {
     try {

@@ -59,6 +59,32 @@ const liveMessagesController = {
         res.status(500).json({ error: 'Failed to retrieve inbox messages.' });
       }
     },
+    getConverstaions: async (req, res) => {
+      try {
+        let username =req.user;
+      
+        
+        if (req.user?.iat){
+          username=req.user.username;
+        }
+    else{
+      username=req.user;
+    }
+    
+        const inboxMessages = await messageService.getConverstaions(username);
+       
+        if (inboxMessages.success) {
+         
+        res.status(200).json(inboxMessages.message);
+      } else {
+        res.status(400).json({ errors: inboxMessages.errors, message: inboxMessages.error });
+    }
+      } catch (error) {
+        
+        console.error('Failed to retrieve inbox messages:', error);
+        res.status(500).json({ error: 'Failed to retrieve inbox messages.' });
+      }
+    },
     deleteMessage: async (req, res) => {
         try {
           let username =req.user;
