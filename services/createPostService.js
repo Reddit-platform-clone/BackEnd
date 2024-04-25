@@ -4,26 +4,28 @@ const Community = require('../models/communityModel.js')
 const { v4: uuidv4 } = require('uuid'); // Import the uuid library
 
 const createPostService = {
-    createPost: async (postData) => {
+    createPost: async (postData,username) => {
         try {
-            // Generate a unique post ID using UUID
-            const postId = uuidv4();
+            console.log(postData)
+            if(!postData.title || !postData.communityId){
+                return { success: false, error: `title or communityId is null.` };
+            }
 
-            // Add the generated post ID and user ID to the post data
-            postData.postId = postId;
 
-            // Create a new post object using the updated postData
-            const newPost = new Post(postData);
+            const community = await Community.findOne({_id:postData.communityId })
+           if(!community)
+           { 
+            return { success: false, error: `community is not exists.` };
+        }
+        postData.username=username
+        const newPost = new Post(postData);
+        const savedPost = await newPost.save();
 
-            // Save the new post object to the database
-            const savedPost = await newPost.save();
+        community.posts.push(savedPost._id)
+        await community.save()
 
-            const community = await Community.findOne({communityName: postData.communityName})
-            community.posts.push(savedPost._id)
-            await community.save()
-
-            // Return the saved post object
-            return savedPost;
+            
+            return { success: true, message: `Post created succesfully` };
         } catch (error) {
             console.error("Error creating post:", error);
             throw new Error("Failed to create post");

@@ -4,21 +4,27 @@ const CreatePostController = {
     createPost: async (req, res) => {
         
         try {
-            // Extract post data from the request body
-            const postData = req.body;
 
-            // Get the ID of the currently logged-in user
-            const userId = req.body.userId; // Assuming the user ID is stored in req.body.userId
-            console.log("userId: ", userId);
+     let username =req.user;
+      if (req.user?.iat){
+        username=req.user.username;
+      }
+  else{
+    username=req.user;
+  }
 
-            // Call the createPost method from the postService to create and add the post to the database
-            const newPost = await postService.createPost(postData); // Pass userId as an argument
-
-            // Return the newly created post in the response
-            return res.status(201).json(newPost);
+      const postData = req.body;
+           
+            const result = await postService.createPost(postData,username); 
+            if (result.success) {
+                console.log(result)
+                res.status(200).json({ message: result.message });
+            } else {
+                res.status(400).json({ errors: result.errors, message: result.error });
+            }
         } catch (error) {
-            console.error("Error creating post:", error);
-            return res.status(500).json({ error: "Internal server error" });
+            console.error('Error composing message:', error);
+            res.status(500).json({ error: 'Failed to send message.' });
         }
     }
 };
