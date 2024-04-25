@@ -56,7 +56,10 @@ const userSchema = {
     default: []
   },
 
-  gender: String,
+  gender: { 
+    type: String,
+    enum: ['Male', 'Female', 'Non-Binary', 'I Prefer Not To Say']
+  },
 
   socialLinks: {
     type: [String],

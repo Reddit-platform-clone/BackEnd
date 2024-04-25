@@ -3,7 +3,7 @@ const Post = require('./postModel.js')
 
 const communitySchema = new mongoose.Schema({
     communityName: { type: String, unique: true, required: true },
-    type: { type: String, enum: ['private', 'ristricted', 'public']},
+    type: { type: String, enum: ['private', 'restricted', 'public']},
     isNSFW: { type: Boolean, default: false },
     description: {type: String},
     rules: { type: [String], default: [] },
