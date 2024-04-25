@@ -6,6 +6,7 @@ const { validationResult } = require('express-validator');
 const UserModel = require('../models/userModel'); 
 const mongoose = require('mongoose');
 const { getReceiverSocketId, io } = require("../utils/WebSockets");
+const Mention=require('../models/mentionModel');
 const messageService = {
   composeMessage: async (messageData) => {
     try {
@@ -291,8 +292,23 @@ if (receiverSocketId) {
       return { success: false, error: 'Failed to all read message.' };
   }
   },
-  getUserMentions: async (messageId, sentuserId) => {
+  getUserMentions: async ( userID) => {
+   try{ 
+    const user = await UserModel.findOne({ username: userID });
+    console.log(userID)
+    if (!user) {
+       return { success: false, error:'User not found.'};
+    }
+    const mentions = await Mention.find({ mentioned: userID});
+    if (!mentions || mentions.length === 0) {
+      return { success: true, message: [] };
+    }
 
+    return {success: true, message:inboxMessages};}
+    catch (error) {
+      console.error('Error get sent message:', error);
+      return { success: false, error: 'Failed to get sent message.' };
+    }
   },
 };
 

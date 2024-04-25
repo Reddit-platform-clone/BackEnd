@@ -247,23 +247,29 @@ const messageController = {
     }
   },
   getUserMentions: async (req, res) => {
-    // Placeholder for retrieving username mentions
+   
     try {
-      // Placeholder logic to retrieve username mentions
-      // This could involve querying the database for messages containing username mentions
-      // Placeholder response
-      const mentions = [
-        {
-          messageId: 1, sender: 'user1', content: 'This message mentions @user2 ', recipient: 'user2',
-        },
-        {
-          messageId: 2, sender: 'user2', content: 'Another message mentioning @user1', recipient: 'user1',
-        },
-      ];
-      res.json({ success: true, data: mentions });
-    } catch (error) {
-      res.status(500).json({ success: false, message: 'Failed to retrieve username mentions', error: error.message });
+      let username =req.user;
+      // console.log(req.user.iat);
+      if (req.user?.iat){
+        username=req.user.username;
+      }
+  else{
+    username=req.user;
+  }
+      const result =await messageService.getUserMentions(username);
+      
+      if (result.success) {
+       
+        res.status(200).json(result.message);
+      } else {
+        res.status(400).json({ errors: result.errors, message: result.error });
     }
+      } catch (error) {
+        
+        console.error('Failed to retrieve mentions:', error);
+        res.status(500).json({ error: 'Failed to retrieve mentions.' });
+      }
   },
 };
 
