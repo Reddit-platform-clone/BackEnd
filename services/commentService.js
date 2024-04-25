@@ -20,6 +20,7 @@ const commentService = {
        if(data.rr=='reply' && !data.commentData.replyToID){
         return { success: false, error: `replyToID  is missing.` };
        }
+      
        
         const senderExists = await UserModel.exists({ username: data.username });
         
@@ -47,12 +48,33 @@ const commentService = {
 
        commentSave= await comment.save();
     if(commentSave){
+        
         const mentionRegex = /@(\w+)/g;
-        const mentions = data.content.match(mentionRegex);
+        
+        const mentions =data.commentData.content.match(mentionRegex);
+        const savedmention=[]
         if (mentions) {
             let mentiondata=mentions.map(mention => mention.substring(1));
-            console.log(mentiondata);
+            
+            for (const checkUser of mentiondata){
+                const userChecker= await UserModel.findOne({username:checkUser})
+                if (userChecker){
+                    const mention = new Mention({ mentionedBy:data.username,mentioned:checkUser,type:"comment",entityId:comment._id });
+                    
+                    mention.save();
+                    savedmention.push(checkUser);
+                    
+                }
+            }
+            if (savedmention.length === mentiondata.length) {
+                return { success: true, message: 'comment sent successfully with mentions.' };
+            }
+            else{
+                return { success: true, message: 'comment sent successfully but some mentioned users do not exist',missingUsers: mentiondata.filter(username => !savedmention.includes(username)) };
+            }
+            
         }
+
         return { success: true, message: 'comment sent successfully.' };
 
     }
