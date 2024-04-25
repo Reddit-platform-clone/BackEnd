@@ -9,17 +9,27 @@ const postSchema = new mongoose.Schema({
     downvotes: {type: Number,default:0},
     communityId: {type: String, required: true},
     upvotes: {type: Number,default:0},
-    scheduled: {type: Boolean},
+    scheduled: {
+        date: {
+            type: Date,
+            required: false
+        },
+        time: {
+            type: String,
+            required: false
+        }
+    },
     isSpoiler: {type: Boolean,default:false},
     isLocked: {type: Boolean,default:false},
     isReported: {type: Boolean,default:false},
-    isReason:{type:String,default:false},
+    isReason:{type:[String],default:false},
     nsfw:{type: Boolean,default:false},
     ac:{type: Boolean,default:false},
     url:{  type: [String],
         default: []  },
     flair:{  type: [String],
         default: []  }, 
+
 
 
 }, {timestamps: true});
