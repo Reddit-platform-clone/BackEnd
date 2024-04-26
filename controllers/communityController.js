@@ -11,7 +11,7 @@ const communityController = {
     },
 
     communityPosts: async (req, res) => {
-        const {communityName} = req.body
+        const {communityName} = req.params
         console.log(communityName)
         try {
             const result = await communityService.commuintyPosts(communityName);
