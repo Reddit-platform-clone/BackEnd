@@ -100,7 +100,30 @@ const communityService = {
             console.error("Error fetching posts from community: ", error);
             throw new Error("Failed to fetch posts from community")
         }
-    } 
+    },
+    
+    listCommunitiesNotJoined: async (username) => {
+        
+        try {
+            
+            // Find the user by ID
+            const user = await User.findOne({username: username});
+            if (!user) {
+                throw new Error('User not found');
+            }
+
+            console.log(username)
+            // Get the IDs of communities joined by the user
+            const joinedCommunitiesIds = user.joinedCommunities.map(community => community._id);
+
+            // Find communities that the user has not joined
+            const communitiesNotJoined = await Community.find({ _id: { $nin: joinedCommunitiesIds } });
+
+            return communitiesNotJoined;
+        } catch (error) {
+            throw new Error('Failed to fetch communities not joined by user');
+        }
+    }
 };
 
 module.exports = communityService;

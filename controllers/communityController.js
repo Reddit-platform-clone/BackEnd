@@ -100,6 +100,18 @@ const communityController = {
             console.error('Error leaving community:', error);
             res.status(500).json({error: 'Internal server error'});
         }
+    },
+
+    listCommunitiesNotJoined: async (req, res) => {
+        const { username } = req.user;
+        console.log(username)
+
+        try {
+            const communities = await communityService.listCommunitiesNotJoined(username);
+            res.status(200).json({ success: true, data: communities });
+        } catch (error) {
+            res.status(500).json({ success: false, error: error.message });
+        }
     }
 }
 
