@@ -12,7 +12,7 @@ const createPostService = {
             }
 
 
-            const community = await Community.findOne({_id:postData.communityId })
+            const community = await Community.findOne({communityName:postData.communityId })
            if(!community)
            { 
             return { success: false, error: `community is not exists.` };
