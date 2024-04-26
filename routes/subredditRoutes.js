@@ -9,6 +9,6 @@ router.get('/api/subreddit/getBest', userAuthentication.authorizeationToken,subr
 router.get('/api/subreddit/getHot', userAuthentication.authorizeAccess,subredditController.getHotPost);
 router.get('/api/subreddit/getNew', userAuthentication.authorizeAccess,subredditController.getNewPost);
 router.get('/api/subreddit/getTop', userAuthentication.authorizeAccess,subredditController.getTopPost);
-router.get('/api/subreddit/getRandom', userAuthentication.authorizeAccess,subredditController.getRandomPost);
+router.get('/api/subreddit/getRandom', subredditController.getRandomPost);
 
 module.exports = router;
