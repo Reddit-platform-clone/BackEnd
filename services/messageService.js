@@ -63,7 +63,7 @@ if (receiverSocketId) {
       
     const user = await UserModel.findOne({ username: sentUsername });
     if (!user) {
-     ;
+     
       return { success: false, error:'User not found.'};
     }
 
