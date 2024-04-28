@@ -5,6 +5,8 @@ const jwt = require('jsonwebtoken');
 const { validationResult } = require('express-validator');
 const mongoose = require('mongoose');
 const UserModel= require('../models/userModel');
+const enrichPostsWithExtras  = require('./modifierPostService.js');
+
 const hideService = {
     hidePostOrComment: async (entityId,username,type) => {
       try{  
@@ -121,29 +123,10 @@ const hideService = {
             
             if(type == 'post')
             {
-               
-                let post = await Post.findOne({_id:entityId});
                 
-                numComments=await Comment.countDocuments({postID:entityId});
-                console.log(numComments)
-                let postWithExtraAttributes = {
-                    ...post.toObject(), 
-                    numberOfComments: numComments || 0, 
-                    communitPic: null,
-                    communityDesc: "no description"
-                };
-                if(numComments)
-                {console.log(numComments);
-                    postWithExtraAttributes.numberOfComments=numComments;
-                }
-                else{postWithExtraAttributes.numberOfComments=0;
-                }
                 
-                let communityPost=await Community.findOne({communityName:post.communityId})
                
-                postWithExtraAttributes.communitPic=communityPost.displayPic;
-                if(communityPost.description)
-                {postWithExtraAttributes.communityDesc=communityPost.description;}
+                let postWithExtraAttributes=await enrichPostsWithExtras([entityId]);
                 
                 Find.push(["post", [postWithExtraAttributes]]);
         
