@@ -18,8 +18,13 @@ const communityService = {
             if(!community.members){
                 community.members = [];
             }
-            community.members.push(username);
-            await community.save();
+
+            if (community.members.includes(username)) {
+                return { success: false, message: 'User is already a member'};
+            } else {
+                community.members.push(username);
+                await community.save()
+            }
 
             user.joinedCommunities.push(communityName);
             await user.save();
@@ -114,15 +119,37 @@ const communityService = {
 
             console.log(username)
             // Get the IDs of communities joined by the user
-            const joinedCommunitiesIds = user.joinedCommunities.map(community => community._id);
-
+            const joinedCommunitiesNames = user.joinedCommunities;
             // Find communities that the user has not joined
-            const communitiesNotJoined = await Community.find({ _id: { $nin: joinedCommunitiesIds } });
+            const communitiesNotJoined = await Community.find({ communityName: { $nin: joinedCommunitiesNames } });
+            console.log(communitiesNotJoined);
 
-            return communitiesNotJoined;
+            return communitiesNotJoined
         } catch (error) {
             throw new Error('Failed to fetch communities not joined by user');
         }
+    },
+
+    listCommunitiesJoined: async (username) => {
+        try {
+            
+            // Find the user by ID
+            const user = await User.findOne({username: username});
+            if (!user) {
+                throw new Error('User not found');
+            }
+
+            console.log(username)
+            // Get the IDs of communities joined by the user
+            const joinedCommunitiesNames = user.joinedCommunities;
+            console.log(joinedCommunitiesNames);
+
+            const communitiesJoined = await Community.find({ communityName: { $in: joinedCommunitiesNames } });
+
+            return communitiesJoined;
+        } catch (error) {
+            throw new Error('Failed to fetch communities not joined by user');
+        }    
     }
 };
 
