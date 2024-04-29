@@ -279,10 +279,35 @@ singUp: async (username, email, password) => {
 
   getUserDownvoted: async (username) => {
     // logic to get user details
+    let returnedVote=[]
     const user = await userModel.findOne({ username: username });
     if (!user) throw new Error('User not found');
+    let votes=await Vote.find({username:username, rank: -1});
+    if(!votes || votes.length == 0 ){
+      return {upvotes: []}
+    }
+    for (const vote of votes) {
+      if (vote.type === 'post') {
+        let check=await Post.findOne({_id:vote.entityId});
+        if(!check){
+          continue;
+        }
+        console.log(vote.entityId)
+        let postmod=await enrichPostsWithExtras([vote.entityId]);
+        console.log(postmod)
+        returnedVote.push(["post", postmod])
 
-    return { upvotes: user.downVotes };
+      }
+      else{
+        if(! await Comment.findOne({_id:vote.entityId})){
+          continue;
+        }
+        returnedVote.push(["comment", vote])
+      }
+  }
+
+
+    return { upvotes: returnedVote };
   },
   
   getUserIdentity: async (username) => {
