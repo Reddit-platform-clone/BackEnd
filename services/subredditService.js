@@ -3,11 +3,22 @@
 const Post = require('../models/postModel.js');
 const enrichPostsWithExtras  = require('./modifierPostService.js');
 
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+}
+
 const subredditService = {
     getAll: async () => {
         try {
-            const post = await Post.find();
-            return post;
+            const posts = await Post.find();
+            const postIds = posts.map(post => post._id);
+            console.log(postIds)
+            let postWithExtraAttributes = await enrichPostsWithExtras(postIds)
+            return postWithExtraAttributes;
         } catch (error) {
             console.log('Error fetching posts:', error);
             throw new Error('Failed to fetch post');
@@ -19,12 +30,14 @@ const subredditService = {
         try {
             // Fetch posts from the database
             const posts = await Post.find();
-
+            const postIds = posts.map(post => post._id);
+            console.log(postIds)
+            let postWithExtraAttributes= await enrichPostsWithExtras(postIds)
             // Sort posts based on upvotes
-            posts.sort((a, b) => {
+            postWithExtraAttributes.sort((a, b) => {
                 return b.upvotes - a.upvotes;
             });
-            return posts;
+            return postWithExtraAttributes;
         } catch(error) {
             console.error('Error fetching best post:', error);
             throw new Error('Failed to fetch best post');
@@ -38,7 +51,7 @@ const subredditService = {
             const posts = await Post.find();
             const postIds = posts.map(post => post._id);
             console.log(postIds)
-            let postWithExtraAttributes=await enrichPostsWithExtras(['662a7d802f17a91f4cdfae51']);
+            let postWithExtraAttributes=await enrichPostsWithExtras(postIds);
             console.log(postWithExtraAttributes)
             // Sort posts based on score criteria
             postWithExtraAttributes.sort((a, b) => {
@@ -59,10 +72,13 @@ const subredditService = {
         try {
             // Fetch posts from the database
             const posts = await Post.find();
+            const postIds = posts.map(post => post._id);
+            console.log(postIds)
+            let postWithExtraAttributes = await enrichPostsWithExtras(postIds)
+            
+            postWithExtraAttributes.sort((a,b) => b.createdAt - a.createdAt);
 
-            posts.sort((a,b) => b.createdAt - a.createdAt);
-
-            return posts;
+            return postWithExtraAttributes;
         } catch (error) {
             console.error('Error fetching new posts:', error);
             throw new Error('Failed to fetch new posts');
@@ -74,15 +90,16 @@ const subredditService = {
         try {
             // Fetch posts from the database
             const posts = await Post.find();
-
+            const postIds = posts.map(post => post._id);
+            let postWithExtraAttributes = await enrichPostsWithExtras(postIds)
             // Sort posts based on score criteria
-            posts.sort((a, b) => {
+            postWithExtraAttributes.sort((a, b) => {
                 const scoreA = a.upvotes + a.numComments;
                 const scoreB = b.upvotes + b.numComments;
                 return scoreB - scoreA;
             });
 
-            return posts;
+            return postWithExtraAttributes;
         } catch (error) {
             console.error('Error fetching hot post:', error);
             throw new Error('Failed to fetch hot post');
@@ -94,11 +111,12 @@ const subredditService = {
         try {
             // Fetch posts from the database
             const posts = await Post.find();
-
-            // Generate a random index within the range of the posts array
-            const randomIndex = Math.floor(Math.random() * posts.length);
-
-            return posts[parseInt(randomIndex)];
+            const randomPosts = shuffleArray(posts);
+            const postIds = randomPosts.map(post => post._id);
+            console.log(postIds)
+            let postWithExtraAttributes = await enrichPostsWithExtras(postIds)
+            
+            return postWithExtraAttributes;
         } catch (error) {
             console.error('Error fetching random post:', error);
             throw new Error('Failed to fetch random post');
