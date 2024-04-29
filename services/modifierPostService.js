@@ -31,7 +31,7 @@ class CommentService {
         ]);
 
       
-        console.log(commentCounts);
+       
       
         return commentCounts
     }
