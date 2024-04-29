@@ -12,10 +12,28 @@ class PostService {
 
 class CommentService {
     static async countCommentsByPostIds(postIds) {
-        return await Comment.aggregate([
-            {$match: {postID: {$in: postIds}}},
-            {$group: {_id: "$postID", count: {$sum: 1}}}
+       
+        
+        let postIdsString=postIds.map(id => id.toString());
+      
+
+
+        const commentCounts = await Comment.aggregate([
+            {
+                $match: { postID: { $in: postIdsString } } 
+            },
+            {
+                $group: {
+                    _id: "$postID",
+                    count: { $sum: 1 } 
+                }
+            }
         ]);
+
+      
+        console.log(commentCounts);
+      
+        return commentCounts
     }
 }
 
