@@ -133,7 +133,7 @@ for (const messageId of conversation.messagesId) {
       
     const user = await UserModel.findOne({ username: sentUsername });
     if (!user) {
-     ;
+     
       return { success: false, error:'User not found.'};
     }
     const messages=[]
@@ -145,6 +145,36 @@ if(!conversation){
 
 
     return { success: true, message: conversation };
+    
+  }catch (error) {
+      console.error('Error get message:', error);
+      return { success: false, error: 'Failed to get message.' };
+  }
+  },
+
+  getConverstaionId: async (sentUsername,reciptant) => {
+    
+    try {
+      if(sentUsername==reciptant){
+        return { success: false, error:'User cannot send to himself.'};
+      }
+    const user = await UserModel.findOne({ username: sentUsername });
+    const rec = await UserModel.findOne({ username: reciptant });
+    if (!rec||!user) {
+     
+      return { success: false, error:'User not found.'};
+    }
+   
+    const check= await  Converstaion.findOne({
+      users: { $all: [sentUsername, reciptant] }
+    });
+    console.log(check)
+if(!check){
+  return { success: true, message: "no conversation" };
+}
+
+
+    return { success: true, message: check._id };
     
   }catch (error) {
       console.error('Error get message:', error);

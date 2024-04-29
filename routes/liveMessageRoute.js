@@ -6,5 +6,6 @@ const authenticateToken = require('../middleware/authMiddleware');
 router.post('/api/message/chat',authenticateToken, messageController.compose);
 router.post('/api/message/converstaion',authenticateToken, messageController.getInboxMessages);
 router.get('/api/message/getconverstaions',authenticateToken, messageController.getConverstaions);
+router.post('/api/message/converstaionId',authenticateToken, messageController.getConverstaionId);
 router.delete('/api/message/del_livmsg',authenticateToken, messageController.deleteMessage);
 module.exports = router;
