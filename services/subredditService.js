@@ -1,6 +1,7 @@
 
 
 const Post = require('../models/postModel.js');
+const enrichPostsWithExtras  = require('./modifierPostService.js');
 
 const subredditService = {
     getAll: async () => {
@@ -35,15 +36,18 @@ const subredditService = {
         try {
             // Fetch posts from the database
             const posts = await Post.find();
-
+            const postIds = posts.map(post => post._id);
+            console.log(postIds)
+            let postWithExtraAttributes=await enrichPostsWithExtras(['662a7d802f17a91f4cdfae51']);
+            console.log(postWithExtraAttributes)
             // Sort posts based on score criteria
-            posts.sort((a, b) => {
+            postWithExtraAttributes.sort((a, b) => {
                 const scoreA = a.upvotes + a.numComments - Math.floor((Date.now() - a.createdAt) / (1000 * 60 * 60 * 24));
                 const scoreB = b.upvotes + b.numComments - Math.floor((Date.now() - b.createdAt) / (1000 * 60 * 60 * 24));
                 return scoreB - scoreA;
             });
 
-            return posts;
+            return postWithExtraAttributes;
         } catch (error) {
             console.error('Error fetching hot post:', error);
             throw new Error('Failed to fetch hot post');

@@ -5,11 +5,10 @@ const { validationResult } = require('express-validator');
 const mongoose = require('mongoose');
 const UserModel= require('../models/userModel');
 const { v4: uuidv4 } = require('uuid');
+const enrichPostsWithExtras  = require('./modifierPostService.js');
 
 const postService = {
     getPostReplies: async (postID) => {
-       
-
     try {
       console.log(postID)
       
