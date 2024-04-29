@@ -9,6 +9,8 @@ router.post('/api/signup', userController.singUp);
 router.post('/api/verifyToken', userController.verifyToken);
 router.post('/api/login/forget_password', userController.logInForgetPassword);
 router.patch('/api/login/reset_password/:token', userController.resetPassword);
+router.post('/api/login/forget_username', userController.logInForgetUsername);
+router.patch('/api/login/reset_username/:token', userController.resetUsername);
 
 router.post('/api/block_user', authMiddleware.authorizeationToken, userController.blockUser);
 router.post('/api/report_user', authMiddleware.authorizeationToken, userController.reportUser);
