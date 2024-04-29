@@ -64,9 +64,15 @@ const communityService = {
         }
     },
     
-    listCommunities: async () => {
+    listCommunities: async (category = null) => {
         try {
-            const communities = await Community.find();
+            let query = {};
+            if (category !== null) {
+                category = category.toLowerCase();
+                query = { communityCategory: category }; // Filter communities by category if provided
+            }
+    
+            const communities = await Community.find(query);
             return communities;
         } catch (error) {
             console.error('Error fetching communities', error);
@@ -75,6 +81,8 @@ const communityService = {
     },
 
     create: async (username, communityData) => {
+        
+        communityData.communityCategory = communityData.communityCategory.map(category => category.toLowerCase());
         try {
             console.log(communityData)
             const existingCommunity = await Community.findOne({ communityName: communityData.communityName })
