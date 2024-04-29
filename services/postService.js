@@ -19,7 +19,8 @@ const postService = {
         return { success: false, error:'Post not found.'};
       }
   
-      const comments=await Comment.find({postID: postID });
+      let comments=await Comment.find({postID: postID , replyToID: null  });
+      console.log(comments)
       
       
       if (!comments || comments.length === 0) {
