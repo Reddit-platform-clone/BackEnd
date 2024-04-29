@@ -2,7 +2,7 @@ const communityService = require('../services/communityService.js');
 
 const communityController = {
     listCommunities: async (req, res) => {
-        const {category} = req.body;
+        const category = req.headers['category'];
         try {
             
             const communities = await communityService.listCommunities(category);
@@ -11,6 +11,8 @@ const communityController = {
             res.status(500).json({success: false, error: error.message})
         }
     },
+
+
 
     communityPosts: async (req, res) => {
         const {communityName} = req.params
