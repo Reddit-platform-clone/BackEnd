@@ -240,7 +240,7 @@ if (receiverSocketId) {
   },
   markMessageRead: async (userID,messageId) => {
     try{
-      console.log(messageId)
+      
     if(!messageId){
        return { success: false, error:'message Id is null.'};
     }
@@ -295,7 +295,7 @@ if (receiverSocketId) {
   getUserMentions: async ( userID) => {
    try{ 
     const user = await UserModel.findOne({ username: userID });
-    console.log(userID)
+    
     if (!user) {
        return { success: false, error:'User not found.'};
     }
