@@ -21,12 +21,15 @@ const userSchema = {
   },
 
   displayName: {
-    type: String
+    type: String,
   },
 
   profilePicture: {
     type: String,
+    default: 'soora gamda fashkh'
   },
+
+  profileBanner: String,
 
   followers: {
     type: [String],
@@ -44,7 +47,8 @@ const userSchema = {
   },
 
   about: {
-    type: String
+    type: String,
+    default: 'user gamed mot'
   },
 
   interests: {
@@ -52,12 +56,43 @@ const userSchema = {
     default: []
   },
 
-  gender: {
+  gender: { 
     type: String,
-    enum: ['Male', 'Female']
+    enum: ['Male', 'Female', 'Non-Binary', 'I Prefer Not To Say']
   },
 
   socialLinks: {
+    type: [String],
+    default: []
+  },
+
+  displayPic: {
+    type: String
+  },
+
+  savedPosts: {
+    type: [String],
+    default: []
+  },
+  
+  followPosts:{
+    type: [String],
+    default: []
+  },
+  hidePosts:{
+    type: [String],
+    default: []
+  },
+  savedCategories:{
+    type: [String],
+    default: []
+  },
+  joinedCommunities: {
+    type: [String],
+    default: []
+  }, 
+
+  mutedCommunities: {
     type: [String],
     default: []
   },

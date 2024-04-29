@@ -1,24 +1,59 @@
 const Post = require('../models/postModel');
 const User = require('../models/userModel');
+const Community = require('../models/communityModel.js')
 const { v4: uuidv4 } = require('uuid'); // Import the uuid library
-
+const Mention=require('../models/mentionModel');
 const createPostService = {
-    createPost: async (postData) => {
+    createPost: async (postData,username) => {
         try {
-            // Generate a unique post ID using UUID
-            const postId = uuidv4();
+            
+            if(!postData.title || !postData.communityId){
+                return { success: false, error: `title or communityId is null.` };
+            }
 
-            // Add the generated post ID and user ID to the post data
-            postData.postId = postId;
 
-            // Create a new post object using the updated postData
-            const newPost = new Post(postData);
+            const community = await Community.findOne({communityName:postData.communityId })
+           if(!community)
+           { 
+            return { success: false, error: `community is not exists.` };
+        }
+        postData.username=username
+        const newPost = new Post(postData);
+        const savedPost = await newPost.save();
 
-            // Save the new post object to the database
-            const savedPost = await newPost.save();
+        community.posts.push(savedPost._id)
+        await community.save()
+        if(postData.content){
+            const mentionRegex = /@(\w+)/g;
+        
+            const mentions =postData.content.match(mentionRegex);
+            const savedmention=[]
+            if (mentions) {
+                let mentiondata=mentions.map(mention => mention.substring(1));
+                
+                for (const checkUser of mentiondata){
+                    const userChecker= await User.findOne({username:checkUser})
+                    if (userChecker){
+                        const mention = new Mention({ mentionedBy:username,mentioned:checkUser,type:"post",entityId:savedPost._id });
+                        
+                        mention.save();
+                        savedmention.push(checkUser);
+                        
+                    }
+                }
+                if (savedmention.length === mentiondata.length) {
+                    return { success: true, message: 'post sent successfully with mentions.' };
+                }
+                else{
+                    return { success: true, message: 'post sent successfully but some mentioned users do not exist',missingUsers: mentiondata.filter(username => !savedmention.includes(username)) };
+                }
+                
+            }
+    
 
-            // Return the saved post object
-            return savedPost;
+        }
+            
+        return { success: true, message: `Post created succesfully` };
         } catch (error) {
             console.error("Error creating post:", error);
             throw new Error("Failed to create post");

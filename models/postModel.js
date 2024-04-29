@@ -1,23 +1,40 @@
 let mongoose = require('mongoose');
 
 const postSchema = new mongoose.Schema({
-    postId: {type: String, unique: true},
-    content: { type: String, required: true },
-    title: {type: String},
-    userId: {type: String, required: true},
-    parentId: {type: String, required: true, default:"0"},
+
+    content: { type: String },
+    title: {type: String, required: true},
+    username: {type: String, required: true},
     media: {type: JSON},
-    downvotes: {type: Number, default:0},
+    downvotes: {type: Number,default:0},
     communityId: {type: String, required: true},
-    communityName: {type: String},
-    upvotes: {type: Number, default:0},
-    numComments: {type: Number, default:0},
-    scheduled: {type: Boolean, default:0},
-    isSpoiler: {type: Boolean, default:0},
-    numViews: {type: Number, default:0},
-    isLocked: {type: Boolean, required: true},
-    
+    upvotes: {type: Number,default:0},
+    scheduled: {
+        date: {
+            type: Date,
+            required: false
+        },
+        time: {
+            type: String,
+            required: false
+        }
+    },
+    isSpoiler: {type: Boolean,default:false},
+    isLocked: {type: Boolean,default:false},
+    isReported: {type: Boolean,default:false},
+    isReason:{type:[String],default:false},
+    nsfw:{type: Boolean,default:false},
+    ac:{type: Boolean,default:false},
+    url:{  type: [String],
+        default: []  },
+    flair:{  type: [String],
+        default: []  }, 
+
+
+
 }, {timestamps: true});
+
+postSchema.index({ content: 'text', title: 'text'});
 
 const Post = mongoose.model('post', postSchema);
 

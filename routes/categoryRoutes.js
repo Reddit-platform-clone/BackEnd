@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const categoryController = require('../controllers/categoryController');
+const categoryController = require('../controllers/categoryController.js');
+const userAuthentication = require('../middleware/userAuthMiddleware.js');
 
 
-router.get('/category/best', categoryController.best);
-router.get('/category/hot', categoryController.hot);
-router.get('/category/new', categoryController.new);
-router.get('/category/today', categoryController.today);
+router.get('/api/category/best', userAuthentication.authorizeationToken ,categoryController.best);
+router.get('/api/category/hot', userAuthentication.authorizeationToken,categoryController.hot);
+router.get('/api/category/new', userAuthentication.authorizeationToken,categoryController.new);
+router.get('/api/category/today', userAuthentication.authorizeationToken ,categoryController.today);
 module.exports = router;

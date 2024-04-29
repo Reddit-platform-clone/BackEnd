@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const Post = require('../models/postModel.js');
 require('dotenv').config();
-console.log(process.env.MONGO_URI);
 
 beforeAll(async () => {
     await mongoose.connect(process.env.MONGO_URI);

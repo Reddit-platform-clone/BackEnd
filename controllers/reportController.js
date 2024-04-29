@@ -1,28 +1,30 @@
+reportService=require('../services/reportService');
+
 const reportController = {
   reportThing: async (req, res) => {
-    try {
-    //   const { type, id } = req.params;
-    //   const reportReason = req.body.reason;
-    //   type = 'message';
-    //   let itemType;
-    //   switch (type) {
-    //     case 'link':
-    //       itemType = 'link';
-    //       break;
-    //     case 'comment':
-    //       itemType = 'comment';
-    //       break;
-    //     case 'message':
-    //       itemType = 'message';
-    //       break;
-    //     default:
-    //       return res.status(400).json({ success: false, message: 'Invalid report type' });
-      const message = 'Thank you for reporting message 4. We will review it soon.';
-
-      res.json({ success: true, message });
-    } catch (error) {
-      res.status(500).json({ success: false, message: 'Failed to report thing', error: error.message });
+ try{
+    const {reportedUsername,reason,type,entityId,description} = req.body;
+ 
+    let username =req.user;
+    
+    if (req.user?.iat){
+      username=req.user.username;
     }
+else{
+  username=req.user;
+}
+
+  const result=await reportService.reportThing(reportedUsername,reason,type,entityId,description, username );
+  
+  if (result.success) {
+  
+  res.status(200).json({ message: 'Thank you for reporting. We will review it soon' });
+} else {
+  res.status(400).json({ errors: result.errors, message: result.error });
+}
+} catch (error) {
+res.status(500).json({ success: false, message: 'Failed to report ', error: error.message });
+}
   },
 };
 

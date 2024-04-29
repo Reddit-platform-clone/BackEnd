@@ -15,12 +15,12 @@ paths:
           schema:
             type: object
             properties:
-              link:
+              type:
                 type: string
-                description: The link to be hidden
-              userID:
+                description: The typr(comment/post) to be hidden
+              entityId:
                 type: string
-                description: The ID of the user who wants to hide the link
+                description: The ID of the post/comment  wants to hide the link
       responses:
         '200':
           description: Link hidden successfully

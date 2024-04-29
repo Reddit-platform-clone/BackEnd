@@ -1,11 +1,20 @@
 require('dotenv').config();
 
+const mongoose = require('mongoose')
 const userModel = require('../models/userModel.js');
 const reportModel = require('../models/profileReportModel.js');
 const settingsModel = require('../models/settingsMode.js');
+const postModel = require('../models/postModel');
+const commentModel = require('../models/commentModel.js');
+const voteModel = require('../models/voteModel.js')
 const utils = require('../utils/helpers.js');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
+const Communities = require('../models/communityModel.js');
+const { foreign_key } = require('i/lib/methods.js');
+const enrichPostsWithExtras  = require('./modifierPostService.js');
+const Vote = require('../models/voteModel'); 
+const Post = require('../models/postModel.js');
 
 const userService = {
   logIn: async (emailOrUsername, password) => {
@@ -75,7 +84,7 @@ singUp: async (username, email, password) => {
       
       return { token: userToken };
     } catch (err) {
-      return (err.message)
+      throw new Error(err.message)
     }
   },
 
@@ -166,14 +175,6 @@ singUp: async (username, email, password) => {
     return { message: 'User blocked successfully' };
   },
 
-  createRelationship: async (username) => {
-    // logic to create relationships
-  },
-
-  removeRelationship: async (username) => {
-    // logic to create relationships
-  },
-
   getFriendInfo: async (username, friendUsername) => {
     // logic to get user info
     const user = await userModel.findOne({ username: username });
@@ -196,7 +197,7 @@ singUp: async (username, email, password) => {
   checkUsernameAvailability: async (username) => {
     // logic to check username validity
     const user = await userModel.findOne({ username: username });
-    if (user == null) throw new Error('Username is not available');
+    if (user) return { message: 'Username is not available' };
     return { message: 'Username is available' };
   },
 
@@ -205,27 +206,140 @@ singUp: async (username, email, password) => {
     const user = await userModel.findOne({ username: username });
     if (!user) throw new Error('User does not exist');
 
-    return { about: user.about}
+    return { about: user.about }
   },
 
   getUserOverview: async (username) => {
     // logic to get user details
+    const user = await userModel.findOne({ username: username });
+    if (!user) throw new Error('User does not exist');
+
+    return{ 
+      username: user.username,
+      profilePicture: user.profilePicture,
+      follwers: user.followers,
+      about: user.about,
+      gender: user.gender,
+      links: user.socialLinks,
+      communitiesJoined: user.joinedCommunities
+    };
   },
 
   getUserSubmitted: async (username) => {
     // logic to get user details
+    const user = await userModel({ username: username })
+    if (!user) throw new Error('User does not exist')
+
+    const userPosts = await postModel.aggregate([
+      { $match: { username: username } },
+      { $lookup: {
+        from: commentModel.collection.name,
+        localField: "_id",
+        foreignField: "postID",
+        as: "comments"
+      } },
+      { $project: 
+        {
+          content: 1,
+          title: 1,
+          username: 1,
+          media: 1,
+          downvotes: 1,
+          communityId: 1,
+          upvotes: 1,
+          scheduled: 1,
+          isSpoiler: 1,
+          isLocked: 1,
+          isReported: 1,
+          isReason: 1,
+          nsfw: 1,
+          ac: 1,
+          url: 1,
+          flair: 1,
+          commentCount: { $size: "$comments" }
+        }
+      
+      }
+    ])
+    return { posts: userPosts };
   },
 
   getUserComments: async (username) => {
-    // logic to get user details
+    // logic to get user 
+    const user = await userModel({ username: username })
+    if (!user) throw new Error('User does not exist')
+
+    const userComments = await commentModel.find({ userID: username });
+    if (!userComments) return { message: 'user has no comments' };
+
+    return { userComments };
   },
 
   getUserUpvoted: async (username) => {
     // logic to get user details
+    let returnedVote=[]
+    const user = await userModel.findOne({ username: username });
+    if (!user) throw new Error('User not found');
+    let votes=await Vote.find({username:username, rank: 1});
+    if(!votes || votes.length == 0 ){
+      return {upvotes: []}
+    }
+    for (const vote of votes) {
+      if (vote.type === 'post') {
+        let check=await Post.findOne({_id:vote.entityId});
+        if(!check){
+          continue;
+        }
+        console.log(vote.entityId)
+        let postmod=await enrichPostsWithExtras([vote.entityId]);
+        console.log(postmod)
+        returnedVote.push(["post", postmod])
+
+      }
+      else{
+        if(! await commentModel.findOne({_id:vote.entityId})){
+          continue;
+        }
+        returnedVote.push(["comment", vote])
+      }
+  }
+
+
+    return { upvotes: returnedVote };
   },
 
   getUserDownvoted: async (username) => {
     // logic to get user details
+    let returnedVote=[]
+    const user = await userModel.findOne({ username: username });
+    if (!user) throw new Error('User not found');
+    let votes=await Vote.find({username:username, rank: -1});
+    if(!votes || votes.length == 0 ){
+      return {upvotes: []}
+    }
+    for (const vote of votes) {
+      if (vote.type === 'post') {
+        let check=await Post.findOne({_id:vote.entityId});
+        if(!check){
+          continue;
+        }
+        console.log(vote.entityId)
+        let postmod=await enrichPostsWithExtras([vote.entityId]);
+        console.log(postmod)
+        returnedVote.push(["post", postmod])
+
+      }
+      else{
+        if(! await commentModel.findOne({_id:vote.entityId})){
+          continue;
+        }
+        returnedVote.push(["comment", vote])
+        console.log(returnedVote)
+      }
+  }
+
+
+    return { upvotes: returnedVote };
   },
   
   getUserIdentity: async (username) => {
@@ -248,12 +362,37 @@ singUp: async (username, email, password) => {
 
   updatePrefs: async (username, settings) => {
     // logic to get update preferences
+    userFields = ['email', 'password', 'gender', 'displayName', 'about', 'socialLinks', 'profilePicture', 'blockedUsers', 'mutedCommunities'];
+    profileSettings = {}
+    for (let i in settings) {
+      if (userFields.includes(i)) profileSettings[i] = settings[i];
+    };
+    
     const user = await userModel.findOne({ username: username });
     if (!user) throw new Error('User not found');
-
+    
     const userSettings = await settingsModel.findOneAndUpdate({ username: username }, settings, { new: true, upsert: true, runValidators: true });
+    console.log(profileSettings)
+    const updatedProfile = await userModel.findOneAndUpdate({ username: username }, profileSettings, { new: true, upsert: true, runValidators: true })
 
-    return { settings: userSettings };
+    return { settings: userSettings, profile: updatedProfile };
+  },
+
+  savePost: async (username, postId) => {
+    const user = await userModel.findOne({username: username});
+    user.savedPosts.push(postId);
+    user.save();
+    
+    return { message: 'Post saved successfully'};
+  },
+
+  unsavePost: async (username, postId) => {
+    const user = await userModel.findOne({username: username});
+    const postIndex = user.savedPosts.indexOf(postId);
+    user.savedPosts.splice(postIndex,1);
+    user.save();
+
+    return { message: 'Post unsaved successfully'};
   }
 };
 

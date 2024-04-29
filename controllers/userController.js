@@ -14,10 +14,10 @@ const userController = {
         const result = await userService.logIn(emailOrUsername, password);
         res.status(200).json(result);
       } catch (error) {
-        res.status(400).send(error.message);
+        res.status(400).json({ message: error.message });
       }
     } catch (err) {
-      res.status(500).send(err.message);
+      res.status(500).json({ message: err.message });
     }
   },
 
@@ -38,10 +38,10 @@ const userController = {
         const result = await userService.singUp(username, email, password);
         res.status(200).json(result);
       } catch (error) {
-        res.status(400).send(error.message);
+        res.status(400).json({ message: error.message });
       }
     } catch (err) {
-      res.status(500).send(err.message);
+      res.status(500).json({ message: err.message });
     }
   },
 
@@ -52,7 +52,7 @@ const userController = {
 
       res.status(200).json(result);
     } catch(err) {
-      res.status(400).send({ error: err.message });
+      res.status(400).send({ message: err.message });
     }
   },
 
@@ -60,7 +60,7 @@ const userController = {
     try {
       const emailOrUsername = req.body.emailOrUsername;
       const userData = await userService.logInForgetPassword(emailOrUsername);
-      const resetUrl = `${req.protocol}://${req.get('host')}/login/reset_password/${userData.resetToken}`;
+      const resetUrl = `http://localhost:3000/login/reset_password/${userData.resetToken}`;
       const emailHTML = `Click <a href=${resetUrl}>here</a> to reset your password, this link is valid for a short period of time, if you didn't request changing your password ignore this email`;
       const emailSubject = 'Reset Password';
       
@@ -73,7 +73,7 @@ const userController = {
         res.status(200).json({ status: 'success', message: 'reset email sent' });
     } catch(err) {
 
-      res.status(400).send(err.message);
+      res.status(400).json({ message: err.message });
     }
   },
 
@@ -86,7 +86,7 @@ const userController = {
 
       res.status(200).json(result);
     } catch(err) {
-      res.status(400).json({ error: err.message });
+      res.status(400).json({ message: err.message });
     }
   },
 
@@ -98,10 +98,10 @@ const userController = {
         const result = await userService.removeFriend(username, usernameToRemove);
         res.status(200).json(result);
       } catch (error) {
-        res.status(400).send(error.message);
+        res.status(400).json({ message: error.message });
       }
     } catch (err) {
-      res.status(500).send(err.message);
+      res.status(500).json({ message: err.message });
     }
   },
 
@@ -113,10 +113,10 @@ const userController = {
         const result = await userService.reportUser(reporter, reported, details);
         res.status(200).json(result);
       } catch (error) {
-        res.status(400).send(error.message);
+        res.status(400).json({ message: error.message });
       }
     } catch (err) { 
-      res.status(500).send(err.message);
+      res.status(500).json({ message: err.message });
     }
   },
 
@@ -132,10 +132,10 @@ const userController = {
         const result = await userService.blockUser(username, usernameToBlock);
         res.status(200).json(result);
       } catch (error) {
-        res.status(400).send(error.message);
+        res.status(400).json({ message: error.message });
       }
     } catch (err) {
-      res.status(500).send(err.message);
+      res.status(500).json({ message: err.message });
     }
   },
 
@@ -155,10 +155,10 @@ const userController = {
         const result = await userService.getFriendInfo(username, friendUsername);
         res.status(200).json(result);
       } catch (error) {
-        res.status(400).send(error.message);
+        res.status(400).json({ message: error.message });
       }
     } catch (err) {
-      res.status(500).send(err.message);
+      res.status(500).json({ message: err.message });
     }
   },
 
@@ -168,7 +168,7 @@ const userController = {
       const result = await userService.checkUsernameAvailability(username);
       res.status(200).json(result);
     } catch (error) {
-      res.status(400).send(error.message);
+      res.status(400).json({ message: error.message });
     }
   },
 
@@ -179,31 +179,73 @@ const userController = {
         const result = await userService.getUserAbout(username);
         res.status(200).json(result);
       } catch (error) {
-        res.status(400).send(error.message);
+        res.status(400).json({ message: error.message });
       }
     } catch (err) {
-      res.status(500).send(err.message);
+      res.status(500).json({ message: err.message });
     }
   },
   
   getUserOverview: async (req, res) => {
-    res.json({ message: 'user overview'})
+    try {
+      const username = req.params.username;
+      const result = await userService.getUserOverview(username);
+      res.status(200).json(result);
+    } catch (err) {
+      res.status(400).json({ message: err.message });
+    }
   },
   
   getUserSubmitted: async (req, res) => {
-    res.json({ message: 'user submitted'})
+    try {
+      const username = req.params.username;
+      const result = await userService.getUserSubmitted(username);
+      res.status(200).json(result);
+    } catch (err) {
+      res.status(400).json({ message: err.message });
+    }
   },
   
   getUserComments: async (req, res) => {
-    res.json({ message: 'user comments'})
+    try {
+      const username = req.params.username;
+      const result = await userService.getUserComments(username);
+      res.status(200).json(result);
+    } catch (err) {
+      res.status(400).json({ message: err.message });
+    }
   },
   
   getUserUpvoted: async (req, res) => {
-    res.json({ message: 'user upvoted'})
+    try {
+      const usernameToView = req.params.username;
+      const user = req.user.username;
+      if (usernameToView != user) {
+        res.status(403).json({ message: 'you have no access to this page' });
+        return;
+      }
+
+      const result = await userService.getUserUpvoted(usernameToView);
+      res.status(200).json(result);
+    } catch (err) {
+      res.status(400).json({ message: err.message });
+    }
   },
   
   getUserDownvoted: async (req, res) => {
-    res.json({ message: 'user downvoted'})
+    try {
+      const usernameToView = req.params.username;
+      const user = req.user.username;
+      if (usernameToView != user) {
+        res.status(403).json({ message: 'you have no access to this page' });
+        return;
+      }
+
+      const result = await userService.getUserDownvoted(usernameToView);
+      res.status(200).json(result);
+    } catch (err) {
+      res.status(400).json({ message: err.message });
+    }
   },
 
   getUserIdentity: async (req, res) => {
@@ -214,7 +256,7 @@ const userController = {
 
       res.status(200).json(result);
     } catch(err) {
-      res.status(400).send(err.message);
+      res.status(400).json({ message: err.message });
     }
   },
 
@@ -226,7 +268,7 @@ const userController = {
   
       res.status(200).json(result);
     } catch(err) {
-      res.status(400).send(err.message);
+      res.status(400).json({ message: err.message });
     }
   },
 
@@ -239,7 +281,31 @@ const userController = {
   
       res.status(200).json(result);
     } catch(err) {
-      res.status(400).send(err.message);
+      res.status(400).json({ message: err.message });
+    }
+  },
+
+  savePost: async (req, res) => {
+    try {
+      const username = req.user.username;
+      const postId = req.body.postId;
+
+      const result = await userService.savePost(username, postId);
+      res.status(200).json({message : result});
+    } catch (error) {
+      res.status(500).json({message: error.message});
+    }
+  },
+
+  unSavePost: async (req, res) => {
+    try {
+      const username = req.user.username;
+      const postId = req.body.postId;
+
+      const result = await userService.unsavePost(username, postId);
+      res.status(200).json({message: result})
+    } catch (error) {
+      res.status(500).json({message: error.message})
     }
   }
 };

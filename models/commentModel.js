@@ -1,14 +1,14 @@
 const mongoose = require('mongoose');
 
 const commentSchema = new mongoose.Schema({
-    commentID: {
-        type: String,
-        required: true,
-        unique: true
-    },
+
     postID: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
         required: true
+    },
+    content:{
+    type:String,
+    required: true
     },
     userID: {
         type: String,
@@ -35,6 +35,7 @@ const commentSchema = new mongoose.Schema({
         default: null
     }
 });
+commentSchema.index({ content: 'text'});
 
 const Comment = mongoose.model('Comment', commentSchema);
 
