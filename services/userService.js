@@ -297,7 +297,7 @@ singUp: async (username, email, password) => {
 
       }
       else{
-        if(! await Comment.findOne({_id:vote.entityId})){
+        if(! await commentModel.findOne({_id:vote.entityId})){
           continue;
         }
         returnedVote.push(["comment", vote])
@@ -330,10 +330,11 @@ singUp: async (username, email, password) => {
 
       }
       else{
-        if(! await Comment.findOne({_id:vote.entityId})){
+        if(! await commentModel.findOne({_id:vote.entityId})){
           continue;
         }
         returnedVote.push(["comment", vote])
+        console.log(returnedVote)
       }
   }
 
