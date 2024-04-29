@@ -150,7 +150,26 @@ const communityService = {
         } catch (error) {
             throw new Error('Failed to fetch communities not joined by user');
         }    
-    }
+    }, 
+
+    getCommunityInfo: async (postId) => {
+        try {
+            const post = await Post.findOne({_id: postId});
+            if (!post) {
+                throw new Error('Post not found');
+            }
+
+            const community = await Community.findOne({ communityName: post.communityId });
+            console.log(community);
+            if (!community) {
+                throw new Error('Community not found');
+            }
+
+            return { success: true, data: community}
+        } catch (error) {
+            throw new Error(`Error getting community info: ${error.message}`);
+        } 
+    } 
 };
 
 module.exports = communityService;

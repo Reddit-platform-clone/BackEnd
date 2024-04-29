@@ -124,6 +124,20 @@ const communityController = {
         } catch (error) {
             res.status(500).json({ success: false, error: error.message });
         }
+    },
+
+    getCommunityInfo: async (req, res) => {
+        const { postId } = req.params;
+        try {
+            const result = await communityService.getCommunityInfo(postId)
+            if (result.success) {
+                return res.status(200).json({ success: true, data: result})
+            } else {
+                return res.status(400).json({ success: false, message: "Error in getting community info"});
+            }
+        } catch (error) {
+            res.status(500).json({ success: false, error: error.message });
+        }
     }
 }
 
