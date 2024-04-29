@@ -21,7 +21,7 @@ const lockService = {
            return { success: false, error:'post not found.'};
         }
      
-        const community = await Community.findOne({ moderatorsUsernames: { $in: [username] } });
+        const community = await Community.findOne({ moderatorsUsernames: { $in: [username] } ,communityName:post.communityId});
 
     
         
@@ -73,7 +73,7 @@ const lockService = {
             return { success: false, error:'post not found.'};
          }
       
-         const community = await Community.findOne({ moderatorsUsernames: { $in: [username] } });
+         const community = await Community.findOne({ moderatorsUsernames: { $in: [username] },communityName:post.communityId });
  
      
          

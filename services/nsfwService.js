@@ -21,7 +21,7 @@ const nsfwService = {
            return { success: false, error:'post not found.'};
         }
      
-        const community = await Community.findOne({ moderatorsUsernames: { $in: [username] } });
+        const community = await Community.findOne({ moderatorsUsernames: { $in: [username] } ,communityName:post.communityId});
 
     
         
@@ -45,7 +45,7 @@ const nsfwService = {
     }
         post.nsfw=true
         await post.save();
-        Nsfw= new NSFW( {   
+        let Nsfw= new NSFW( {   
          typeOfUser:typeOfUser,
          NsfwUsername:username,
          entityId:Id});
@@ -73,7 +73,7 @@ const nsfwService = {
             return { success: false, error:'post not found.'};
          }
       
-         const community = await Community.findOne({ moderatorsUsernames: { $in: [username] } });
+         const community = await Community.findOne({ moderatorsUsernames: { $in: [username] } ,communityName:post.communityId});
  
      
          
