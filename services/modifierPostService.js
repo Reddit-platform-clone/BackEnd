@@ -64,11 +64,11 @@ async function enrichPostsWithExtras(entityIds) {
     const communityMap = new Map(communities.map(community => [community.communityName, community]));
 
     const postsWithExtras = posts.map(post => {
-        const numComments = commentsMap.get(String(post._id)) || 0;
+        const numComments = commentsMap.get(String(post._id));
         const community = communityMap.get(post.communityId);
         const communityPic = community ? community.displayPic : null;
         const communityDesc = community ? community.description : null;
-
+        console.log(numComments);
         return new PostWithExtras(post.toObject(), numComments, communityPic, communityDesc);
     });
     
