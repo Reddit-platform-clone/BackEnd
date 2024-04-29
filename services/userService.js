@@ -132,6 +132,45 @@ singUp: async (username, email, password) => {
     return { message: 'password updated' }
   },
 
+  logInForgetUsername: async (email) => {
+    // logic to reset username
+    let userEmail;
+    if (utils.isValidEmail(email)){
+      user = await userModel.findOne({ email: email });
+      if (!user) throw new Error('invalid email'); 
+
+      userEmail = email;
+    };
+
+    const resetToken = crypto.randomBytes(64).toString('hex');
+    user.resetPasswordToken = resetToken;
+    user.resetPasswordTokenExpires = Date.now() + 5 * 60 * 1000;
+    await user.save();
+
+    return { email: userEmail, resetToken: resetToken }
+  },
+
+  resetUsername: async (token, username) => {
+    // logic to reset username
+    const user = await userModel.findOne({ resetPasswordToken: token });
+    if (!user) throw new Error('User not found')
+
+    if(Date.now() > user.resetPasswordTokenExpires){
+      user.resetPasswordToken = undefined;
+      user.resetPasswordTokenExpires = undefined;
+      await user.save();
+      throw new Error('link expired')
+    }
+
+    const newUsername = username;
+    user.username = newUsername;
+    user.resetPasswordToken = undefined;
+    user.resetPasswordTokenExpires = undefined;
+    await user.save();
+
+    return { message: 'username updated' }
+  },
+
   removeFriend: async (username, usernameToRemove) => {
     // logic to remove friend
     const user = await userModel.findOne({ username: username });

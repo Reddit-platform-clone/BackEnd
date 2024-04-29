@@ -90,6 +90,40 @@ const userController = {
     }
   },
 
+  logInForgetUsername: async (req, res) => {
+    try {
+      const email = req.body.email;
+      const userData = await userService.logInForgetUsername(email);
+      const resetUrl = `http://localhost:3000/login/reset_username/${userData.resetToken}`;
+      const emailHTML = `Click <a href=${resetUrl}>here</a> to reset your username, this link is valid for a short period of time, if you didn't request changing your username ignore this email`;
+      const emailSubject = 'Reset Username';
+      
+      await mail({
+          email: userData.email,
+          subject: emailSubject,
+          text: emailHTML
+        })      
+        
+        res.status(200).json({ status: 'success', message: 'reset email sent' });
+    } catch(err) {
+
+      res.status(400).json({ message: err.message });
+    }
+  },
+
+  resetUsername: async (req, res) => {
+    try {
+      const username = req.body.username;
+      const token = req.params.token;
+
+      const result = await userService.resetUsername(token, username);
+
+      res.status(200).json(result);
+    } catch(err) {
+      res.status(400).json({ message: err.message });
+    }
+  },
+
   removeFriend: async (req, res) => {
     try {
       try {
