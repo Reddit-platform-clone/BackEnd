@@ -5,9 +5,9 @@ const mongoose = require('mongoose');
 const { getReceiverSocketId, io } = require("../utils/WebSockets");
 const Post=require('../models/postModel');
 const Community=require('../models/communityModel');
-const NSFW=require('../models/nsfwModel');
-const nsfwService = {
-    markNsfwModPosts: async (username ,Id) => {
+const Lock=require('../models/lockModel');
+const lockService = {
+    lockPost: async (username ,Id) => {
         try {
        
      
@@ -32,34 +32,34 @@ const nsfwService = {
         
         
         if (post.username !== username && !community) {
-           return { success: false, error:'You are not authorized to mark this post.'};
+           return { success: false, error:'You are not authorized to lock this post.'};
         }
         let typeOfUser="owner";
        if(community){
          typeOfUser="mod";
        }
        
-       
-       if(post.nsfw == true){
-        return { success: false, error:'post already nsfw.'};
+      
+       if(post.isLocked == true){
+        return { success: false, error:'post already lock.'};
     }
-        post.nsfw=true
+        post.isLocked=true
         await post.save();
-        Nsfw= new NSFW( {   
-         typeOfUser:typeOfUser,
-         NsfwUsername:username,
-         entityId:Id});
-         Nsfw.save();
-        return { success: true, message: 'Nsfw marked successfully.' };
+        Locker= new Lock( {   
+            typeOfUser:typeOfUser,
+            lockUsername:username,
+            entityId:Id});
+            Locker.save();
+        return { success: true, message: 'locked successfully.' };
         }
           catch (error) {
-            console.error('Error markeing NSFW:', error);
-            return { success: false, error: 'Error markeing NSFW:' };
+            console.error('Error  Lock:', error);
+            return { success: false, error: 'Error lock:' };
         }
       },
 
 
-      unmarkNsfwModPosts: async (username ,Id) => {
+      unlockPost: async (username ,Id) => {
          try {
       
       
@@ -84,38 +84,39 @@ const nsfwService = {
          
          
          if (post.username !== username && !community) {
-            return { success: false, error:'You are not authorized to unmark this post.'};
+            return { success: false, error:'You are not authorized to unlock this post.'};
          }
 
     
-        if(post.nsfw == false){
-         return { success: false, error:'post already unmarked.'};
+        if(post.isLocked == false){
+         return { success: false, error:'post already unlocked.'};
      }
-        let  Nsfw= await NSFW.findOne({ NsfwUsername: username });
-         if(!Nsfw){
-            return { success: false, error:'NSFW doesnt exists.'};
+    
+        let  lock= await Lock.findOne({ lockUsername: username });
+         if(!lock){
+            return { success: false, error:'lock doesnt exists.'};
 
          }
          if(community)
          {
-            if(Nsfw.typeOfUser !=="mod" ){
-               return { success: false, error:'You are not authorized to unmark this post(you are not mod).'};
+            if(lock.typeOfUser !=="mod" ){
+               return { success: false, error:'You are not authorized to lock this post(you are not mod).'};
             }
       
       }
     
-         post.nsfw=false
+         post.isLocked=false
          await post.save();
-         await NSFW.deleteOne({ _id: Nsfw._id });
+         await lock.deleteOne({ _id: lock._id });
          
          
-         return { success: true, message: 'Nsfw marked successfully.' };
+         return { success: true, message: 'unlock  successfully.' };
          }
            catch (error) {
-             console.error('Error markeing NSFW:', error);
-             return { success: false, error: 'Error markeing NSFW:' };
+             console.error('Error unlock:', error);
+             return { success: false, error: 'Error unlock:' };
          }
        },
 };
 
-module.exports = nsfwService;
+module.exports = lockService;

@@ -28,12 +28,12 @@ const commentService = {
       
             return { success: false, error: `Sender  does not exist.` };
         }
-        const postExists= await Post.exists({_id:data.commentData.postID});
+        const postExists= await Post.exists({_id:data.commentData.postID , isLocked:false});
         
         if (!postExists) {
             
       
-            return { success: false, error: `Post  does not exist.` };
+            return { success: false, error: `Post  does not exist or Locked.` };
         }
        if (data.commentData.replyToID){
         const commentExists= await Comment.exists({_id:data.commentData.replyToID});
