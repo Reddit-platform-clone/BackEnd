@@ -74,14 +74,7 @@ const userSchema = {
     type: [String],
     default: []
   },
-  upVotes: {
-    type: [String],
-    default: []
-  },
-  downVotes: {
-    type: [String],
-    default: []
-  },
+  
   followPosts:{
     type: [String],
     default: []

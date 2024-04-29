@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const voteSchema = new mongoose.Schema({
 
     entityId: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
         required: true
     },
     type:{

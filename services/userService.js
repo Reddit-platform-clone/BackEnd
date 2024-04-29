@@ -1,14 +1,17 @@
 require('dotenv').config();
 
+const mongoose = require('mongoose')
 const userModel = require('../models/userModel.js');
 const reportModel = require('../models/profileReportModel.js');
 const settingsModel = require('../models/settingsMode.js');
-const postModel = require('../models/postModel.js');
+const postModel = require('../models/postModel');
 const commentModel = require('../models/commentModel.js');
+const voteModel = require('../models/voteModel.js')
 const utils = require('../utils/helpers.js');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const Communities = require('../models/communityModel.js');
+const { foreign_key } = require('i/lib/methods.js');
 const enrichPostsWithExtras  = require('./modifierPostService.js');
 const Vote = require('../models/voteModel'); 
 const Post = require('../models/postModel.js');
@@ -227,9 +230,37 @@ singUp: async (username, email, password) => {
     const user = await userModel({ username: username })
     if (!user) throw new Error('User does not exist')
 
-    const userPosts = await postModel.find({ userId: username });
-    if (!userPosts) return { message: 'User has no posts' };
-
+    const userPosts = await postModel.aggregate([
+      { $match: { username: username } },
+      { $lookup: {
+        from: commentModel.collection.name,
+        localField: "_id",
+        foreignField: "postID",
+        as: "comments"
+      } },
+      { $project: 
+        {
+          content: 1,
+          title: 1,
+          username: 1,
+          media: 1,
+          downvotes: 1,
+          communityId: 1,
+          upvotes: 1,
+          scheduled: 1,
+          isSpoiler: 1,
+          isLocked: 1,
+          isReported: 1,
+          isReason: 1,
+          nsfw: 1,
+          ac: 1,
+          url: 1,
+          flair: 1,
+          commentCount: { $size: "$comments" }
+        }
+      
+      }
+    ])
     return { posts: userPosts };
   },
 
