@@ -46,7 +46,7 @@ class CommunityService {
 
 class PostWithExtras {
     constructor(post, numComments, communityPic, communityDesc) {
-        this.post = post;
+        Object.assign(this, post);
         this.numberOfComments = numComments || 0;
         this.communityPic = communityPic;
         this.communityDesc = communityDesc || "no description";
