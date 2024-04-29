@@ -60,7 +60,7 @@ const userController = {
     try {
       const emailOrUsername = req.body.emailOrUsername;
       const userData = await userService.logInForgetPassword(emailOrUsername);
-      const resetUrl = `${req.protocol}://${req.get('host')}/api/login/reset_password/${userData.resetToken}`;
+      const resetUrl = `http://localhost:3000/login/reset_password/${userData.resetToken}`;
       const emailHTML = `Click <a href=${resetUrl}>here</a> to reset your password, this link is valid for a short period of time, if you didn't request changing your password ignore this email`;
       const emailSubject = 'Reset Password';
       
