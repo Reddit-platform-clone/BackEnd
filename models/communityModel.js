@@ -12,7 +12,8 @@ const communitySchema = new mongoose.Schema({
     members: { type: [String], default: [] },
     displayPicUrl: {type: String},
     backgroundPicUrl: {type: String},
-    posts: {type: [mongoose.Schema.Types.ObjectId], ref: 'post'}
+    posts: {type: [mongoose.Schema.Types.ObjectId], ref: 'post'},
+    communityCategory: {type:[String], required: true}
 }, { strict: 'throw', timestamps: true });
 
 const Communities = mongoose.model('Communities', communitySchema);

@@ -3,6 +3,14 @@ const User = require('../models/userModel.js');
 const Post = require('../models/postModel.js')
 const cloudinary = require('../utils/cloudinary.js'); 
 
+function shuffleArray(array){
+    for(let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+};
+
 const communityService = {
     join: async (username, communityName) => {
         try {
@@ -65,9 +73,15 @@ const communityService = {
         }
     },
     
-    listCommunities: async () => {
+    listCommunities: async (category = null) => {
         try {
-            const communities = await Community.find();
+            let query = {};
+            if (category !== null) {
+                category = category.toLowerCase();
+                query = { communityCategory: category }; // Filter communities by category if provided
+            }
+    
+            const communities = await Community.find(query);
             return communities;
         } catch (error) {
             console.error('Error fetching communities', error);
@@ -76,6 +90,8 @@ const communityService = {
     },
 
     create: async (username, communityData) => {
+        
+        communityData.communityCategory = communityData.communityCategory.map(category => category.toLowerCase());
         try {
 
             //const displayPicUpload = await cloudinary.uploader.upload(displayPic.path);
@@ -177,7 +193,20 @@ const communityService = {
         } catch (error) {
             throw new Error(`Error getting community info: ${error.message}`);
         } 
-    } 
+    }, 
+
+    
+
+    getRandomCommunities: async () => {
+        try {
+            const communities = await Community.find();
+            const RandomCommunities = shuffleArray(communities);
+            return RandomCommunities;
+        } catch (error) {
+            console.error('Error fetching communities', error);
+            throw new Error('Failed to fetch communities');
+        }
+    }
 };
 
 module.exports = communityService;

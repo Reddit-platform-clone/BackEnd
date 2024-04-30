@@ -6,13 +6,17 @@ const cloudinary = require('cloudinary').v2;
 
 const communityController = {
     listCommunities: async (req, res) => {
+        const category = req.headers['category'];
         try {
-            const communities = await communityService.listCommunities();
+            
+            const communities = await communityService.listCommunities(category);
             res.json({success: true, data: communities});
         } catch (error) {
             res.status(500).json({success: false, error: error.message})
         }
     },
+
+
 
     communityPosts: async (req, res) => {
         const {communityName} = req.params
@@ -157,6 +161,15 @@ const communityController = {
             }
         } catch (error) {
             res.status(500).json({ success: false, error: error.message });
+        }
+    },
+
+    getRandomCommunities: async (req, res) => {
+        try {
+            const randomCommunities = await communityService.getRandomCommunities();
+            res.json({success: true, data: randomCommunities});
+        } catch (error) {
+            res.status(500).json({success: false, error: error.message})
         }
     }
 }
