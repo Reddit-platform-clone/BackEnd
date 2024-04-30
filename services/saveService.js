@@ -4,6 +4,9 @@ const jwt = require('jsonwebtoken');
 const { validationResult } = require('express-validator');
 const mongoose = require('mongoose');
 const UserModel= require('../models/userModel');
+const enrichPostsWithExtras  = require('./modifierPostService.js');
+
+
 const saveService = {
     savePostOrComment: async (entityId,username,type) => {
       try{  
@@ -96,6 +99,58 @@ const saveService = {
             console.error('Error get message:', error);
             return { success: false, error: 'Failed to save.' };
         }
+      },
+
+      get_save: async (sentUsername) => {
+    
+        try {
+          
+        const user = await UserModel.findOne({ username: sentUsername });
+        if (!user) {
+         
+          return { success: false, error:'User not found.'};
+        }
+        
+        
+        const combinedStrings = user.savedPosts;
+        
+       
+
+        let Find=[]
+        for(const combinedString of combinedStrings){
+            const part=combinedString.split("/!");;
+            const type = part[0];
+            const entityId = part[1];
+            
+            if(type == 'post')
+            {
+                
+                
+               
+                let postWithExtraAttributes=await enrichPostsWithExtras([entityId]);
+                
+                Find.push(["post", [postWithExtraAttributes]]);
+        
+            }
+            else{
+                let comment= await Comment.findOne({_id:entityId});
+                Find.push(["comment", [comment]]);
+
+            }
+     
+        }
+        if (!Find || Find.length === 0) {
+          
+          return { success: true, message: [] };
+        }
+    
+        return { success: true, message: Find };
+       
+      
+      }catch (error) {
+          console.error('Error get saved:', error);
+          return { success: false, error: 'Failed to get saved.' };
+      }
       },
 };
 module.exports=saveService
