@@ -15,6 +15,7 @@ router.get('/api/community/:communityName/getPosts', userAuthentication.authoriz
 router.get('/api/user/:userId/communitiesNotJoined', userAuthentication.authorizeationToken, communityController.listCommunitiesNotJoined);
 router.get('/api/user/:username/communitiesJoined', userAuthentication.authorizeationToken, communityController.listCommunitiesJoined);
 router.get('/api/community/:postId/getCommunityInfo', communityController.getCommunityInfo);
+router.get('/api/community/getRandomCommunities', userAuthentication.authorizeationToken, communityController.getRandomCommunities);
 
 module.exports = router;
 

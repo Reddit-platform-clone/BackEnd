@@ -142,6 +142,15 @@ const communityController = {
         } catch (error) {
             res.status(500).json({ success: false, error: error.message });
         }
+    },
+
+    getRandomCommunities: async (req, res) => {
+        try {
+            const randomCommunities = await communityService.getRandomCommunities();
+            res.json({success: true, data: randomCommunities});
+        } catch (error) {
+            res.status(500).json({success: false, error: error.message})
+        }
     }
 }
 

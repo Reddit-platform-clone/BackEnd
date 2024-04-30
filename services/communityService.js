@@ -2,6 +2,14 @@ const Community = require('../models/communityModel.js');
 const User = require('../models/userModel.js');
 const Post = require('../models/postModel.js')
 
+function shuffleArray(array){
+    for(let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+};
+
 const communityService = {
     join: async (username, communityName) => {
         try {
@@ -177,7 +185,20 @@ const communityService = {
         } catch (error) {
             throw new Error(`Error getting community info: ${error.message}`);
         } 
-    } 
+    }, 
+
+    
+
+    getRandomCommunities: async () => {
+        try {
+            const communities = await Community.find();
+            const RandomCommunities = shuffleArray(communities);
+            return RandomCommunities;
+        } catch (error) {
+            console.error('Error fetching communities', error);
+            throw new Error('Failed to fetch communities');
+        }
+    }
 };
 
 module.exports = communityService;
