@@ -1,6 +1,7 @@
 const Community = require('../models/communityModel.js');
 const User = require('../models/userModel.js');
 const Post = require('../models/postModel.js')
+const cloudinary = require('../utils/cloudinary.js'); 
 
 const communityService = {
     join: async (username, communityName) => {
@@ -76,6 +77,13 @@ const communityService = {
 
     create: async (username, communityData) => {
         try {
+
+            //const displayPicUpload = await cloudinary.uploader.upload(displayPic.path);
+            //communityData.displayPicUrl = displayPic
+
+            // const backgroundPicUpload = await cloudinary.uploader.upload(backgroundPic.path);
+            // communityData.backgroundPicUrl = backgroundPic
+
             console.log(communityData)
             const existingCommunity = await Community.findOne({ communityName: communityData.communityName })
             if (existingCommunity) {

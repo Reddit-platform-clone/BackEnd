@@ -1,4 +1,8 @@
 const communityService = require('../services/communityService.js');
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' }); // Destination folder for uploaded files
+const cloudinary = require('cloudinary').v2;
+
 
 const communityController = {
     listCommunities: async (req, res) => {
@@ -27,6 +31,7 @@ const communityController = {
 
     createCommunity: async (req, res) => {
         const communityData = req.body;
+        console.log(communityData.communityName)
         let username = req.user;
 
         if (req.user?.iat) {
@@ -35,9 +40,24 @@ const communityController = {
             username = req.user;
         }
 
-        console.log(username);
-
         try {
+            if (!req.files.displayPic || !req.files.backgroundPic) {
+                return res.status(400).json({ message: 'Display picture and background picture are required' });
+            }
+
+            const displayPicFile = req.files.displayPic;
+            const backgroundPicFile = req.files.backgroundPic;
+            console.log(displayPicFile);
+
+            // Upload display picture to Cloudinary
+            const displayPicUpload = await cloudinary.uploader.upload(displayPicFile.tempFilePath);
+            console.log(displayPicUpload);
+            communityData.displayPicUrl = displayPicUpload.secure_url;
+
+            // Upload background picture to Cloudinary
+            const backgroundPicUpload = await cloudinary.uploader.upload(backgroundPicFile.tempFilePath);
+            communityData.backgroundPicUrl = backgroundPicUpload.secure_url;
+
             const result = await communityService.create(username, communityData)
             if(result.success) {
                 return res.status(200).json({message: result.message})

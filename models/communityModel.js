@@ -10,7 +10,8 @@ const communitySchema = new mongoose.Schema({
     banned: { type: [String], default: [] },
     moderatorsUsernames: { type:[String], required:true },
     members: { type: [String], default: [] },
-    displayPic: {type: String},
+    displayPicUrl: {type: String},
+    backgroundPicUrl: {type: String},
     posts: {type: [mongoose.Schema.Types.ObjectId], ref: 'post'}
 }, { strict: 'throw', timestamps: true });
 

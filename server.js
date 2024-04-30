@@ -5,6 +5,9 @@ const fs = require('fs');
 const path = require('path');
 const { swaggerUi, specs, router } = require('./swaggerConfig');
 const { app, server } = require("./utils/WebSockets");
+const fileupload = require('express-fileupload'); 
+
+app.use(fileupload({useTempFiles: true}))
 
 require('dotenv').config();
 const mongoose = require('mongoose');
