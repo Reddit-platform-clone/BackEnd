@@ -91,41 +91,64 @@ const spoilerService = {
             if(!type){
                 return { success: false, error:'type is required.'}; 
             }
+            let typeOfUser="owner";
+        
+     
            if(type==='post'){ 
-            postExists=await Post.exists({_id:entityId});
+            postExists=await Post.findOne({_id:entityId});
             if(!postExists){
                 return { success: false, error:'Post not found.'};
             }
+            if(postExists.isSpoiler == false){
+                return { success: false, error:'Post is already spoiler.'};
+    
+            }
+            const community = await Community.findOne({ moderatorsUsernames: { $in: [username] } ,communityName:postExists.communityId});
+            if (postExists.username !== username && !community) {
+                return { success: false, error:'You are not authorized to mark this post.'};
+             }
+             if(community){
+                typeOfUser="mod"
+             }
+            postExists.isSpoiler = false;
+            postExists.save();
+        
+        
         }
         else if(type==='comment'){ 
-            commentExists=await Comment.exists({_id:entityId});
+            commentExists=await Comment.findOne({_id:entityId});
             if(!commentExists){
                 return { success: false, error:'comment not found.'};
             }
+            
+            if(commentExists.isSpoiler == false){
+                return { success: false, error:'Post is already unspoiler.'};
+    
+            }
+            const postcheck=await Comment.findOne({_id:commentExists.postID})
+            const community = await Community.findOne({ moderatorsUsernames: { $in: [username] } ,communityName:postcheck.communityId});
+            if (commentExists.userID !== username && !community) {
+                return { success: false, error:'You are not authorized to mark this comment.'};
+             }
+             if(community){
+                typeOfUser="mod"
+             }
+            
+            commentExists.isSpoiler = false;
+            commentExists.save();
         }
         else{
             return { success: false, error:'type is not post or comment.'};
         }
+        await Spoiler.deleteOne({ entityId:entityId, markUsername:username});
+
+
             
-            user= await UserModel.findOne({username:username});
-            
-            if(!user){
-                return { success: false, error:'User not found.'};
-            }
-            
-            const combinedString = type + "/!" + entityId;
-            if( !user.hidePosts.includes(combinedString)){
-                return { success: false, error:' already unhide.'};
-            }
-           
-            await user.hidePosts.pull(combinedString);
-            await user.save();
-    
-        return { success: true, message: ' unhide successfully.' };
-     
+
+        return { success: true, message: ' unSpoiler successfully.' }; 
         }catch (error) {
-            console.error('Error get message:', error);
-            return { success: false, error: 'Failed to save.' };
+            console.error('Error to unspoil :', error);
+            return { success: false, error: 'Failed to unspoil.' };
         }
       },
      

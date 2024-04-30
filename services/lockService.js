@@ -92,7 +92,7 @@ const lockService = {
          return { success: false, error:'post already unlocked.'};
      }
     
-        let  lock= await Lock.findOne({ lockUsername: username });
+        let  lock= await Lock.findOne({ lockUsername: username,entityId:Id });
          if(!lock){
             return { success: false, error:'lock doesnt exists.'};
 

@@ -91,7 +91,7 @@ const nsfwService = {
         if(post.nsfw == false){
          return { success: false, error:'post already unmarked.'};
      }
-        let  Nsfw= await NSFW.findOne({ NsfwUsername: username });
+        let  Nsfw= await NSFW.findOne({ NsfwUsername: username,entityId:Id });
          if(!Nsfw){
             return { success: false, error:'NSFW doesnt exists.'};
 
