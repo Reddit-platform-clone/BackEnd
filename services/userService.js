@@ -81,6 +81,9 @@ singUp: async (username, email, password) => {
       userToken = jwt.sign({ username: newEntry.username }, process.env.SECRET_ACCESS_TOKEN);
       const newUser = new userModel(newEntry);
       await newUser.save();
+
+      const settings = { signedInWithGoogle: true };
+      await settingsModel.findOneAndUpdate({ username: username }, settings, { upsert: true })
       
       return { token: userToken };
     } catch (err) {
@@ -402,16 +405,23 @@ singUp: async (username, email, password) => {
   updatePrefs: async (username, settings) => {
     // logic to get update preferences
     userFields = ['email', 'password', 'gender', 'displayName', 'about', 'socialLinks', 'profilePicture', 'blockedUsers', 'mutedCommunities'];
-    profileSettings = {}
+    let profileSettings = {}
     for (let i in settings) {
       if (userFields.includes(i)) profileSettings[i] = settings[i];
     };
+
     
     const user = await userModel.findOne({ username: username });
     if (!user) throw new Error('User not found');
     
+    if (profileSettings.hasOwnProperty('email')) settings.signedInWithGoogle = false;
+    
+    if (settings.hasOwnProperty('oldPassword')) {
+      profileSettings.password = await utils.updatePassword(username, settings.oldPassword, settings.password)
+      console.log(settings.oldPassword, settings.password)
+    }
+    
     const userSettings = await settingsModel.findOneAndUpdate({ username: username }, settings, { new: true, upsert: true, runValidators: true });
-    console.log(profileSettings)
     const updatedProfile = await userModel.findOneAndUpdate({ username: username }, profileSettings, { new: true, upsert: true, runValidators: true })
 
     return { settings: userSettings, profile: updatedProfile };
