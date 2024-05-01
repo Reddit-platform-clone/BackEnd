@@ -80,6 +80,10 @@ const moderationController = {
 
     getUnmoderated: async (req, res) => {
         res.json({ message: 'unmoderated' })
+    },
+
+    getCommunityLandingPage: async (req, res) => {
+        res.status(200).json({ role: req.role });
     }
 };
 
