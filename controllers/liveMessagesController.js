@@ -96,9 +96,9 @@ const liveMessagesController = {
     else{
       username=req.user;
     }
-      const {reciptant} = req.body;
+      const {recipient} = req.body;
     
-        const inboxMessages = await messageService.getConverstaionId(username,reciptant);
+        const inboxMessages = await messageService.getConverstaionId(username,recipient);
        
         if (inboxMessages.success) {
          

@@ -152,21 +152,21 @@ if(!conversation){
   }
   },
 
-  getConverstaionId: async (sentUsername,reciptant) => {
+  getConverstaionId: async (sentUsername,recipient) => {
     
     try {
-      if(sentUsername==reciptant){
+      if(sentUsername==recipient){
         return { success: false, error:'User cannot send to himself.'};
       }
     const user = await UserModel.findOne({ username: sentUsername });
-    const rec = await UserModel.findOne({ username: reciptant });
+    const rec = await UserModel.findOne({ username: recipient });
     if (!rec||!user) {
      
       return { success: false, error:'User not found.'};
     }
    
     const check= await  Converstaion.findOne({
-      users: { $all: [sentUsername, reciptant] }
+      users: { $all: [sentUsername, recipient] }
     });
     console.log(check)
 if(!check){
