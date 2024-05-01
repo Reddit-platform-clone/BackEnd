@@ -11,6 +11,11 @@ const settingsSchema = new mongoose.Schema({
     contetnLanguage: String,
     localCustomization: String,
 
+    signedInWithGoogle: {
+        type: Boolean,
+        default: false
+    },
+
     optIntoBeta: {
         type: Boolean,
         default: false
