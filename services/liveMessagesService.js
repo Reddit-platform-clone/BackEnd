@@ -56,15 +56,16 @@ if(receiverSocketId || sendrSocketId){
 }
    
    
- 
-
-      const check= await  Converstaion.findOne({
-        users: { $all: [sender.username, receiver.username] }
+     check= await  Converstaion.findOne({
+        $or: [
+          { users: { $elemMatch: { $eq: sender.username, $eq: receiver.username } } },
+          { users: { $elemMatch: { $eq: receiver.username, $eq: sender.username } } }
+        ]
       });
     if(!check){
 
         const converstaion=new Converstaion(
-        {users:[receiver.username,sender.username],
+        {users:[sender.username,sender.username],
           messagesId: [message._id]
         
         
