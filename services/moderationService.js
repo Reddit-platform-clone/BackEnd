@@ -78,7 +78,16 @@ const moderationService = {
     },
 
     getUnmoderated: async (id) => {
-        // get items that have not yet been approved
+        // get items, that have not yet been approved
+    },
+
+    checkIfModerator: async (communityName, username) => {
+        const community = await communityModel.findOne({ communityName: communityName });
+        if (!community) throw new Error('Community  does not exist')
+
+        if (community.moderatorsUsernames.includes(username)) return 1;
+        if (community.members.includes(username)) return 0;
+        return -1;
     }
 };
 

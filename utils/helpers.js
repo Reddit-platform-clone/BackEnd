@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const axios = require('axios');
+const userModel = require('../models/userModel');
 
 const hashPassword = async (password) => {
   const hash = await bcrypt.hash(password, 10);
@@ -10,6 +11,19 @@ const validatePassword = async (password, hash) => {
   const compare = await bcrypt.compare(password, hash);
   return compare;
 };
+
+const updatePassword = async (username, oldPassword, newPassword) => {
+  const user = await userModel.findOne({ username: username });
+  const currentPassword = user.password;
+  const correctPassword = await validatePassword(oldPassword, currentPassword)
+  if (!correctPassword) throw new Error('incorrect password');
+  const newHashedPassword = await hashPassword(newPassword);
+  console.log(newPassword)
+  user.password = newHashedPassword;
+  await user.save();
+
+  return newHashedPassword;
+}
 
 function isValidEmail(email) {
   var pattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
@@ -39,4 +53,4 @@ const generateRandomUsername = () => {
   return username;
 }
 
-module.exports = { hashPassword, validatePassword, isValidEmail, verifyGoogleToken, generateRandomUsername };
+module.exports = { hashPassword, validatePassword, updatePassword, isValidEmail, verifyGoogleToken, generateRandomUsername };
