@@ -65,7 +65,7 @@ if(receiverSocketId || sendrSocketId){
     if(!check){
 
         const converstaion=new Converstaion(
-        {users:[sender.username,sender.username],
+        {users:[receiver.username,sender.username],
           messagesId: [message._id]
         
         
