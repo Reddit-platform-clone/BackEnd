@@ -164,6 +164,20 @@ const communityController = {
         }
     },
 
+    getCommunityInfoByName: async (req, res) => {
+        const { communityName } = req.params;
+        try {
+            const result = await communityService.getCommunityInfoByName(communityName)
+            if (result.success) {
+                return res.status(200).json({ success: true, data: result})
+            } else {
+                return res.status(400).json({ success: false, message: "Error in getting community info"});
+            }
+        } catch (error) {
+            res.status(500).json({ success: false, error: error.message });
+        }
+    },
+
     getRandomCommunities: async (req, res) => {
         try {
             const randomCommunities = await communityService.getRandomCommunities();
