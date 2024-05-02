@@ -33,7 +33,9 @@ const commentSchema = new mongoose.Schema({
     replyToID: {
         type: String,
         default: null
-    }
+    },
+    hashtags:{type:[String]},
+    mentions: {type: [String]}
 });
 commentSchema.index({ content: 'text'});
 

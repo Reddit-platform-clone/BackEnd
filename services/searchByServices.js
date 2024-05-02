@@ -1,4 +1,3 @@
-const sort = require('../models/searchByModel.js');
 const Post = require('../models/postModel.js');
 const User = require('../models/userModel.js');
 const Comment = require('../models/commentModel.js');
@@ -74,11 +73,19 @@ const searchByService = {
 
     async searchByHashtags(keyword) {
         try {
-            // Search for hashtags by name
-            const hashtagsResults = await Hashtag.find({
-                hashtagString: { $regex: keyword, $options: 'i' }
-            });
-
+            // Search for hashtags in posts
+            const hashPostsResults = await Post.find(
+                { hashtags: { $in: [keyword] } }
+            );
+    
+            // Search for hashtags in comments
+            const hashCommentsResults = await Comment.find(
+                { hashtags: { $in: [keyword] } }
+            );
+    
+            // Combine results
+            const hashtagsResults = hashPostsResults.concat(hashCommentsResults);
+    
             return hashtagsResults;
         } catch (error) {
             console.error("Error searching by hashtags:", error);

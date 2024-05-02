@@ -29,7 +29,9 @@ const postSchema = new mongoose.Schema({
         default: []  },
     flair:{  type: [String],
         default: []  }, 
-
+    
+    hashtags:{type: [String]},
+    mentions:{type:[String]}
 
 
 }, {timestamps: true});
