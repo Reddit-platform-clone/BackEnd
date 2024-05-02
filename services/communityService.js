@@ -195,6 +195,20 @@ const communityService = {
         } 
     }, 
 
+    getCommunityInfoByName: async (communityName) => {
+        try {
+            const community = await Community.findOne({communityName: communityName});
+            if (!community) {
+                throw new Error('Post not found');
+            }
+            console.log(community);
+
+            return { success: true, data: community}
+        } catch (error) {
+            throw new Error(`Error getting community info: ${error.message}`);
+        } 
+    }, 
+
     
 
     getRandomCommunities: async () => {
