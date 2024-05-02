@@ -36,21 +36,7 @@ const userAuth = {
             next();
         } catch (err) {
             res.status(403).json({ error: err.message });
-        }
-
-        // jwt.verify(token, process.env.SECRET_ACCESS_TOKEN, (err, user) => {
-        //     if (err) return res.sendStatus(403);
-        //     const isModerator = await moderationService.checkIfModerator(user);
-        //     if (isModerator == 1) {
-        //         req.role = 'moderator';
-        //         next();
-        //     }
-        //     if (isModerator == 0) {
-        //         req.role = 'moderator';
-        //         next();
-        //     }
-        //     req.role = 'not a member';
-        // });        
+        }      
     }
 }
 
