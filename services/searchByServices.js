@@ -1,4 +1,3 @@
-const sort = require('../models/searchByModel.js');
 const Post = require('../models/postModel.js');
 const User = require('../models/userModel.js');
 const Comment = require('../models/commentModel.js');
