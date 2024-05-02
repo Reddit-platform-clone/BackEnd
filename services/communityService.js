@@ -14,10 +14,13 @@ function shuffleArray(array){
 const communityService = {
     join: async (username, communityName) => {
         try {
+            console.log(communityName);
             const user = await User.findOne({ username: username });
             if (!user) {
                 return {success: false, error: 'user not found'};
             }
+
+            console.log(username);
 
             const community = await Community.findOne({ communityName: communityName });
             if(!community) {
@@ -91,7 +94,7 @@ const communityService = {
 
     create: async (username, communityData) => {
         
-        communityData.communityCategory = communityData.communityCategory.map(category => category.toLowerCase());
+        // communityData.communityCategory = communityData.communityCategory.map(category => category.toLowerCase());
         try {
 
             //const displayPicUpload = await cloudinary.uploader.upload(displayPic.path);
