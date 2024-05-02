@@ -49,8 +49,10 @@ const moderationService = {
         // logic to get recently edited posts
     },
 
-    getModeratedSubreddits: async (id) => {
+    getModeratedSubreddits: async (username) => {
         // logic to get all subreddits moderated by a moderator
+        const moderatedCommunities = await communityModel.find({ moderatorsUsernames: username });
+        return moderatedCommunities;
     },
 
     getBannedUsers: async (id) => {
