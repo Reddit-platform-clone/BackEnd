@@ -6,6 +6,13 @@ const path = require('path');
 const { swaggerUi, specs, router } = require('./swaggerConfig');
 const { app, server } = require("./utils/WebSockets");
 const fileupload = require('express-fileupload'); 
+const Agenda = require('agenda');
+
+
+(async () => {
+  await Agenda.start();
+  console.log('Agenda started');
+  });
 
 app.use(fileupload({useTempFiles: true}))
 
