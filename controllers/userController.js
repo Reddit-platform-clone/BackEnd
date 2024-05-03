@@ -341,7 +341,30 @@ const userController = {
     } catch (error) {
       res.status(500).json({message: error.message})
     }
+  },
+
+  viewPost: async (req, res) => {
+    try {
+      const username = req.params.username;
+      const postId = req.body.postId;
+
+      const result = await userService.viewPost(username, postId);
+      res.status(200).json({message : result});
+    } catch (error) {
+      res.status(500).json({message: error.message});
+    }
+  },
+
+  getRecentlyViewedPosts: async (req, res) => {
+    try {
+      let username =req.params.username;
+      const result = await userService.getRecentlyViewedPosts(username);
+      res.status(200).json({message : result});
+    } catch (error) {
+      res.status(500).json({message: error.message});
+    }
   }
+
 };
 
 module.exports = userController;

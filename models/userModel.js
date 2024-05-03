@@ -97,6 +97,11 @@ const userSchema = {
     default: []
   },
 
+  recentlyViewedPosts:{
+    type: [String],
+    default:[]
+  },
+
   resetPasswordToken: String,
   resetPasswordTokenExpires: Date
 };

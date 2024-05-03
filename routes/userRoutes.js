@@ -32,5 +32,9 @@ router.patch('/api/v1/me/prefs', authMiddleware.authorizeationToken, userControl
 
 router.post('/api/:username/savePost', userController.savePost);
 router.post('/api/:username/unSavePost', userController.unSavePost);
+router.post('/api/:username/viewPost', authMiddleware.authorizeationToken, userController.viewPost);
+
+router.get('/api/:username/recentlyViewedPosts',authMiddleware.authorizeationToken, userController.getRecentlyViewedPosts);
+
 
 module.exports = router;
