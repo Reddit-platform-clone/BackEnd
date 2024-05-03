@@ -20,7 +20,7 @@ const CreatePostController = {
                 console.log(result)
                 res.status(200).json({ message: result.message });
             } else {
-                res.status(400).json({ errors: result.errors, message: result.error });
+                res.status(400).json({ errors: result.error, message: result.error });
             }
         } catch (error) {
             console.error('Error composing message:', error);
