@@ -5,6 +5,8 @@ const { validationResult } = require('express-validator');
 const mongoose = require('mongoose');
 const UserModel= require('../models/userModel');
 const Mention=require('../models/mentionModel');
+const modqueue = require('../models/modqueueModel.js');
+
 const commentService = {
     postComment: async (data) => {
         
@@ -46,7 +48,17 @@ const commentService = {
        
         const comment = new Comment(data.commentData);
 
-       commentSave= await comment.save();
+       const commentSave= await comment.save();
+
+       try {
+        const parentPost = await Post.findById(commentSave.postID);
+        const modqueueItem = { communityName: parentPost.communityId, entityId: commentSave._id, type: 'comment', username: commentSave.userID, modStatus: 'unmoderated' };
+        const modqueueEntry = new modqueue(modqueueItem);
+        await modqueueEntry.save();
+    } catch (err) {
+        console.log(err.message);
+    }
+
     if(commentSave){
         
         const mentionRegex = /@(\w+)/g;
