@@ -4,6 +4,7 @@ const Community = require('../models/communityModel.js')
 const { v4: uuidv4 } = require('uuid'); // Import the uuid library
 const Mention=require('../models/mentionModel');
 const modqueue = require('../models/modqueueModel.js');
+const pushNotificationService = require('./notificationsService.js');
 
 const createPostService = {
     createPost: async (postData,username) => {
@@ -62,7 +63,10 @@ const createPostService = {
     
 
         }
-            
+
+        pushNotificationService.sendPushNotificationToToken('cLS-T5z6R3Kmn6F8AUnQc0:APA91bEJKlXeGRM8fcrCWyZ97gEieQLf_j2IPnKkzR_mIpelP_jAbIr53_CeH3UeaH7MtaWkR4zcIsi0YrkUd7TfADeIxqJPsNqRm4XDAeWwuO6iibCJF-3ktXUSCawuix-BodQlGF3j', 'Test', 'Joe trying notifications');
+        console.log('Notification sent');    
+
         return { success: true, message: `Post created succesfully` };
         } catch (error) {
             console.error("Error creating post:", error);
