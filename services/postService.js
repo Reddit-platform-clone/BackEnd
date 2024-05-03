@@ -66,4 +66,4 @@ const postService = {
     }
 }
 }
-module.exports=postService
+module.exports = postService;

@@ -442,6 +442,67 @@ singUp: async (username, email, password) => {
     user.save();
 
     return { message: 'Post unsaved successfully'};
+  },
+
+  viewPost: async (username, postId) => {
+    try {
+
+      if(!username || !postId){
+        return{success: false, message:'Enter username and postId'};
+      }
+      const user = await userModel.findOne({ username: username });
+      const post = await postModel.findById(postId);
+
+      if(!user){
+        return{success: false, message:'user does not exist'};
+      }
+
+      if(!post){
+        return{success: false, message:'post does not exist'};
+      }
+
+      const recentlyViewedPosts = user.recentlyViewedPosts;
+
+      //if post is already present in recently viewed, return
+      if(recentlyViewedPosts.includes(postId))
+      {
+        return{success: true, message:'post already in recently viewed'};
+      }
+
+      recentlyViewedPosts.push(postId);
+    
+      if (user.recentlyViewedPosts.length > 50) {
+          // If exceeds, remove the oldest entry
+          user.recentlyViewedPosts.shift();
+      }
+      await user.save();
+      return { message: 'Post saved to recently viewed successfully' };
+      } 
+      catch (error) {
+        console.error('Error viewing post:', error);
+        throw new Error('Failed to save post to recently viewed');
+      }
+  },
+
+  getRecentlyViewedPosts: async (Username) => {
+    try {
+        const user = await userModel.findOne({ username: Username });
+        if (!user) {
+          return{success: false, message: 'User not found'};
+        }
+        const postIds = user.recentlyViewedPosts;
+        const posts = await postModel.find({ _id: { $in: postIds } });
+
+        // Sort the posts based on their order in the recentlyViewedPosts array
+        const result = postIds.map(postId => posts.find(post => post._id.toString() === postId));
+
+        //let postsIds = user.recentlyViewedPosts;
+        //result = await postModel.find({ _id: { $in: postsIds } });
+        return {result};
+    } catch (error) {
+        console.error('Error retrieving recently viewed posts:', error);
+        throw new Error('Failed to retrieve recently viewed posts');
+    }
   }
 };
 
