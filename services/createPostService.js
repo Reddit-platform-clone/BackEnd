@@ -17,7 +17,7 @@ const createPostService = {
             const community = await Community.findOne({communityName:postData.communityId })
            if(!community)
            { 
-            return { success: false, error: `community is not exists.` };
+            return { success: false, error: `community does not exists.` };
         }
         postData.username=username
         const newPost = new Post(postData);
