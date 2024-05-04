@@ -62,15 +62,46 @@ const moderationController = {
     },
 
     getBannedUsers: async (req, res) => {
-        res.json({ message: 'banned users' })
+        try {
+            if (req.role != 'moderator') {    
+                res.status(403).json({ message: 'moderator only page' }); 
+                return;
+            }            
+            const communityName = req.params.subreddit;
+            const result = await moderationService.getBannedUsers(communityName);
+            res.status(200).json(result);
+        } catch (err) {
+            res.status(400).json({ message: err.message});
+        }
     },
 
     getMutedUsers: async (req, res) => {
-        res.json({ message: 'muted users' })
+        try {
+            if (req.role != 'moderator') {    
+                res.status(403).json({ message: 'moderator only page' }); 
+                return;
+            }
+            const communityName = req.params.subreddit;
+            const result = await moderationService.getMutedUsers(communityName);
+            res.status(200).json(result);
+        } catch (err) {
+            res.status(400).json({ message: err.message});
+        }
     },
 
     getModerators: async (req, res) => {
-        res.json({ message: 'moderators' })
+        try {
+            if (req.role === 'not logged in') {    
+                res.status(403).json({ message: 'user has to be logged in' }); 
+                return;
+            }
+            const communityName = req.params.subreddit;
+            const result = await moderationService.getModerators(communityName);
+            res.status(200).json(result);
+        } catch (err) {
+            res.status(400).json({ message: err.message});
+        }
+
     },
 
     getReported: async (req, res) => {

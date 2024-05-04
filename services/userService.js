@@ -504,6 +504,13 @@ singUp: async (username, email, password) => {
         console.error('Error retrieving recently viewed posts:', error);
         throw new Error('Failed to retrieve recently viewed posts');
     }
+  },
+
+  deleteUser: async (username) => {
+    const user = await userModel.findOneAndDelete({ username: username });
+    if(!user) throw new Error('No user found');
+
+    return { message: 'User deleted successfully' };
   }
 };
 
