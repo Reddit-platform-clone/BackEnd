@@ -511,6 +511,22 @@ singUp: async (username, email, password) => {
     if(!user) throw new Error('No user found');
 
     return { message: 'User deleted successfully' };
+  },
+
+  getUpvotedIds: async (username) => {
+    const user = await userModel.findOne({ username: username });
+    if (!user) throw new Error ('User does not exist');
+
+    const upvotedPostsIds = await Vote.find({ username: username, rank: 1, type: 'post' }, 'entityId -_id');
+    return { upvotedPostsIds: upvotedPostsIds };    
+  },
+
+  getDownvotedIds: async (username) => {
+    const user = await userModel.findOne({ username: username });
+    if (!user) throw new Error ('User does not exist');
+
+    const downvotedPostsIds = await Vote.find({ username: username, rank: -1, type: 'post' }, 'entityId -_id');
+    return { downvotedPostsIds: downvotedPostsIds };    
   }
 };
 

@@ -37,5 +37,7 @@ router.post('/api/:username/viewPost', authMiddleware.authorizeationToken, userC
 
 router.get('/api/:username/recentlyViewedPosts',authMiddleware.authorizeationToken, userController.getRecentlyViewedPosts);
 
+router.get('/api/user/:username/upvotedids', authMiddleware.authorizeationToken, userController.upvotedPostsIds);
+router.get('/api/user/:username/downvotedids', authMiddleware.authorizeationToken, userController.downvotedPostsIds);
 
 module.exports = router;
