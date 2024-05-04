@@ -495,7 +495,7 @@ singUp: async (username, email, password) => {
         const posts = await postModel.find({ _id: { $in: postIds } });
 
         // Sort the posts based on their order in the recentlyViewedPosts array
-        const result = postIds.map(postId => posts.find(post => post._id === postId));
+        const result = postIds.map(postId => posts.find(post => post._id.toString() === postId));
 
         //let postsIds = user.recentlyViewedPosts;
         //result = await postModel.find({ _id: { $in: postsIds } });
