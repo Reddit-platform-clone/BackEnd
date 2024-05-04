@@ -29,6 +29,7 @@ router.get('/api/user/:username/downvoted', authMiddleware.authorizeationToken, 
 router.get('/api/v1/me', authMiddleware.authorizeationToken, userController.getUserIdentity);
 router.get('/api/v1/me/prefs', authMiddleware.authorizeationToken, userController.getPrefs);
 router.patch('/api/v1/me/prefs', authMiddleware.authorizeationToken, userController.updatePrefs);
+router.delete('/api/v1/me/delete_profile', authMiddleware.authorizeationToken, userController.deleteUser);
 
 router.post('/api/:username/savePost', userController.savePost);
 router.post('/api/:username/unSavePost', userController.unSavePost);
