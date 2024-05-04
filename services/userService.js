@@ -495,7 +495,7 @@ singUp: async (username, email, password) => {
         const posts = await postModel.find({ _id: { $in: postIds } });
 
         // Sort the posts based on their order in the recentlyViewedPosts array
-        const result = postIds.map(postId => posts.find(post => post._id.toString() === postId));
+        const result = postIds.map(postId => posts.find(post => post._id === postId));
 
         //let postsIds = user.recentlyViewedPosts;
         //result = await postModel.find({ _id: { $in: postsIds } });
@@ -504,6 +504,29 @@ singUp: async (username, email, password) => {
         console.error('Error retrieving recently viewed posts:', error);
         throw new Error('Failed to retrieve recently viewed posts');
     }
+  },
+
+  deleteUser: async (username) => {
+    const user = await userModel.findOneAndDelete({ username: username });
+    if(!user) throw new Error('No user found');
+
+    return { message: 'User deleted successfully' };
+  },
+
+  getUpvotedIds: async (username) => {
+    const user = await userModel.findOne({ username: username });
+    if (!user) throw new Error ('User does not exist');
+
+    const upvotedPostsIds = await Vote.find({ username: username, rank: 1, type: 'post' }, 'entityId -_id');
+    return { upvotedPostsIds: upvotedPostsIds };    
+  },
+
+  getDownvotedIds: async (username) => {
+    const user = await userModel.findOne({ username: username });
+    if (!user) throw new Error ('User does not exist');
+
+    const downvotedPostsIds = await Vote.find({ username: username, rank: -1, type: 'post' }, 'entityId -_id');
+    return { downvotedPostsIds: downvotedPostsIds };    
   }
 };
 

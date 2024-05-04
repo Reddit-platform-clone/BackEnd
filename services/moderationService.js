@@ -1,4 +1,5 @@
 const communityModel = require('../models/communityModel.js');
+const modqueue = require('../models/modqueueModel.js');
 
 const moderationService = {
     approve: async (id) => {
@@ -55,16 +56,28 @@ const moderationService = {
         return moderatedCommunities;
     },
 
-    getBannedUsers: async (id) => {
+    getBannedUsers: async (communityName) => {
         // logic to get all banned users from a subreddit
+        const community = await communityModel.findOne({ communityName: communityName });
+        if (!community) throw new Error('Community not found');
+
+        return { bannedUsers: community.banned };
     },
 
-    getMutedUsers: async (id) => {
+    getMutedUsers: async (communityName) => {
         // logic to get all muted users in a subreddit
+        const community = await communityModel.findOne({ communityName: communityName });
+        if (!community) throw new Error('Community not found');
+
+        return { mutedUsers: community.muted };
     },
 
-    getModerators: async (id) => {
+    getModerators: async (communityName) => {
         // logic to get all moderators of a subreddit
+        const community = await communityModel.findOne({ communityName: communityName });
+        if (!community) throw new Error('Community not found');
+
+        return { moderators: community.moderatorsUsernames };
     },
 
     getReported: async (id) => {
