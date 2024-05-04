@@ -15,12 +15,16 @@ const CreatePostController = {
                 username=req.user;
             }
 
-            const mediaFile = req.files.media;
-            const mediaFileUpload = await cloudinary.uploader.upload(mediaFile.tempFilePath);
-
             const postData = req.body;
-            postData.media = mediaFileUpload.secure_url;
-           
+            
+            if(!req.files || !req.files.media) {
+                console.log("Post created has no media");
+            } else {
+                const mediaFile = req.files.media;
+                const mediaFileUpload = await cloudinary.uploader.upload(mediaFile.tempFilePath);
+                postData.media = mediaFileUpload.secure_url;
+            }
+
             const result = await postService.createPost(postData,username); 
             if (result.success) {
                 console.log(result)
