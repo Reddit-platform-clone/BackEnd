@@ -48,9 +48,6 @@ const communityController = {
         }
 
         try {
-            if (!req.files.displayPic || !req.files.backgroundPic) {
-                return res.status(400).json({ message: 'Display picture and background picture are required' });
-            }
 
             const displayPicFile = req.files.displayPic;
             const backgroundPicFile = req.files.backgroundPic;
