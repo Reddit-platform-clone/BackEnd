@@ -374,6 +374,26 @@ const userController = {
     } catch (err) {
       res.status(400).json({ message: err.message });
     }
+  },
+
+  upvotedPostsIds: async (req, res) => {
+    try {
+      const username = req.user.username;
+      const result = await userService.getUpvotedIds(username);
+      res.status(200).json(result);
+    } catch (err) {
+      res.status(400).json({ message: err.message });
+    }
+  },
+
+  downvotedPostsIds: async (req, res) => {
+    try {
+      const username = req.user.username;
+      const result = await userService.getDownvotedIds(username);
+      res.status(200).json(result);
+    } catch (err) {
+      res.status(400).json({ message: err.message });
+    }
   }
 };
 

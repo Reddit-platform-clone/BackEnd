@@ -9,7 +9,8 @@ const editService = {
 
     editUserText: async (username,data) => {
         
-        const errors = validationResult(data);
+        
+        
         if (!errors.isEmpty()) {
             
             return { success: false, errors: errors.array() };
@@ -47,7 +48,7 @@ const editService = {
         if(!post){
             return { success: false, error: 'post does not exist.' };
         }
-        if(post.userID !== username ){
+        if(post.username !== username ){
             return { success: false, error: 'user  not authorized.' };
         }
         await Post.updateOne(
