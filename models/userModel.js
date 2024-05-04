@@ -26,7 +26,6 @@ const userSchema = {
 
   profilePicture: {
     type: String,
-    default: 'soora gamda fashkh'
   },
 
   profileBanner: String,

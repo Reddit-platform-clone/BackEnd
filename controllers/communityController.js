@@ -2,7 +2,9 @@ const communityService = require('../services/communityService.js');
 const multer = require('multer');
 const upload = multer({ dest: 'uploads/' }); // Destination folder for uploaded files
 const cloudinary = require('cloudinary').v2;
+const dotenv = require('dotenv')
 
+dotenv.config()
 
 const communityController = {
     listCommunities: async (req, res) => {
@@ -33,6 +35,16 @@ const communityController = {
         }
     },
 
+    updateCommunityDisplayPic: async (req, res) => {
+        try {
+            if (!req.files || !req.files.displayPic) {
+                return res.status(400).json({message: result.message});
+            }
+        } catch (error) {
+            res.status(500).json({error: error.message});
+        }
+    },
+
     createCommunity: async (req, res) => {
         console.log('**********');
         console.log(req.files.displayPic)
@@ -48,22 +60,23 @@ const communityController = {
         }
 
         try {
-            if (!req.files.displayPic || !req.files.backgroundPic) {
-                return res.status(400).json({ message: 'Display picture and background picture are required' });
+            if (!req.files || !req.files.displayPic) {
+                console.log('Community display picture not set');
+                communityData.displayPic = process.env.DEFAULT_PIC;
+            } else {
+                const displayPicFile = req.files.displayPic;
+                const displayPicUpload = await cloudinary.uploader.upload(displayPicFile.tempFilePath);
+                communityData.displayPic = displayPicUpload.secure_url;
             }
 
-            const displayPicFile = req.files.displayPic;
-            const backgroundPicFile = req.files.backgroundPic;
-            console.log(displayPicFile);
-
-            // Upload display picture to Cloudinary
-            const displayPicUpload = await cloudinary.uploader.upload(displayPicFile.tempFilePath);
-            console.log(displayPicUpload);
-            communityData.displayPicUrl = displayPicUpload.secure_url;
-
-            // Upload background picture to Cloudinary
-            const backgroundPicUpload = await cloudinary.uploader.upload(backgroundPicFile.tempFilePath);
-            communityData.backgroundPicUrl = backgroundPicUpload.secure_url;
+            if(!req.files || !req.files.backgroundPic) {
+                console.log('Community background pic not set');
+                communityData.backgroundPic = process.env.DEFAULT_BACKGROUND;
+            } else {
+                const backgroundPicFile = req.files.backgroundPic;
+                const backgroundPicUpload = await cloudinary.uploader.upload(backgroundPicFile.tempFilePath);
+                communityData.backgroundPic = backgroundPicUpload.secure_url;
+            }
 
             const result = await communityService.create(username, communityData)
             if(result.success) {

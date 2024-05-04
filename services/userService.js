@@ -36,17 +36,17 @@ const userService = {
   return { token: token };
 },
 
-singUp: async (username, email, password) => {
+singUp: async (username, email, password, profilePictureUpload) => {
   // logic to register new users
     const userExists = await userModel.findOne({ username: username });
-    if (userExists) throw new Error('invalid username or password');
+    if (userExists) throw new Error('Username already taken');
 
     const emailExists = await userModel.findOne({ email: email });
     if (emailExists) throw new Error ('this email is already linked to an account')
 
     // const hashedPassword = await bcrypt.hash(password, 10);
     const hashedPassword = await utils.hashPassword(password);
-    const userData = { username: username, password: hashedPassword, email: email };
+    const userData = { username: username, password: hashedPassword, email: email, profilePicture: profilePictureUpload };
 
     const token = jwt.sign({ username: userData.username }, process.env.SECRET_ACCESS_TOKEN);
 

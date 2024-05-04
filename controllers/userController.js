@@ -1,6 +1,11 @@
 const userService = require('../services/userService');
 const utils = require('../utils/helpers.js');
 const mail = require('../utils/mailHandler.js');
+const multer = require('multer');
+const cloudinary = require('cloudinary').v2;
+const dotenv = require('dotenv');
+
+dotenv.config()
 
 const userController = {
   logIn: async (req, res) => {
@@ -22,9 +27,20 @@ const userController = {
   },
 
   singUp: async (req, res) => {
+    let profilePic ="";
     try {
       try {
         const { username, email, password } = req.body;
+
+        if (!req.files || !req.files.profilePic) {
+          console.log("No profile picture uploaded");
+          profilePic = process.env.DEFAULT_PIC
+        } else {
+          const profilePicFile = req.files.profilePic
+          const profilePictureUpload = await cloudinary.uploader.upload(profilePicFile.tempFilePath);
+          profilePic = profilePictureUpload.secure_url;
+        }
+
         if (!username || !password || !email) {
           res.status(400).send('missing username or email or password');
           return;
@@ -35,7 +51,7 @@ const userController = {
           return;
         }
 
-        const result = await userService.singUp(username, email, password);
+        const result = await userService.singUp(username, email, password, profilePic);
         res.status(200).json(result);
       } catch (error) {
         res.status(400).json({ message: error.message });

@@ -11,8 +11,8 @@ const communitySchema = new mongoose.Schema({
     muted: { type: [String], default: [] },
     moderatorsUsernames: { type:[String], required:true },
     members: { type: [String], default: [] },
-    displayPicUrl: {type: String},
-    backgroundPicUrl: {type: String},
+    displayPic: {type: String},
+    backgroundPic: {type: String},
     posts: {type: [mongoose.Schema.Types.ObjectId], ref: 'post'},
     communityCategory: {type:[String], required: true}
 }, { strict: 'throw', timestamps: true });
