@@ -1,37 +1,21 @@
-
-
-const Notification = require('../models/notificationsModel.js');
+const User = require('../models/userModel.js');
 
 const notificationService = {
-    thread: async (post) => {
-        // Logic for thread notification
+    getDeviceToken: async (username, deviceToken) => {
+        try {
+            let user = await User.findOne({username: username})
+            if (!user) {
+                throw new Error('User not found');
+            }
 
-        // return thread notification
-    },
-
-    create: async (post) => {
-        // Logic for create notification
-
-        // return create notification
-    },
-
-    edit: async (post) => {
-        // Logic for edit notification
-
-        // return edit notification
-    },
-
-    update: async (post) => {
-        // Logic for update notification
-
-        // return update notification
-    },
-
-    close_thread: async (post) => {
-        // Logic for close_thread notification
-
-        // return close_thread
+            user.deviceToken = deviceToken;
+            await user.save();
+            
+            return {success: true, message: 'Device token added successfully'}
+        } catch (error) {
+            return {success: false, message: error.message};
+        }
     }
-};
+}
 
 module.exports = notificationService;
