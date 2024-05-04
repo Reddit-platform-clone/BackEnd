@@ -98,7 +98,7 @@ const userSchema = {
   },
 
   recentlyViewedPosts:{
-    type: [String],
+    type: [mongoose.Schema.Types.ObjectId],
     default:[]
   },
 

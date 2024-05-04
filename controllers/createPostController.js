@@ -42,10 +42,8 @@ const CreatePostController = {
             if (result.success) {
                 console.log(result)
                 res.status(200).json({ message: result.message });
-            } 
-            else 
-            {
-                res.status(400).json({ errors: result.errors, message: result.error });
+            } else {
+                res.status(400).json({ errors: result.error, message: result.error });
             }
         } 
         catch (error) 

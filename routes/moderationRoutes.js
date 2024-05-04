@@ -16,7 +16,7 @@ router.post(('/r/:subreddit/api/upload_sr_icon'), moderationController.uploadSub
 
 router.get(('/api/r/:subreddit'), authMiddleware.checkUserRole, moderationController.getCommunityLandingPage);
 router.get(('/api/r/:subreddit/about/edited'), moderationController.getRecentlyEditedPosts);
-router.get(('/api/subreddits/mine/moderator'), moderationController.getModeratedSubreddits);
+router.get(('/api/subreddits/mine/moderator'), authMiddleware.authorizeationToken, moderationController.getModeratedSubreddits);
 router.get(('/api/r/:subreddit/about/banned'), moderationController.getBannedUsers);
 router.get(('/api/r/:subreddit/about/muted'), moderationController.getMutedUsers);
 router.get(('/api/r/:subreddit/about/moderators'), moderationController.getModerators);

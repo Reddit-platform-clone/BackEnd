@@ -3,6 +3,8 @@ const User = require('../models/userModel');
 const Community = require('../models/communityModel.js')
 const { v4: uuidv4 } = require('uuid'); // Import the uuid library
 const Mention=require('../models/mentionModel');
+const modqueue = require('../models/modqueueModel.js');
+
 const createPostService = {
     createPost: async (postData,username) => {
         try {
@@ -20,6 +22,14 @@ const createPostService = {
         postData.username=username
         const newPost = new Post(postData);
         const savedPost = await newPost.save();
+
+        try {
+            const modqueueItem = { communityName: postData.communityId, entityId: savedPost._id, type: 'post', username: username, modStatus: 'unmoderated' };
+            const modqueueEntry = new modqueue(modqueueItem);
+            await modqueueEntry.save();
+        } catch (err) {
+            console.log(err.message);
+        }
 
         community.posts.push(savedPost._id)
         await community.save()

@@ -34,6 +34,9 @@ const communityController = {
     },
 
     createCommunity: async (req, res) => {
+        console.log('**********');
+        console.log(req.files.displayPic)
+        console.log('**********');
         const communityData = req.body;
         console.log(communityData.communityName)
         let username = req.user;
@@ -86,8 +89,8 @@ const communityController = {
             username = req.user;
         }
 
-        console.log(username)
-        console.log(communityName);
+        // console.log(username)
+        // console.log(communityName);
 
         try{
             const result = await communityService.join(username, communityName);

@@ -255,11 +255,12 @@ singUp: async (username, email, password) => {
     // logic to get user details
     const user = await userModel.findOne({ username: username });
     if (!user) throw new Error('User does not exist');
-
+    const following  = userModel.find({ followers: username });
     return{ 
       username: user.username,
       profilePicture: user.profilePicture,
       follwers: user.followers,
+      following: following,
       about: user.about,
       gender: user.gender,
       links: user.socialLinks,

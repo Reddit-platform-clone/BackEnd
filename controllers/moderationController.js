@@ -51,7 +51,14 @@ const moderationController = {
     },
 
     getModeratedSubreddits: async (req, res) => {
-        res.json({ message: 'moderated subreddits' })
+        try {
+            const username = req.user.username;
+            const result = await moderationService.getModeratedSubreddits(username);
+
+            res.status(200).json(result);
+        } catch (err) {
+            res.status(400).json({ message: err.message });
+        }
     },
 
     getBannedUsers: async (req, res) => {

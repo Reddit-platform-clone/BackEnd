@@ -8,6 +8,7 @@ const communitySchema = new mongoose.Schema({
     description: {type: String},
     rules: { type: [String], default: [] },
     banned: { type: [String], default: [] },
+    muted: { type: [String], default: [] },
     moderatorsUsernames: { type:[String], required:true },
     members: { type: [String], default: [] },
     displayPicUrl: {type: String},

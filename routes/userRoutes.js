@@ -19,10 +19,10 @@ router.delete('/api/v1/me/friends/:username', authMiddleware.authorizeationToken
 router.get('/api/v1/me/friends/:username', authMiddleware.authorizeationToken, userController.getFriendInfo);
 router.get('/api/username_available/:username', userController.checkUsernameAvailability);
 
-router.get('/api/user/:username/about', authMiddleware.authorizeationToken, userController.getUserAbout);
-router.get('/api/user/:username/overview', authMiddleware.authorizeationToken, userController.getUserOverview);
-router.get('/api/user/:username/submitted', authMiddleware.authorizeationToken, userController.getUserSubmitted);
-router.get('/api/user/:username/comments', authMiddleware.authorizeationToken, userController.getUserComments);
+router.get('/api/user/:username/about', userController.getUserAbout);
+router.get('/api/user/:username/overview', userController.getUserOverview);
+router.get('/api/user/:username/submitted', userController.getUserSubmitted);
+router.get('/api/user/:username/comments', userController.getUserComments);
 router.get('/api/user/:username/upvoted', authMiddleware.authorizeationToken, userController.getUserUpvoted);
 router.get('/api/user/:username/downvoted', authMiddleware.authorizeationToken, userController.getUserDownvoted);
 
