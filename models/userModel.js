@@ -102,6 +102,10 @@ const userSchema = {
     default:[]
   },
 
+  deviceToken: {
+    type: String
+  },
+
   resetPasswordToken: String,
   resetPasswordTokenExpires: Date
 };
