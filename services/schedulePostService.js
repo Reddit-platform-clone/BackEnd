@@ -1,14 +1,13 @@
 const Agenda = require('agenda');
 const mongoose = require('mongoose');
 const createPostService = require('./createPostService'); // Import your createPost service
-
-const agenda = new Agenda({ mongo: mongoose.connection });
+const agenda = require('../server').agenda;
 
 // Define the job outside of schedulePost
-agenda.define('createPost', async job => {
-    const { postData, username } = job.attrs.data; // Destructure postData and username from job data
-    await createPostService.createPost(postData, username);
-});
+//agenda.define('createPost', async job => {
+  //  const { postData, username } = job.attrs.data; // Destructure postData and username from job data
+    //await createPostService.createPost(postData, username);
+//});
 
 const schedulePostService = {
     schedulePost: async (postData, username, scheduledTime) => {
