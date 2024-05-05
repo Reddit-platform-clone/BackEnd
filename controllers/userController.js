@@ -361,7 +361,7 @@ const userController = {
 
   viewPost: async (req, res) => {
     try {
-      const username = req.params.username;
+      const username = req.user.username;
       const postId = req.body.postId;
 
       const result = await userService.viewPost(username, postId);
@@ -373,7 +373,7 @@ const userController = {
 
   getRecentlyViewedPosts: async (req, res) => {
     try {
-      let username =req.params.username;
+      let username =req.user.username;
       const result = await userService.getRecentlyViewedPosts(username);
       res.status(200).json({message : result});
     } catch (error) {
