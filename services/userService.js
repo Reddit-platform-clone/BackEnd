@@ -526,6 +526,21 @@ singUp: async (username, email, password, profilePictureUpload) => {
     const user = await userModel.findOneAndDelete({ username: username });
     if(!user) throw new Error('No user found');
 
+    await Communities.updateMany(
+      { $or: [{ members: username }, { moderatorsUsernames: username }] },
+      { $pull: { members: username, moderatorsUsernames: username } }
+    );
+
+    await Post.updateMany(
+      { username: username },
+      { $set: { username: 'DELETED' } }
+    );
+
+    await commentModel.updateMany(
+      { userID: username },
+      { $set: { userID: 'DELETED' } }
+    );
+
     return { message: 'User deleted successfully' };
   },
 
