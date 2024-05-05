@@ -56,6 +56,22 @@ singUp: async (username, email, password, profilePictureUpload) => {
     return { token: token };
   },
 
+  updatePic: async (username, profilePic) => {
+    try {
+      const userExists = await userModel.findOne({username: username})
+      if (!userExists) {
+        throw new Error("User doesn't exist");
+      }
+
+      userExists.profilePicture = profilePic;
+      await userExists.save()
+      
+      return {success: true, message: "Profile picture updated successfully"}
+    } catch (error) {
+      return {success: false, message: error.message}
+    }
+  },
+
   verifyToken: async (token) => {
     try {
       userData = await utils.verifyGoogleToken(token);
@@ -509,6 +525,21 @@ singUp: async (username, email, password, profilePictureUpload) => {
   deleteUser: async (username) => {
     const user = await userModel.findOneAndDelete({ username: username });
     if(!user) throw new Error('No user found');
+
+    await Communities.updateMany(
+      { $or: [{ members: username }, { moderatorsUsernames: username }] },
+      { $pull: { members: username, moderatorsUsernames: username } }
+    );
+
+    await Post.updateMany(
+      { username: username },
+      { $set: { username: 'DELETED' } }
+    );
+
+    await commentModel.updateMany(
+      { userID: username },
+      { $set: { userID: 'DELETED' } }
+    );
 
     return { message: 'User deleted successfully' };
   },

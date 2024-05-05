@@ -26,6 +26,28 @@ const userController = {
     }
   },
 
+  updateProfilePic: async (req, res) => {
+    try {
+      let {username} = req.user;
+      console.log(username)
+
+      if (!req.files || !req.files.profilePic) {
+        res.status(400).json({message: "profile picture not provided"});
+      }
+
+      let profilePicFile = req.files.profilePic;
+      let profilePicUpload = await cloudinary.uploader.upload(profilePicFile.tempFilePath);
+
+      const result = await userService.updatePic(username, profilePicUpload.secure_url);
+
+      if (result.success) {
+        res.status(200).json({message: result.message});
+      }
+    } catch (error) {
+      res.status(500).json({message: error.message})
+    }
+  },
+
   singUp: async (req, res) => {
     let profilePic ="";
     try {

@@ -40,15 +40,48 @@ const communityController = {
             if (!req.files || !req.files.displayPic) {
                 return res.status(400).json({message: result.message});
             }
+
+            const {communityName} = req.body;
+            console.log(communityName)
+            const displayPicFile = req.files.displayPic;
+            console.log(displayPicFile)
+            const displayPicUpload = await cloudinary.uploader.upload(displayPicFile.tempFilePath);
+            const result = await communityService.updateDisplayPic(communityName, displayPicUpload.secure_url)
+            console.log(result)
+            if(result.success) {
+                return res.status(200).json({message: "Updated community display picture successfully"})
+            } else {
+                return res.status(400).json({message: result.message})
+            }
         } catch (error) {
+            console.error("Error updating community display pic", error)
             res.status(500).json({error: error.message});
         }
     },
 
+    updateCommunityBackgroundPic: async (req, res) => {
+        try {
+            if (!req.files || !req.files.backgroundPic) {
+                return res.status(400).json({ message: "Background picture not provided" });
+            }
+    
+            const { communityName } = req.body;
+            const backgroundPicFile = req.files.backgroundPic;
+            const backgroundPicUpload = await cloudinary.uploader.upload(backgroundPicFile.tempFilePath);
+            const result = await communityService.updateBackgroundPic(communityName, backgroundPicUpload.secure_url);
+    
+            if (result.success) {
+                return res.status(200).json({ message: "Updated community background picture successfully" });
+            } else {
+                return res.status(400).json({ message: result.message });
+            }
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    },
+    
+
     createCommunity: async (req, res) => {
-        console.log('**********');
-        console.log(req.files.displayPic)
-        console.log('**********');
         const communityData = req.body;
         console.log(communityData.communityName)
         let username = req.user;

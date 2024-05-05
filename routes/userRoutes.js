@@ -33,6 +33,8 @@ router.delete('/api/v1/me/delete_profile', authMiddleware.authorizeationToken, u
 
 router.post('/api/:username/savePost', userController.savePost);
 router.post('/api/:username/unSavePost', userController.unSavePost);
+
+router.post('/api/user/updatePic', authMiddleware.authorizeationToken, userController.updateProfilePic);
 router.post('/api/viewPost', authMiddleware.authorizeationToken, userController.viewPost);
 
 router.get('/api/recentlyViewedPosts',authMiddleware.authorizeationToken, userController.getRecentlyViewedPosts);

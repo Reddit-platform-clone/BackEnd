@@ -7,9 +7,14 @@ const UserModel = require('../models/userModel');
 const mongoose = require('mongoose');
 const { getReceiverSocketId, io } = require("../utils/WebSockets");
 const Mention=require('../models/mentionModel');
+const pushNotificationService = require('./notificationsService.js');
 const messageService = {
   composeMessage: async (messageData) => {
     try {
+      
+      if(!messageData.title){
+        return { success: false, errors: "title cant be null" };
+      }
      
       const errors = validationResult(messageData);
       if (!errors.isEmpty()) {
@@ -30,7 +35,7 @@ const messageService = {
       
       return { success: false, error: `Sender  does not exist.` };
   }
-
+  
 
 if ((sender.blockedUsers && sender.blockedUsers.includes(receiver.username)) || 
 (receiver.blockedUsers && receiver.blockedUsers.includes(sender.username))) {
@@ -47,6 +52,9 @@ if (receiverSocketId) {
     const message = new Message(messageData);
 
     await message.save();
+    const notificationMessage = `${username}: ${messageData.title}`;
+    pushNotificationService.sendPushNotificationToToken(receiver.deviceToken, 'Sarakel',notificationMessage )
+
 
       
 

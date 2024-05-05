@@ -2,6 +2,7 @@ const Community = require('../models/communityModel.js');
 const User = require('../models/userModel.js');
 const Post = require('../models/postModel.js')
 const cloudinary = require('../utils/cloudinary.js'); 
+const pushNotificationService = require('./notificationsService.js');
 
 function shuffleArray(array){
     for(let i = array.length - 1; i > 0; i--) {
@@ -96,27 +97,60 @@ const communityService = {
         
         // communityData.communityCategory = communityData.communityCategory.map(category => category.toLowerCase());
         try {
-
+            const user = await User.findOneAndUpdate({username: username}, { $push: { joinedCommunities: communityData.communityName } });
+            if (!user) throw new Error('User does not exist');
             //const displayPicUpload = await cloudinary.uploader.upload(displayPic.path);
             //communityData.displayPicUrl = displayPic
 
             // const backgroundPicUpload = await cloudinary.uploader.upload(backgroundPic.path);
             // communityData.backgroundPicUrl = backgroundPic
-
-            console.log(communityData)
             const existingCommunity = await Community.findOne({ communityName: communityData.communityName })
             if (existingCommunity) {
                 return { success: false, message: 'Community name already exists' };
             }
-
+            console.log(user.username, user.joinedCommunities)
+            communityData.moderatorsUsernames = [username];
             const newCommunity = new Community(communityData);
             await newCommunity.save();
 
+            pushNotificationService.sendPushNotificationToToken(user.deviceToken, 'Sarakel', 'New community created successfully')
             return { success: true, message: 'Community created successfully'};
         } catch (error) {
             return { success: false, message: error.message };
         }
-    }, 
+    },
+    
+    updateDisplayPic: async (communityName, displayPic) => {
+        try {
+            console.log(communityName)
+            const existingCommunity = await Community.findOne({communityName: communityName});
+            console.log(existingCommunity)
+            if (!existingCommunity) {
+                return {success: false, message: "Community does not exist"};
+            }
+
+            existingCommunity.displayPic = displayPic;
+            await existingCommunity.save();
+            return { success: true, message: "Updated community display successfully"};
+        } catch (error) {
+            return {success: false, message: error.message};
+        }
+    },
+
+    updateBackgroundPic: async (communityName, backgroundPic) => {
+        try {
+            const existingCommunity = await Community.findOne({communityName: communityName});
+            if (!existingCommunity) {
+                return {success: false, message: "Community does not exist"};
+            }
+
+            existingCommunity.backgroundPic = backgroundPic;
+            await existingCommunity.save();
+            return { success: true, message: "Updated community background successfully"};
+        } catch (error) {
+            return {success: false, message: error.message};
+        }
+    },
 
     commuintyPosts: async(communityName) => {
         try {
