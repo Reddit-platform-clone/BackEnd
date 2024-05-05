@@ -211,6 +211,21 @@ const userController = {
     }
   },
 
+  unblockUser: async (req, res) => {
+    try {
+      const { usernameToUnblock } = req.body;
+      if (!usernameToUnblock) { 
+        res.status(400).send('missing username to unblock'); 
+        return; 
+      }
+      const username = req.user.username;
+      const result = await userService.unblockUser(username, usernameToUnblock);
+      res.status(200).json(result);
+    } catch (err) {
+      res.status(400).json({ message: err.message });
+    }
+  },
+
   createRelationship: async (req, res) => {
     res.json({ message: 'relationship created' });
   },
