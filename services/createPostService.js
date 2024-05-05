@@ -10,7 +10,7 @@ const createPostService = {
     createPost: async (postData,username) => {
         try {
 
-            console.log(username)
+            
             if(!postData.title || !postData.communityId){
                 return { success: false, error: `title or communityId is null.` };
             }
@@ -22,7 +22,7 @@ const createPostService = {
         }
 
         const user = await User.findOne({username: username})
-        console.log(user)
+        
         postData.username = user.username
         const newPost = new Post(postData);
         const savedPost = await newPost.save();
@@ -41,21 +41,41 @@ const createPostService = {
             const mentionRegex = /@(\w+)/g;
         
             const mentions =postData.content.match(mentionRegex);
-            const savedmention=[]
+            let savedmention=[];
+            let  userNotMentioned=[];
             if (mentions) {
                 let mentiondata=mentions.map(mention => mention.substring(1));
+               
                 
                 for (const checkUser of mentiondata){
                     const userChecker= await User.findOne({username:checkUser})
                     if (userChecker){
+                        
+                        if(checkUser == username){
+                            userNotMentioned.push(checkUser);
+                            continue;
+                        }
+                        if((user.blockedUsers && user.blockedUsers.includes(checkUser.username)) || 
+                        (checkUser.blockedUsers && checkUser.blockedUsers.includes(user.username))){
+                            userNotMentioned.push(checkUser);
+                            continue;
+                        }
                         const mention = new Mention({ mentionedBy:username,mentioned:checkUser,type:"post",entityId:savedPost._id });
                         
                         mention.save();
                         savedmention.push(checkUser);
+                        const notificationMessage = `${username}: Mentioned you in a post`;
+                        pushNotificationService.sendPushNotificationToToken(userChecker.deviceToken, 'Sarakel',notificationMessage )
+                      
                         
                     }
                 }
-                if (savedmention.length === mentiondata.length) {
+              
+                
+                 if(!userNotMentioned || !userNotMentioned.length == 0){
+                    return { success: true,message: "Post sent, but the following users were not mentioned(because block or trying to mention yourself): " + userNotMentioned.join(", ") }
+                }
+                else if (savedmention.length === mentiondata.length) {
                     return { success: true, message: 'post sent successfully with mentions.' };
                 }
                 else{
