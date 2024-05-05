@@ -97,20 +97,19 @@ const communityService = {
         
         // communityData.communityCategory = communityData.communityCategory.map(category => category.toLowerCase());
         try {
-
-            const user = await User.findOne({username: username});
+            const user = await User.findOneAndUpdate({username: username}, { $push: { joinedCommunities: communityData.communityName } });
+            if (!user) throw new Error('User does not exist');
             //const displayPicUpload = await cloudinary.uploader.upload(displayPic.path);
             //communityData.displayPicUrl = displayPic
 
             // const backgroundPicUpload = await cloudinary.uploader.upload(backgroundPic.path);
             // communityData.backgroundPicUrl = backgroundPic
-
-            console.log(communityData)
             const existingCommunity = await Community.findOne({ communityName: communityData.communityName })
             if (existingCommunity) {
                 return { success: false, message: 'Community name already exists' };
             }
-
+            console.log(user.username, user.joinedCommunities)
+            communityData.moderatorsUsernames = [username];
             const newCommunity = new Community(communityData);
             await newCommunity.save();
 
