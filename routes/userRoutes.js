@@ -13,6 +13,7 @@ router.post('/api/login/forget_username', userController.logInForgetUsername);
 router.patch('/api/login/reset_username/:token', userController.resetUsername);
 
 router.post('/api/block_user', authMiddleware.authorizeationToken, userController.blockUser);
+router.post('/api/unblock_user', authMiddleware.authorizeationToken, userController.unblockUser);
 router.post('/api/report_user', authMiddleware.authorizeationToken, userController.reportUser);
 router.delete('/api/v1/me/friends/:username', authMiddleware.authorizeationToken, userController.removeFriend);
 

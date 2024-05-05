@@ -233,6 +233,17 @@ singUp: async (username, email, password, profilePictureUpload) => {
     return { message: 'User blocked successfully' };
   },
 
+  unblockUser: async (username, usernameToUnblock) => {
+    // logic to unblock user
+    const user = await userModel.findOne({ username: username });
+    if (!user) throw new Error('User does not exist');
+
+    if(!user.blockedUsers.includes(usernameToUnblock)) throw new Error('User is not blocked');
+    user.blockedUsers.pull(usernameToUnblock)
+    await user.save();
+    return { message: 'User unblocked successfully' };
+  },
+
   getFriendInfo: async (username, friendUsername) => {
     // logic to get user info
     const user = await userModel.findOne({ username: username });
