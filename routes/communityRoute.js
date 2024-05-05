@@ -21,6 +21,7 @@ router.get('/api/user/:username/communitiesJoined', userAuthentication.authorize
 router.get('/api/community/:postId/getCommunityInfo', communityController.getCommunityInfo);
 router.get('/api/community/:communityName/getCommunityInfoByName', communityController.getCommunityInfoByName);
 router.get('/api/community/getRandomCommunities', userAuthentication.authorizeationToken, communityController.getRandomCommunities);
+router.get('/api/community/getTopCommunities', userAuthentication.authorizeationToken, communityController.getTopCommunities);
 
 module.exports = router;
 

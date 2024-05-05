@@ -81,7 +81,7 @@ const communityService = {
             let query = {};
             if (category !== null) {
                 category = category.toLowerCase();
-                query = { communityCategory: category }; // Filter communities by category if provided
+                query = { category: {$in: communityCategory} }; // Filter communities by category if provided
             }
     
             const communities = await Community.find(query);
@@ -255,7 +255,18 @@ const communityService = {
             console.error('Error fetching communities', error);
             throw new Error('Failed to fetch communities');
         }
+    },
+
+    getTopCommunities: async () => {
+        try {
+            const topCommunities = await Community.find().sort({ members: -1 }).limit(20);
+            return topCommunities;
+        } catch (error) {
+            console.error('Error fetching top communities:', error);
+            throw new Error('Failed to fetch top communities');
+        }
     }
+    
 };
 
 module.exports = communityService;

@@ -9,18 +9,22 @@ const editService = {
 
     editUserText: async (username,data) => {
         
-        
-        
-        if (!errors.isEmpty()) {
-            
-            return { success: false, errors: errors.array() };
+        if(!data.type | !data.entityId){
+            return { success: false, errors:'entityId,type cant be empty'};
         }
+        
+        // if (!errors.isEmpty()) {
+           
+        //     return { success: false, errors: errors.array() };
+        // }
         
         if (data.type != 'comment' && data.type != 'post'){
+            
             return { success: false, error: 'type is not comment or post.' };
         }
-        const senderExists = await UserModel.exists({ username: username });
         
+        const senderExists = await UserModel.exists({ username: username });
+       
         
         if ( !senderExists) {
           return { success: false, error: 'user does not exist.' };
