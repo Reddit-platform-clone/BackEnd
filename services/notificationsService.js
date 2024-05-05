@@ -36,8 +36,25 @@ async function sendPushNotificationToTopic(topic, title, body) {
     }
 }
 
+async function getDeviceToken(username, deviceToken) {
+    try {
+        let user = await User.findOne({username: username})
+        if (!user) {
+            throw new Error('User not found');
+        }
+
+        user.deviceToken = deviceToken;
+        await user.save();
+        
+        return {success: true, message: 'Device token added successfully'}
+    } catch (error) {
+        return {success: false, message: error.message};
+    }
+}
+
 // Export the functions for use in other files
 module.exports = {
     sendPushNotificationToToken,
-    sendPushNotificationToTopic
+    sendPushNotificationToTopic,
+    getDeviceToken
 };
