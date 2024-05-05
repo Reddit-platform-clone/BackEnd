@@ -2,6 +2,7 @@ const Community = require('../models/communityModel.js');
 const User = require('../models/userModel.js');
 const Post = require('../models/postModel.js')
 const cloudinary = require('../utils/cloudinary.js'); 
+const pushNotificationService = require('./notificationsService.js');
 
 function shuffleArray(array){
     for(let i = array.length - 1; i > 0; i--) {
@@ -97,6 +98,7 @@ const communityService = {
         // communityData.communityCategory = communityData.communityCategory.map(category => category.toLowerCase());
         try {
 
+            const user = await User.findOne({username: username});
             //const displayPicUpload = await cloudinary.uploader.upload(displayPic.path);
             //communityData.displayPicUrl = displayPic
 
@@ -112,6 +114,7 @@ const communityService = {
             const newCommunity = new Community(communityData);
             await newCommunity.save();
 
+            pushNotificationService.sendPushNotificationToToken(user.deviceToken, 'Sarakel', 'New community created successfully')
             return { success: true, message: 'Community created successfully'};
         } catch (error) {
             return { success: false, message: error.message };
