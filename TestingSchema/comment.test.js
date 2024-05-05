@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Comment = require('../models/commentModel');
+const { ObjectId } = mongoose.Types;
 require('dotenv').config();
 
 
@@ -17,10 +18,11 @@ describe('Comment Model Test', () => {
   it('should be able to insert a comment into the database', async () => {
     const commentData = {
       
-      postID: 'post123',
+      postID: new ObjectId(),
       userID: 'user456',
       dateTime: new Date(),
-      upvote: 5
+      upvote: 5,
+      content: "Er7amni ya zyad"
     };
 
     const comment = new Comment(commentData);
@@ -37,25 +39,31 @@ describe('Comment Model Test', () => {
   it('should be able to retrieve all comments from the database', async () => {
     const commentData1 = {
      
-      postID: 'post123',
+      postID: new ObjectId,
       userID: 'user456',
       dateTime: new Date(),
-      upvote: 5
+      upvote: 5,
+      content: "er7amni ya zyad ba2a"
     };
 
     const commentData2 = {
-      commentID: '67890',
-      postID: 'post456',
+      commentID: new ObjectId(),
+      postID: new ObjectId(),
       userID: 'user789',
       dateTime: new Date(),
-      upvote: 3
+      upvote: 3,
+      content: "er7amni ya zyad tani"
     };
 
     await Comment.create(commentData1);
     await Comment.create(commentData2);
 
-    const comments = await Comment.find({});
-    expect(comments.length).toBe(2);
+    const postIDs = [commentData1.postID, commentData2.postID]; // Array of post IDs
+
+    const createdComments = await Comment.find({ postID: { $in: postIDs } });
+    const numberOfComments = createdComments.length;
+
+    expect(numberOfComments).toBe(2);
   }, 20000);
 });
 
