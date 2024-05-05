@@ -225,6 +225,15 @@ const communityService = {
         }
     },
 
+    getTopCommunities: async () => {
+        try {
+            const topCommunities = await Community.find().sort({ members: -1 }).limit(20);
+            return topCommunities;
+        } catch (error) {
+            console.error('Error fetching top communities:', error);
+            throw new Error('Failed to fetch top communities');
+        }
+    }
     
 };
 
