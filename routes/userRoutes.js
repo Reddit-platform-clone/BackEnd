@@ -34,6 +34,7 @@ router.delete('/api/v1/me/delete_profile', authMiddleware.authorizeationToken, u
 router.post('/api/:username/savePost', userController.savePost);
 router.post('/api/:username/unSavePost', userController.unSavePost);
 router.post('/api/:username/viewPost', authMiddleware.authorizeationToken, userController.viewPost);
+router.post('/api/user/updatePic', authMiddleware.authorizeationToken, userController.updateProfilePic);
 
 router.get('/api/:username/recentlyViewedPosts',authMiddleware.authorizeationToken, userController.getRecentlyViewedPosts);
 

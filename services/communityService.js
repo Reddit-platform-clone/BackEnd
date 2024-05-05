@@ -116,7 +116,39 @@ const communityService = {
         } catch (error) {
             return { success: false, message: error.message };
         }
-    }, 
+    },
+    
+    updateDisplayPic: async (communityName, displayPic) => {
+        try {
+            console.log(communityName)
+            const existingCommunity = await Community.findOne({communityName: communityName});
+            console.log(existingCommunity)
+            if (!existingCommunity) {
+                return {success: false, message: "Community does not exist"};
+            }
+
+            existingCommunity.displayPic = displayPic;
+            await existingCommunity.save();
+            return { success: true, message: "Updated community display successfully"};
+        } catch (error) {
+            return {success: false, message: error.message};
+        }
+    },
+
+    updateBackgroundPic: async (communityName, backgroundPic) => {
+        try {
+            const existingCommunity = await Community.findOne({communityName: communityName});
+            if (!existingCommunity) {
+                return {success: false, message: "Community does not exist"};
+            }
+
+            existingCommunity.backgroundPic = backgroundPic;
+            await existingCommunity.save();
+            return { success: true, message: "Updated community background successfully"};
+        } catch (error) {
+            return {success: false, message: error.message};
+        }
+    },
 
     commuintyPosts: async(communityName) => {
         try {

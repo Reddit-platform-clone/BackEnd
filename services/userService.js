@@ -56,6 +56,22 @@ singUp: async (username, email, password, profilePictureUpload) => {
     return { token: token };
   },
 
+  updatePic: async (username, profilePic) => {
+    try {
+      const userExists = await userModel.findOne({username: username})
+      if (!userExists) {
+        throw new Error("User doesn't exist");
+      }
+
+      userExists.profilePicture = profilePic;
+      await userExists.save()
+      
+      return {success: true, message: "Profile picture updated successfully"}
+    } catch (error) {
+      return {success: false, message: error.message}
+    }
+  },
+
   verifyToken: async (token) => {
     try {
       userData = await utils.verifyGoogleToken(token);
