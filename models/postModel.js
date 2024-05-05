@@ -5,7 +5,7 @@ const postSchema = new mongoose.Schema({
     content: { type: String },
     title: {type: String, required: true},
     username: {type: String, required: true},
-    media: {type: JSON},
+    media: {type: String},
     downvotes: {type: Number,default:0},
     communityId: {type: String, required: true},
     upvotes: {type: Number,default:0},

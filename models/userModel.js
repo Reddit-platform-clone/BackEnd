@@ -26,7 +26,6 @@ const userSchema = {
 
   profilePicture: {
     type: String,
-    default: 'soora gamda fashkh'
   },
 
   profileBanner: String,
@@ -98,7 +97,7 @@ const userSchema = {
   },
 
   recentlyViewedPosts:{
-    type: [mongoose.Schema.Types.ObjectId],
+    type: [String],
     default:[]
   },
 
