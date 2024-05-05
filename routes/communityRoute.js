@@ -15,7 +15,7 @@ router.post('/api/community/updateDisplayPic', userAuthentication.authorizeation
 router.post('/api/community/updateBackground', userAuthentication.authorizeationToken, communityController.updateCommunityBackgroundPic);
 
 router.get('/api/community/list', userAuthentication.authorizeationToken, communityController.listCommunities);
-router.get('/api/community/:communityName/getPosts', userAuthentication.authorizeationToken, communityController.communityPosts)
+router.get('/api/community/:communityName/getPosts', communityController.communityPosts)
 router.get('/api/user/:userId/communitiesNotJoined', userAuthentication.authorizeationToken, communityController.listCommunitiesNotJoined);
 router.get('/api/user/:username/communitiesJoined', userAuthentication.authorizeationToken, communityController.listCommunitiesJoined);
 router.get('/api/community/:postId/getCommunityInfo', communityController.getCommunityInfo);
