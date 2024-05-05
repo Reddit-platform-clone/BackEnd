@@ -24,3 +24,26 @@
 // };
 
 // module.exports = notificationContoller;
+
+const notificationService = require('../services/notificationsService.js')
+
+const notificationContoller = {
+    getDeviceToken: async (req, res) => {
+        let {username} = req.user;
+        let {deviceToken} = req.body;
+
+        try {
+            const result = await notificationService.getDeviceToken(username, deviceToken);
+            if (result.success) {
+                res.status(200).json({message: result.message});
+            } else {
+                res.status(400).json({message: result.message});
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            res.status(500).json({error: error.message})
+        }
+    }
+}
+
+module.exports = notificationContoller;
