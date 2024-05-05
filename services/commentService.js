@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 const UserModel= require('../models/userModel');
 const Mention=require('../models/mentionModel');
 const modqueue = require('../models/modqueueModel.js');
-
+const pushNotificationService = require('./notificationsService.js');
 const commentService = {
     postComment: async (data) => {
         
@@ -24,7 +24,7 @@ const commentService = {
        }
       
        
-        const senderExists = await UserModel.exists({ username: data.username });
+        const senderExists = await UserModel.findOne({ username: data.username });
         
         if (!senderExists) {
       
@@ -64,21 +64,39 @@ const commentService = {
         const mentionRegex = /@(\w+)/g;
         
         const mentions =data.commentData.content.match(mentionRegex);
-        const savedmention=[]
+        let savedmention=[]
+        let userNotMentioned=[]
         if (mentions) {
             let mentiondata=mentions.map(mention => mention.substring(1));
             
             for (const checkUser of mentiondata){
                 const userChecker= await UserModel.findOne({username:checkUser})
+     
                 if (userChecker){
+                   
+                    if(checkUser == data.username){
+                        userNotMentioned.push(checkUser);
+                        continue;
+                    }
+                    if((senderExists.blockedUsers && senderExists.blockedUsers.includes(checkUser)) || 
+                    (userChecker.blockedUsers && userChecker.blockedUsers.includes(senderExists.username))){
+                        userNotMentioned.push(checkUser);
+                        continue;
+                    }
                     const mention = new Mention({ mentionedBy:data.username,mentioned:checkUser,type:"comment",entityId:comment._id });
                     
                     mention.save();
                     savedmention.push(checkUser);
+                    const notificationMessage = `${senderExists.username}: Mentioned you in a post`;
+                    pushNotificationService.sendPushNotificationToToken(userChecker.deviceToken, 'Sarakel',notificationMessage )
+                  
                     
                 }
             }
-            if (savedmention.length === mentiondata.length) {
+            if(!userNotMentioned || !userNotMentioned.length == 0){
+                return { success: true,message: "Post sent, but the following users were not mentioned(because block or trying to mention yourself): " + userNotMentioned.join(", ") }
+            }
+           else if (savedmention.length === mentiondata.length) {
                 return { success: true, message: 'comment sent successfully with mentions.' };
             }
             else{

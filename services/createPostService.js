@@ -55,8 +55,8 @@ const createPostService = {
                             userNotMentioned.push(checkUser);
                             continue;
                         }
-                        if((user.blockedUsers && user.blockedUsers.includes(checkUser.username)) || 
-                        (checkUser.blockedUsers && checkUser.blockedUsers.includes(user.username))){
+                        if((user.blockedUsers && user.blockedUsers.includes(checkUser)) || 
+                        (userChecker.blockedUsers && userChecker.blockedUsers.includes(user.username))){
                             userNotMentioned.push(checkUser);
                             continue;
                         }
