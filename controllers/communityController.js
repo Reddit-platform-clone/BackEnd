@@ -82,9 +82,6 @@ const communityController = {
     
 
     createCommunity: async (req, res) => {
-        console.log('**********');
-        console.log(req.files.displayPic)
-        console.log('**********');
         const communityData = req.body;
         console.log(communityData.communityName)
         let username = req.user;
