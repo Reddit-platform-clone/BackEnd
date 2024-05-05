@@ -201,6 +201,15 @@ const communityController = {
         } catch (error) {
             res.status(500).json({success: false, error: error.message})
         }
+    },
+
+    getTopCommunities: async (req, res) => {
+        try {
+            const topCommunities = await communityService.getTopCommunities();
+            res.json({success: true, data: topCommunities});
+        } catch (error) {
+            res.status(500).json({success: false, error: error.message})
+        }
     }
 }
 
