@@ -1,4 +1,5 @@
 const admin = require('../utils/notificationsAdmin.js'); // Import initialized admin object
+const User = require('../models/userModel.js')
 
 // Function to send push notification to a single FCM token
 async function sendPushNotificationToToken(token, title, body) {

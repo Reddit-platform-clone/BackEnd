@@ -9,23 +9,26 @@ const pushNotificationService = require('./notificationsService.js');
 const createPostService = {
     createPost: async (postData,username) => {
         try {
-            
+
+            console.log(username)
             if(!postData.title || !postData.communityId){
                 return { success: false, error: `title or communityId is null.` };
             }
 
-
             const community = await Community.findOne({communityName:postData.communityId })
            if(!community)
            { 
-            return { success: false, error: `community is not exists.` };
+            return { success: false, error: `community does not exists.` };
         }
-        postData.username=username
+
+        const user = await User.findOne({username: username})
+        console.log(user)
+        postData.username = user.username
         const newPost = new Post(postData);
         const savedPost = await newPost.save();
 
         try {
-            const modqueueItem = { communityName: postData.communityId, entityId: savedPost._id, type: 'post', username: username, modStatus: 'unmoderated' };
+            const modqueueItem = { communityName: postData.communityId, entityId: savedPost._id, type: 'post', username: user.username, modStatus: 'unmoderated' };
             const modqueueEntry = new modqueue(modqueueItem);
             await modqueueEntry.save();
         } catch (err) {
@@ -64,7 +67,7 @@ const createPostService = {
 
         }
 
-        pushNotificationService.sendPushNotificationToToken('cLS-T5z6R3Kmn6F8AUnQc0:APA91bEJKlXeGRM8fcrCWyZ97gEieQLf_j2IPnKkzR_mIpelP_jAbIr53_CeH3UeaH7MtaWkR4zcIsi0YrkUd7TfADeIxqJPsNqRm4XDAeWwuO6iibCJF-3ktXUSCawuix-BodQlGF3j', 'Test', 'Joe trying notifications');
+        pushNotificationService.sendPushNotificationToToken(user.deviceToken, 'Sarakel', 'New post created successfully');
         console.log('Notification sent');    
 
         return { success: true, message: `Post created succesfully` };
