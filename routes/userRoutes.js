@@ -13,6 +13,7 @@ router.post('/api/login/forget_username', userController.logInForgetUsername);
 router.patch('/api/login/reset_username/:token', userController.resetUsername);
 
 router.post('/api/block_user', authMiddleware.authorizeationToken, userController.blockUser);
+router.post('/api/unblock_user', authMiddleware.authorizeationToken, userController.unblockUser);
 router.post('/api/report_user', authMiddleware.authorizeationToken, userController.reportUser);
 router.delete('/api/v1/me/friends/:username', authMiddleware.authorizeationToken, userController.removeFriend);
 
@@ -33,10 +34,11 @@ router.delete('/api/v1/me/delete_profile', authMiddleware.authorizeationToken, u
 
 router.post('/api/:username/savePost', userController.savePost);
 router.post('/api/:username/unSavePost', userController.unSavePost);
-router.post('/api/:username/viewPost', authMiddleware.authorizeationToken, userController.viewPost);
-router.post('/api/user/updatePic', authMiddleware.authorizeationToken, userController.updateProfilePic);
 
-router.get('/api/:username/recentlyViewedPosts',authMiddleware.authorizeationToken, userController.getRecentlyViewedPosts);
+router.post('/api/user/updatePic', authMiddleware.authorizeationToken, userController.updateProfilePic);
+router.post('/api/viewPost', authMiddleware.authorizeationToken, userController.viewPost);
+
+router.get('/api/recentlyViewedPosts',authMiddleware.authorizeationToken, userController.getRecentlyViewedPosts);
 
 router.get('/api/user/:username/upvotedids', authMiddleware.authorizeationToken, userController.upvotedPostsIds);
 router.get('/api/user/:username/downvotedids', authMiddleware.authorizeationToken, userController.downvotedPostsIds);

@@ -211,6 +211,21 @@ const userController = {
     }
   },
 
+  unblockUser: async (req, res) => {
+    try {
+      const { usernameToUnblock } = req.body;
+      if (!usernameToUnblock) { 
+        res.status(400).send('missing username to unblock'); 
+        return; 
+      }
+      const username = req.user.username;
+      const result = await userService.unblockUser(username, usernameToUnblock);
+      res.status(200).json(result);
+    } catch (err) {
+      res.status(400).json({ message: err.message });
+    }
+  },
+
   createRelationship: async (req, res) => {
     res.json({ message: 'relationship created' });
   },
@@ -383,7 +398,7 @@ const userController = {
 
   viewPost: async (req, res) => {
     try {
-      const username = req.params.username;
+      const username = req.user.username;
       const postId = req.body.postId;
 
       const result = await userService.viewPost(username, postId);
@@ -395,7 +410,7 @@ const userController = {
 
   getRecentlyViewedPosts: async (req, res) => {
     try {
-      let username =req.params.username;
+      let username =req.user.username;
       const result = await userService.getRecentlyViewedPosts(username);
       res.status(200).json({message : result});
     } catch (error) {
