@@ -105,6 +105,11 @@ const userSchema = {
     type: String
   },
 
+  modInvitations: { 
+    type: [String],
+    default: []
+  },
+
   resetPasswordToken: String,
   resetPasswordTokenExpires: Date
 };
