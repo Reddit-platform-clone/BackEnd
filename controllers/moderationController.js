@@ -13,8 +13,29 @@ const moderationController = {
         res.json({ message: 'shown' })
     },
 
+    inviteToMod: async (req, res) => {
+        try {
+            const mod = req.user.username;
+            const invitee = req.params.username;
+            const communityName = req.params.subreddit;
+
+            const result = await moderationService.inviteToModeration(mod, invitee, communityName)
+            res.status(200).json(result)
+        } catch (err) {
+            res.status(400).json({ message: err.message });
+        }
+    },
+
     acceptModeratorInvite: async (req, res) => {
-        res.json({ message: 'accepted' })
+        try {   
+            const username = req.user.username;
+            const communityName = req.params.subreddit;
+            
+            const result = await moderationService.acceptModeratorInvite(username, communityName);
+            res.status(200).json(result);
+        } catch (err) {
+            res.status(400).json({ message: err.message });
+        }
     },
 
     leaveModerator: async (req, res) => {
