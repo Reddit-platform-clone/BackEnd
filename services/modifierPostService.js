@@ -18,9 +18,9 @@ class CommentService {
       
 
 
-        const commentCounts = await Comment.aggregate([
+        let commentCounts = await Comment.aggregate([
             {
-                $match: { postID: { $in: postIdsString } } 
+                $match: { postID: { $in: postIdsString.map(id => mongoose.Types.ObjectId(id)) } } 
             },
             {
                 $group: {
@@ -29,6 +29,8 @@ class CommentService {
                 }
             }
         ]);
+        
+      
 
       
        
@@ -39,7 +41,7 @@ class CommentService {
 
 class CommunityService {
     static async findCommunitiesByPosts(posts) {
-        const communityIds = posts.map(post => post.communityId);
+        let communityIds = posts.map(post => post.communityId);
         return await Community.find({communityName: {$in: communityIds}});
     }
 }
@@ -54,25 +56,28 @@ class PostWithExtras {
 }
 
 async function enrichPostsWithExtras(entityIds) {
-    const posts = await PostService.findPostsByIds(entityIds);
-    const postIds = posts.map(post => post._id);
+  
+    let posts = await PostService.findPostsByIds(entityIds);
+    let postIds = posts.map(post => post._id);
 
-    const comments = await CommentService.countCommentsByPostIds(postIds);
-    const commentsMap = new Map(comments.map(({ _id, count }) => [String(_id), count]));
+    let comments = await CommentService.countCommentsByPostIds(postIds);
+    let commentsMap = new Map(comments.map(({ _id, count }) => [String(_id), count]));
+    
 
-    const communities = await CommunityService.findCommunitiesByPosts(posts);
-    const communityMap = new Map(communities.map(community => [community.communityName, community]));
+    let communities = await CommunityService.findCommunitiesByPosts(posts);
+    let communityMap = new Map(communities.map(community => [community.communityName, community]));
 
-    const postsWithExtras = posts.map(post => {
-        const numComments = commentsMap.get(String(post._id));
-        const community = communityMap.get(post.communityId);
-        const communityPic = community ? community.displayPic : null;
-        const communityDesc = community ? community.description : null;
-        console.log(numComments);
+    let postsWithExtras = posts.map(post => {
+        let numComments = commentsMap.get(String(post._id));
+        let community = communityMap.get(post.communityId);
+        let communityPic = community ? community.displayPic : null;
+        let communityDesc = community ? community.description : null;
+        
         return new PostWithExtras(post.toObject(), numComments, communityPic, communityDesc);
     });
     
 
     return postsWithExtras;
 }
+
 module.exports = enrichPostsWithExtras
