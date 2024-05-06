@@ -20,19 +20,21 @@ const userAuth = {
         // get user role
         const header = req.headers['authorization'];
         const token = header && header.split(' ')[1];
+        let user;
         if (token == null) {
-            req.role = 'not logged in'
+            user = { username: 'guest', role: 'not logged in' }
+            req.user = user;
             return next();
         }
 
         try {
-            const user = jwt.verify(token, process.env.SECRET_ACCESS_TOKEN);
+            user = jwt.verify(token, process.env.SECRET_ACCESS_TOKEN);
             // console.log(username)
             const isModerator = await moderationService.checkIfModerator(req.params.subreddit, user.username);
-            if (isModerator === 1) req.role = 'moderator';
-            if (isModerator === 0) req.role = 'member';
-            if (isModerator === -1) req.role = 'not a member';
-            
+            if (isModerator === 1) user.role = 'moderator';
+            if (isModerator === 0) user.role = 'member';
+            if (isModerator === -1) user.role = 'not a member';
+            req.user = user;
             next();
         } catch (err) {
             res.status(403).json({ error: err.message });

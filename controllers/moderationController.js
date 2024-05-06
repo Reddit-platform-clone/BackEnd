@@ -84,7 +84,7 @@ const moderationController = {
 
     getBannedUsers: async (req, res) => {
         try {
-            if (req.role != 'moderator') {    
+            if (req.user.role != 'moderator') {    
                 res.status(403).json({ message: 'moderator only page' }); 
                 return;
             }            
@@ -98,7 +98,7 @@ const moderationController = {
 
     getMutedUsers: async (req, res) => {
         try {
-            if (req.role != 'moderator') {    
+            if (req.user.role != 'moderator') {    
                 res.status(403).json({ message: 'moderator only page' }); 
                 return;
             }
@@ -112,7 +112,7 @@ const moderationController = {
 
     getModerators: async (req, res) => {
         try {
-            if (req.role === 'not logged in') {    
+            if (req.user.role === 'not logged in') {    
                 res.status(403).json({ message: 'user has to be logged in' }); 
                 return;
             }
@@ -142,7 +142,7 @@ const moderationController = {
     },
 
     getCommunityLandingPage: async (req, res) => {
-        res.status(200).json({ role: req.role });
+        res.status(200).json({ role: req.user.role });
     }
 };
 
