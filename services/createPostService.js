@@ -1,7 +1,6 @@
 const Post = require('../models/postModel');
 const User = require('../models/userModel');
 const Community = require('../models/communityModel.js')
-const { v4: uuidv4 } = require('uuid'); // Import the uuid library
 const Mention=require('../models/mentionModel');
 const modqueue = require('../models/modqueueModel.js');
 const pushNotificationService = require('./notificationsService.js');

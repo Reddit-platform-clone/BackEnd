@@ -6,6 +6,7 @@ const { validationResult } = require('express-validator');
 const UserModel = require('../models/userModel'); 
 const mongoose = require('mongoose');
 const { getReceiverSocketId, io } = require("../utils/WebSockets");
+const pushNotificationService = require('./notificationsService.js');
 const liveMessagesService = {
   composeMessage: async (messageData) => {
     try {
@@ -53,6 +54,12 @@ await message.save();
 if(receiverSocketId || sendrSocketId){
   io.to(receiverSocketId).emit("newMessage", message);
   io.to(sendrSocketId).emit("newMessage", message);
+}
+else{
+  const notificationMessage = `${username}: ${messageData.content}`;
+  pushNotificationService.sendPushNotificationToToken(receiver.deviceToken, 'Sarakel',notificationMessage )
+
+
 }
    
    
