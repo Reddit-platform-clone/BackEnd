@@ -226,7 +226,14 @@ const moderationService = {
         return -1;
     },
 
-    // editCommunity: async ()
+    editCommunity: async (communityName, updatedData) => {
+        try {
+            const community = await communityModel.findOneAndUpdate({ communityName: communityName }, updatedData, { new: true, upsert: true });
+            return { updatedCommunityData: community };
+        } catch (err) {
+            return { message: err.message };
+        }
+    }
 };
 
 module.exports = moderationService;
