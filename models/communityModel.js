@@ -7,6 +7,7 @@ const communitySchema = new mongoose.Schema({
     isNSFW: { type: Boolean, default: false },
     description: {type: String},
     rules: { type: [String], default: [] },
+    removalReasons: { type: [String], default: [] },
     banned: { type: [String], default: [] },
     muted: { type: [String], default: [] },
     moderatorsUsernames: { type:[String], required:true },
