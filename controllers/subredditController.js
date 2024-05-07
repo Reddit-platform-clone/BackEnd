@@ -31,10 +31,12 @@ const subredditController = {
 
     getNewPost: async (req, res) => {
         try {
-            const newPost = await subredditService.getNew();
-            res.json({ succes: true, data: newPost });
+            const page = req.query.page || 1;
+            const limit = req.query.limit || 10;
+            const newPost = await subredditService.getNew(page, limit);
+            res.json({ success: true, data: newPost });
         } catch (err) {
-            res.status(500).json({  success: false, error: err.message })
+            res.status(500).json({ success: false, error: err.message });
         }
     },
 

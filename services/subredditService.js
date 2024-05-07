@@ -67,23 +67,31 @@ const subredditService = {
         }
     },
 
-    getNew: async () => {
-        // Logic to get new post
+    getNew: async (page = 1, limit = 10) => {
         try {
-            // Fetch posts from the database
-            const posts = await Post.find();
-            const postIds = posts.map(post => post._id);
-            console.log(postIds)
-            let postWithExtraAttributes = await enrichPostsWithExtras(postIds)
-            
-            postWithExtraAttributes.sort((a,b) => b.createdAt - a.createdAt);
+            // Ensure that limit is parsed as a number
+            limit = parseInt(limit, 10);
 
-            return postWithExtraAttributes;
+            // Calculate the skip value based on the page and limit
+            const skip = (page - 1) * limit;
+
+            // Fetch posts from the database with pagination
+            const posts = await Post.find().sort({ createdAt: -1 }).skip(skip).limit(limit);
+            const postIds = posts.map(post => post._id);
+            let postWithExtraAttributes = await enrichPostsWithExtras(postIds);
+
+            return {
+                posts: postWithExtraAttributes,
+                currentPage: page,
+                totalPages: Math.ceil(await Post.countDocuments() / limit),
+                totalPosts: await Post.countDocuments()
+            };
         } catch (error) {
             console.error('Error fetching new posts:', error);
             throw new Error('Failed to fetch new posts');
         }
     },
+
 
     getTop: async () => {
         // Logic to get top post
