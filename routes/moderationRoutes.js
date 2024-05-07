@@ -10,6 +10,8 @@ router.post(('/r/:subreddit/api/invite/:username'), authMiddleware.authorizeatio
 router.post(('/r/:subreddit/api/accept_moderator_invite'), authMiddleware.authorizeationToken, moderationController.acceptModeratorInvite);
 router.post(('/r/:subreddit/api/leavemoderator'), authMiddleware.checkUserRole, moderationController.leaveModerator);
 router.post(('/api/site_admin'), authMiddleware.authorizeationToken, moderationController.createCommunity);
+router.post(('/r/:subreddit/api/ban/:username'), authMiddleware.checkUserRole, moderationController.ban);
+router.delete(('/r/:subreddit/api/unban/:username'), authMiddleware.checkUserRole, moderationController.unban);
 
 router.get(('/api/r/:subreddit'), authMiddleware.checkUserRole, moderationController.getCommunityLandingPage);
 router.get(('/api/r/:subreddit/about/edited'), authMiddleware.checkUserRole, moderationController.getRecentlyEditedPosts);
@@ -22,5 +24,6 @@ router.get(('/api/r/:subreddit/about/spam'), authMiddleware.checkUserRole, moder
 router.get(('/api/r/:subreddit/about/removed'), authMiddleware.checkUserRole, moderationController.getRemoved);
 router.get(('/api/r/:subreddit/about/modqueue'), authMiddleware.checkUserRole, moderationController.getModQueue);
 router.get(('/api/r/:subreddit/about/unmoderated'), authMiddleware.checkUserRole, moderationController.getUnmoderated);
+router.patch(('/api/r/:subreddit/edit_community'), authMiddleware.checkUserRole, moderationController.editCommunity);
 
 module.exports = router;

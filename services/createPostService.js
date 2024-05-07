@@ -19,7 +19,7 @@ const createPostService = {
            { 
             return { success: false, error: `community does not exists.` };
         }
-
+        if (community.banned.includes(username)) return { success: false, error: 'You are banned from this community' };
         const user = await User.findOne({username: username})
         
         postData.username = user.username

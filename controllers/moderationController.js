@@ -236,6 +236,57 @@ const moderationController = {
 
     getCommunityLandingPage: async (req, res) => {
         res.status(200).json({ role: req.user.role });
+    },
+
+    editCommunity: async (req, res) => {
+        try {
+            if (req.user.role != 'moderator') {
+                console.log(req.user.role)
+                res.status(403).json({ message: 'user is not a moderator' });
+                return;
+            }
+            const communityName = req.params.subreddit;
+            const communityData = req.body;
+            const result = await moderationService.editCommunity(communityName, communityData);
+
+            res.status(200).json(result);
+        } catch (err) {
+            res.status(400).json({ message: err.message })
+        }
+    },
+
+    ban: async (req, res) => {
+        try {
+            if (req.user.role != 'moderator') {
+                console.log(req.user.role)
+                res.status(403).json({ message: 'user is not a moderator' });
+                return;
+            }
+            const communityName = req.params.subreddit;
+            const usernameToBan = req.params.username;
+            const result = await moderationService.ban(communityName, usernameToBan);
+
+            res.status(200).json(result);
+        } catch (err) {
+            res.status(400).json({ message: err.message })
+        }
+    },
+
+    unban: async (req, res) => {
+        try {
+            if (req.user.role != 'moderator') {
+                console.log(req.user.role)
+                res.status(403).json({ message: 'user is not a moderator' });
+                return;
+            }
+            const communityName = req.params.subreddit;
+            const usernameToUnban = req.params.username;
+            const result = await moderationService.unban(communityName, usernameToUnban);
+
+            res.status(200).json(result);
+        } catch (err) {
+            res.status(400).json({ message: err.message })
+        }
     }
 };
 

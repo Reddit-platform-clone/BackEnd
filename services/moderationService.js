@@ -226,7 +226,49 @@ const moderationService = {
         return -1;
     },
 
-    // editCommunity: async ()
+    editCommunity: async (communityName, updatedData) => {
+        try {
+            const community = await communityModel.findOneAndUpdate({ communityName: communityName }, updatedData, { new: true, upsert: true });
+            return { updatedCommunityData: community };
+        } catch (err) {
+            return { message: err.message };
+        }
+    },
+
+    ban: async (communityName, userToBan) => {
+        try {
+            const community = await communityModel.findOne({ communityName: communityName});
+            if (!community) throw new Error('Community does not exist');
+    
+            const user = await userModel.findOne({ username: userToBan });
+            if(!user) throw new Error('User does not exist');
+    
+            community.banned.push(userToBan);
+            await community.save();
+    
+            return { success: true, message: 'User banned successfully'};
+        } catch (err) {
+            return { message: err.message };
+        }
+    }, 
+
+    unban: async (communityName, userToUnban) => {
+        try {
+            const community = await communityModel.findOne({ communityName: communityName});
+            if (!community) throw new Error('Community does not exist');
+    
+            const user = await userModel.findOne({ username: userToUnban });
+            if(!user) throw new Error('User does not exist');
+    
+            if (!community.banned.includes(userToUnban)) throw new Error('User is not banned');
+            community.banned.pull(userToUnban);
+            await community.save();
+    
+            return { success: true, message: 'User unbanned successfully'};
+        } catch (err) {
+            return { message: err.message };
+        }
+    }, 
 };
 
 module.exports = moderationService;
