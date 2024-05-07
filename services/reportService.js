@@ -9,7 +9,7 @@ const reportService = {
     reportThing: async (reportedUsername,reason,type,entityId,description, username) => {
       try{  
         let checkerExist =0;
-        
+        let communityName;
        
         user= await UserModel.findOne({username:username});
         
@@ -32,6 +32,8 @@ const reportService = {
             return { success: false, error:'Post not found.'};
         }
         checkerExist=1;
+        const post = await Post.findOne({ _id: entityId });
+        communityName = post.communityId;
 
 }
 if(type== 'comment'){ 
@@ -56,7 +58,8 @@ if(checkerExist==1){
         type,
         entityId,
         description,
-        username
+        username,
+        communityName
     });
 
     

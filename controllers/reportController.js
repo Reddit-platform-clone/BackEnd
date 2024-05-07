@@ -1,4 +1,4 @@
-reportService=require('../services/reportService');
+const reportService=require('../services/reportService');
 
 const reportController = {
   reportThing: async (req, res) => {

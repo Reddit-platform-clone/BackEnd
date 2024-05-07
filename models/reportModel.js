@@ -31,6 +31,11 @@ const reportSchema = new mongoose.Schema({
     description : {
         type: String,
         required: false
+    },
+
+    communityName: {
+        type: String,
+        default: null
     }
 });
 
@@ -38,8 +43,3 @@ const reportSchema = new mongoose.Schema({
 const Report = mongoose.model('Report', reportSchema);
 
 module.exports = Report;
-
-
-
-
-

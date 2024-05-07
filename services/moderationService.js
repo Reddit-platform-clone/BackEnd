@@ -5,11 +5,11 @@ const pushNotificationService = require('./notificationsService.js');
 
 const moderationService = {
     approve: async (id) => {
-        // logic to approve link or comment
+        // logic to approve posts
     },
 
     remove: async (id) => {
-        // logic to remove link, commet or modmail message
+        // logic to remove posts
     },
 
     showComment: async (id) => {
