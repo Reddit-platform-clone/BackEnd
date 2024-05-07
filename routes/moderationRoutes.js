@@ -10,6 +10,7 @@ router.post(('/r/:subreddit/api/invite/:username'), authMiddleware.authorizeatio
 router.post(('/r/:subreddit/api/accept_moderator_invite'), authMiddleware.authorizeationToken, moderationController.acceptModeratorInvite);
 router.post(('/r/:subreddit/api/leavemoderator'), authMiddleware.checkUserRole, moderationController.leaveModerator);
 router.post(('/api/site_admin'), authMiddleware.authorizeationToken, moderationController.createCommunity);
+router.post(('/r/:subreddit/api/ban/:username'), authMiddleware.checkUserRole, moderationController.ban);
 
 router.get(('/api/r/:subreddit'), authMiddleware.checkUserRole, moderationController.getCommunityLandingPage);
 router.get(('/api/r/:subreddit/about/edited'), authMiddleware.checkUserRole, moderationController.getRecentlyEditedPosts);
