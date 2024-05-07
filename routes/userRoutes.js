@@ -39,6 +39,7 @@ router.post('/api/user/updatePic', authMiddleware.authorizeationToken, userContr
 router.post('/api/viewPost', authMiddleware.authorizeationToken, userController.viewPost);
 
 router.get('/api/recentlyViewedPosts',authMiddleware.authorizeationToken, userController.getRecentlyViewedPosts);
+router.patch('/api/deleteRecentlyViewedPosts',authMiddleware.authorizeationToken, userController.deleteRecentlyViewedPosts);
 
 router.get('/api/user/:username/upvotedids', authMiddleware.authorizeationToken, userController.upvotedPostsIds);
 router.get('/api/user/:username/downvotedids', authMiddleware.authorizeationToken, userController.downvotedPostsIds);

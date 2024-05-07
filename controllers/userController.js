@@ -418,6 +418,16 @@ const userController = {
     }
   },
 
+  deleteRecentlyViewedPosts: async (req, res) => {
+    try {
+      let username =req.user.username;
+      await userService.deleteRecentlyViewedPosts(username);
+      res.status(200).json({message : 'success'});
+    } catch (error) {
+      res.status(500).json({message: error.message});
+    }
+  },
+
   deleteUser: async (req, res) => {
     try {
       const username = req.user.username;
