@@ -1,19 +1,36 @@
 const communityModel = require('../models/communityModel.js');
-const modqueue = require('../models/modqueueModel.js');
+const modqueueModel = require('../models/modqueueModel.js');
 const userModel = require('../models/userModel.js');
 const pushNotificationService = require('./notificationsService.js');
+const postModel = require('../models/postModel.js');
 
 const moderationService = {
-    approve: async (id) => {
+    approve: async (communityName, postId) => {
         // logic to approve posts
+        try {
+            if (!communityName || !postId) throw new Error('Community name or post id not provided');
+            const modqueueItem = await modqueueModel.findOne({ communityName: communityName, entityId: postId });
+            if (!modqueueItem) throw new Error ('Post not found');
+            modqueueItem.modStatus = 'approved';
+            await modqueueItem.save();
+            return { success: true, message: 'Post approved' };
+        } catch (err) {
+            return { error: err.message };
+        }
     },
 
-    remove: async (id) => {
+    remove: async (communityName, postId) => {
         // logic to remove posts
-    },
-
-    showComment: async (id) => {
-        // logic to show collapsed comments
+        try {
+            if (!communityName || !postId) throw new Error('Community name or post id not provided');
+            const modqueueItem = await modqueueModel.findOne({ communityName: communityName, entityId: postId });
+            if (!modqueueItem) throw new Error ('Post not found');
+            modqueueItem.modStatus = 'removed';
+            await modqueueItem.save();
+            return { success: true, message: 'Post removed' };
+        } catch (err) {
+            return { error: err.message };
+        }
     },
 
     inviteToModeration: async (mod, invitedUser, communityName) => {
@@ -74,14 +91,6 @@ const moderationService = {
         }
     },
 
-    // deleteBanner: async (subreddit) => {
-    //     // logic to delete subreddit banner
-    // },
-
-    // deleteIcon: async (subreddit) => {
-    //     // logic to delete subreddit icon
-    // },
-
     createCommunity: async (creator, details) => {
         // logic to create a subreddit
         const communityTitle = details.communityName;
@@ -94,13 +103,19 @@ const moderationService = {
         return { communityDetails: community };
     },
 
-    uploadSubredditIcon: async (id) => {   // custom
-        // logic to upload subreddit icon
-    },
-
-    getRecentlyEditedPosts: async (id) => {
+    getRecentlyEditedPosts: async (communityName) => {
         // logic to get recently edited posts
-    },
+        try {
+            const community = await communityModel.find({ communityName: communityName });
+            if (!community) throw new Error('Community does not exist');
+            const recentlyEditedPosts = await modqueueModel.find({ communityName: communityName, modStatus: 'edited', type: 'post' }).sort({ updatedAt: -1 });
+            const postIds = recentlyEditedPosts.map(post => post.entityId.toString());
+            const posts = await postModel.find({ _id: { $in: postIds } });
+            return { posts: posts };
+        } catch (err) {
+            return { message: err.message };
+        }
+    },  
 
     getModeratedSubreddits: async (username) => {
         // logic to get all subreddits moderated by a moderator
@@ -132,20 +147,74 @@ const moderationService = {
         return { moderators: community.moderatorsUsernames };
     },
 
-    getReported: async (id) => {
+    getReported: async (communityName) => {
         // logic to get reported items
+        try {
+            const community = await communityModel.find({ communityName: communityName });
+            if (!community) throw new Error('Community does not exist');
+            const reportedPosts = await modqueueModel.find({ communityName: communityName, modStatus: 'reported', type: 'post' });
+            const postIds = reportedPosts.map(post => post.entityId.toString());
+            const posts = await postModel.find({ _id: { $in: postIds } });
+            return { posts: posts };
+        } catch (err) {
+            return { message: err.message };
+        }
     },
 
-    getSpam: async (id) => {
+    getSpam: async (communityName) => {
         // logic to get items caught by the spam filter
+        try {
+            const community = await communityModel.find({ communityName: communityName });
+            if (!community) throw new Error('Community does not exist');
+            const spamPosts = await modqueueModel.find({ communityName: communityName, modStatus: 'spam', type: 'post' });
+            const postIds = spamPosts.map(post => post.entityId.toString());
+            const posts = await postModel.find({ _id: { $in: postIds } });
+            return { posts: posts };
+        } catch (err) {
+            return { message: err.message };
+        }
     },
 
-    getModQueue: async (id) => {
+    getRemoved: async (communityName) => {
+        // logic to get removed items
+        try {
+            const community = await communityModel.find({ communityName: communityName });
+            if (!community) throw new Error('Community does not exist');
+            const removedPosts = await modqueueModel.find({ communityName: communityName, modStatus: 'removed', type: 'post' });
+            const postIds = removedPosts.map(post => post.entityId.toString());
+            const posts = await postModel.find({ _id: { $in: postIds } });
+            return { posts: posts };
+        } catch (err) {
+            return { message: err.message };
+        }
+    },
+
+    getModQueue: async (communityName) => {
         // get items that needs to be reviewed by moderators
+        try {
+            const community = await communityModel.find({ communityName: communityName });
+            if (!community) throw new Error('Community does not exist');
+            const postsToReview = await modqueueModel.find({ communityName: communityName, modStatus: { $in: ['reported', 'spam'] }, type: 'post' });
+            const postIds = postsToReview.map(post => post.entityId.toString());
+            const posts = await postModel.find({ _id: { $in: postIds } });
+            return { posts: posts };
+        } catch (err) {
+            return { message: err.message };
+        }
     },
 
     getUnmoderated: async (id) => {
         // get items, that have not yet been approved
+        try {
+            const community = await communityModel.find({ communityName: communityName });
+            if (!community) throw new Error('Community does not exist');
+            const unmoderatedPosts = await modqueueModel.find({ communityName: communityName, modStatus: 'unmoderated', type: 'post' });
+            const postIds = unmoderatedPosts.map(post => post.entityId.toString());
+            const posts = await postModel.find({ _id: { $in: postIds } });
+            return { posts: posts };
+        } catch (err) {
+            return { message: err.message };
+        }
     },
 
     checkIfModerator: async (communityName, username) => {
