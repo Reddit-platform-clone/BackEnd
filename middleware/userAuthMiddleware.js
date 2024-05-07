@@ -29,7 +29,6 @@ const userAuth = {
 
         try {
             user = jwt.verify(token, process.env.SECRET_ACCESS_TOKEN);
-            // console.log(username)
             const isModerator = await moderationService.checkIfModerator(req.params.subreddit, user.username);
             if (isModerator === 1) user.role = 'moderator';
             if (isModerator === 0) user.role = 'member';

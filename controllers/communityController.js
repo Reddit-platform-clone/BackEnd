@@ -21,10 +21,10 @@ const communityController = {
 
 
     communityPosts: async (req, res) => {
-        const {communityName} = req.params
-        console.log(communityName)
+        const {subreddit} = req.params
+        const username = req.user.username;
         try {
-            const result = await communityService.commuintyPosts(communityName);
+            const result = await communityService.commuintyPosts(subreddit, username);
             if(result.success) {
                 res.status(200).json({message: result.message, data: result.data})
             } else {
@@ -214,9 +214,9 @@ const communityController = {
     },
 
     getCommunityInfoByName: async (req, res) => {
-        const { communityName } = req.params;
+        const { subreddit } = req.params;
         try {
-            const result = await communityService.getCommunityInfoByName(communityName)
+            const result = await communityService.getCommunityInfoByName(subreddit)
             if (result.success) {
                 return res.status(200).json({ success: true, data: result})
             } else {

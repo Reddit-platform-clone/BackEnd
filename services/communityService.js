@@ -3,6 +3,8 @@ const User = require('../models/userModel.js');
 const Post = require('../models/postModel.js')
 const cloudinary = require('../utils/cloudinary.js'); 
 const pushNotificationService = require('./notificationsService.js');
+const reportsModel = require('../models/reportModel.js');
+const modqueue = require('../models/modqueueModel.js');
 
 function shuffleArray(array){
     for(let i = array.length - 1; i > 0; i--) {
@@ -152,14 +154,24 @@ const communityService = {
         }
     },
 
-    commuintyPosts: async(communityName) => {
+    commuintyPosts: async(communityName, viewer) => {
         try {
             const existingCommunity = await Community.findOne({communityName: communityName}).populate('posts', '_id')
             if (!existingCommunity) {
                 return {success: false, message: 'community doesnot exist'}
             }
+            
+            let postIds = existingCommunity.posts.map(post => post._id)
+            const removedPosts = await modqueue.find({ type: 'post', communityName: communityName, modStatus: 'removed' });
+            let removedPostIds = removedPosts.map(item => item.entityId.toString());
+            let reportedPostsIds;
 
-            const postIds = existingCommunity.posts.map(post => post._id)
+            if (viewer === 'guest') reportedPostsIds = [];
+            const reportedPosts = await reportsModel.find({ username: viewer, type: 'post', communityName: communityName });
+            reportedPostsIds = reportedPosts.map(item => item.entityId.toString());
+            
+            postIds = postIds.filter(id => !removedPostIds.includes(id.toString()) && !reportedPostsIds.includes(id.toString()));
+
             const posts = await Post.find({ _id: {$in: postIds}})
             return {success: true, data: posts}
         } catch (error) {

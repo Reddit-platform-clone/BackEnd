@@ -15,11 +15,11 @@ router.post('/api/community/updateDisplayPic', userAuthentication.authorizeation
 router.post('/api/community/updateBackground', userAuthentication.authorizeationToken, communityController.updateCommunityBackgroundPic);
 
 router.get('/api/community/list', userAuthentication.authorizeationToken, communityController.listCommunities);
-router.get('/api/community/:communityName/getPosts', communityController.communityPosts)
+router.get('/api/community/:subreddit/getPosts', userAuthentication.checkUserRole,communityController.communityPosts)
 router.get('/api/user/:userId/communitiesNotJoined', userAuthentication.authorizeationToken, communityController.listCommunitiesNotJoined);
 router.get('/api/user/:username/communitiesJoined', userAuthentication.authorizeationToken, communityController.listCommunitiesJoined);
 router.get('/api/community/:postId/getCommunityInfo', communityController.getCommunityInfo);
-router.get('/api/community/:communityName/getCommunityInfoByName', communityController.getCommunityInfoByName);
+router.get('/api/community/:subreddit/getCommunityInfoByName', communityController.getCommunityInfoByName);
 router.get('/api/community/getRandomCommunities', userAuthentication.authorizeationToken, communityController.getRandomCommunities);
 router.get('/api/community/getTopCommunities', userAuthentication.authorizeationToken, communityController.getTopCommunities);
 
