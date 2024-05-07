@@ -233,6 +233,23 @@ const moderationService = {
         } catch (err) {
             return { message: err.message };
         }
+    },
+
+    ban: async (communityName, userToBan) => {
+        try {
+            const community = await communityModel.findOne({ communityName: communityName});
+            if (!community) throw new Error('Community does not exist');
+    
+            const user = await userModel.findOne({ username: userToBan });
+            if(!user) throw new Error('User does not exist');
+    
+            community.banned.push(userToBan);
+            await community.save();
+    
+            return { success: true, message: 'User banned successfully'};
+        } catch (err) {
+            return { message: err.message };
+        }
     }
 };
 
