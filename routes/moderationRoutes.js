@@ -22,5 +22,6 @@ router.get(('/api/r/:subreddit/about/spam'), authMiddleware.checkUserRole, moder
 router.get(('/api/r/:subreddit/about/removed'), authMiddleware.checkUserRole, moderationController.getRemoved);
 router.get(('/api/r/:subreddit/about/modqueue'), authMiddleware.checkUserRole, moderationController.getModQueue);
 router.get(('/api/r/:subreddit/about/unmoderated'), authMiddleware.checkUserRole, moderationController.getUnmoderated);
+router.patch(('/api/r/:subreddit/edit_community'), authMiddleware.checkUserRole, moderationController.editCommunity);
 
 module.exports = router;
