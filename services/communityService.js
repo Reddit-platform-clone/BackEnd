@@ -273,7 +273,23 @@ const communityService = {
 
     getTopCommunities: async () => {
         try {
-            const topCommunities = await Community.find().sort({ members: -1 }).limit(20);
+            const topCommunities = await Community.aggregate([
+                {
+                    $match: { members: { $exists: true, $ne: [] } } // Filter out communities without any members
+                },
+                {
+                    $project: {
+                        communityName: 1, // Include the fields you want to return
+                        numberOfMembers: { $size: "$members" } // Calculate the size of the members array
+                    }
+                },
+                {
+                    $sort: { numberOfMembers: -1 } // Sort communities based on the number of members in descending order
+                },
+                {
+                    $limit: 20 // Limit the result to the top 20 communities
+                }
+            ]);
             return topCommunities;
         } catch (error) {
             console.error('Error fetching top communities:', error);
