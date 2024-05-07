@@ -250,7 +250,25 @@ const moderationService = {
         } catch (err) {
             return { message: err.message };
         }
-    }
+    }, 
+
+    unban: async (communityName, userToUnban) => {
+        try {
+            const community = await communityModel.findOne({ communityName: communityName});
+            if (!community) throw new Error('Community does not exist');
+    
+            const user = await userModel.findOne({ username: userToUnban });
+            if(!user) throw new Error('User does not exist');
+    
+            if (!community.banned.includes(userToUnban)) throw new Error('User is not banned');
+            community.banned.pull(userToUnban);
+            await community.save();
+    
+            return { success: true, message: 'User unbanned successfully'};
+        } catch (err) {
+            return { message: err.message };
+        }
+    }, 
 };
 
 module.exports = moderationService;
