@@ -39,7 +39,18 @@ const moderationController = {
     },
 
     leaveModerator: async (req, res) => {
-        res.json({ message: 'left' })
+        try {
+            if (req.user.role != 'moderator') {
+                res.status(403).json({ message: 'user is not a moderator' });
+                return;
+            }
+            const communityName = req.params.subreddit;
+            const username = req.user.username;
+            const result = await moderationService.leaveModerator(username, communityName);
+            res.status(200).json(result);
+        } catch(err) {
+            res.status(400).json({ message: err.message });
+        }
     },
 
     deleteBanner: async (req, res) => {
