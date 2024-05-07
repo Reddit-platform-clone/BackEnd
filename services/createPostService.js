@@ -86,7 +86,7 @@ const createPostService = {
 
         }
 
-        pushNotificationService.sendPushNotificationToToken(user.deviceToken, 'Sarakel', 'New post created successfully');
+        await pushNotificationService.sendPushNotificationToToken(user.deviceToken, 'Sarakel', 'New post created successfully');
         console.log('Notification sent');    
 
         return { success: true, message: `Post created successfully` };

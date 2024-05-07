@@ -43,6 +43,21 @@ const notificationContoller = {
             console.error("Error:", error);
             res.status(500).json({error: error.message})
         }
+    },
+
+    listNotifications: async (req, res) => {
+        let {username} = req.user;
+
+        try {
+            const result = await notificationService.getNotifications(username);
+            if(result.success) {
+                res.status(200).json({data: result.data})
+            } else {
+                res.status(400).json({error: result.message})
+            }
+        } catch (error) {
+            res.status(500).json({error: error.message});
+        }
     }
 }
 
