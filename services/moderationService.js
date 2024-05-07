@@ -54,17 +54,33 @@ const moderationService = {
         return { message: `${username} is now a moderator in ${communityName}` }
     },
 
-    leaveModerator: async (id) => {
+    leaveModerator: async (username, commununityName) => {
         // logic to leave moderation role
+        try {
+            const user = await userModel.findOne({ username: username, joinedCommunities: commununityName });
+            if (!user) throw new Error('User not found or not a member');
+            
+            const community = await communityModel.findOne({ communityName: commununityName });
+            if (!community) throw new Error('Community does not exist');
+            if (!community.moderatorsUsernames.includes(username)) throw new Error('User is not a moderator');
+
+            community.moderatorsUsernames.pull(username);
+            community.members.push(username);
+            await community.save();
+
+            return { success: true, message: `${username} is not longer a moderator in ${commununityName}` };
+        } catch (err) {
+            return { error: err.message };
+        }
     },
 
-    deleteBanner: async (subreddit) => {
-        // logic to delete subreddit banner
-    },
+    // deleteBanner: async (subreddit) => {
+    //     // logic to delete subreddit banner
+    // },
 
-    deleteIcon: async (subreddit) => {
-        // logic to delete subreddit icon
-    },
+    // deleteIcon: async (subreddit) => {
+    //     // logic to delete subreddit icon
+    // },
 
     createCommunity: async (creator, details) => {
         // logic to create a subreddit
@@ -139,7 +155,9 @@ const moderationService = {
         if (community.moderatorsUsernames.includes(username)) return 1;
         if (community.members.includes(username)) return 0;
         return -1;
-    }
+    },
+
+    // editCommunity: async ()
 };
 
 module.exports = moderationService;

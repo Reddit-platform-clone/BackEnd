@@ -9,7 +9,7 @@ router.post(('/api/remove'), moderationController.remove);
 router.post(('/api/show_comment'), moderationController.showComment);
 router.post(('/r/:subreddit/api/invite/:username'), authMiddleware.authorizeationToken, moderationController.inviteToMod);
 router.post(('/r/:subreddit/api/accept_moderator_invite'), authMiddleware.authorizeationToken, moderationController.acceptModeratorInvite);
-router.post(('/api/leavemoderator'), moderationController.leaveModerator);
+router.post(('/r/:subreddit/api/leavemoderator'), authMiddleware.checkUserRole, moderationController.leaveModerator);
 router.post(('/r/:subreddit/api/delete_sr_banner'), moderationController.deleteBanner);
 router.post(('/r/:subreddit/api/delete_sr_icon'), moderationController.deleteIcon);
 router.post(('/api/site_admin'), authMiddleware.authorizeationToken, moderationController.createCommunity);
