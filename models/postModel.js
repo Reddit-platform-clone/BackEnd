@@ -1,24 +1,16 @@
+const { date } = require('faker/lib/locales/fa');
 let mongoose = require('mongoose');
 
 const postSchema = new mongoose.Schema({
 
-    content: { type: String },
+    content: { type: String},
     title: {type: String, required: true},
     username: {type: String, required: true},
     media: {type: String},
     downvotes: {type: Number,default:0},
     communityId: {type: String, required: true},
     upvotes: {type: Number,default:0},
-    scheduled: {
-        date: {
-            type: Date,
-            required: false
-        },
-        time: {
-            type: String,
-            required: false
-        }
-    },
+    scheduled: {type: Date},
     isSpoiler: {type: Boolean,default:false},
     isLocked: {type: Boolean,default:false},
     isReported: {type: Boolean,default:false},
