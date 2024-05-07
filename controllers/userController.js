@@ -54,14 +54,14 @@ const userController = {
       try {
         const { username, email, password } = req.body;
 
-        if (!req.files || !req.files.profilePic) {
-          console.log("No profile picture uploaded");
-          profilePic = process.env.DEFAULT_PIC
-        } else {
-          const profilePicFile = req.files.profilePic
-          const profilePictureUpload = await cloudinary.uploader.upload(profilePicFile.tempFilePath);
-          profilePic = profilePictureUpload.secure_url;
-        }
+        // if (!req.files || !req.files.profilePic) {
+        //   console.log("No profile picture uploaded");
+        profilePic = process.env.DEFAULT_PIC
+        // } else {
+        //   const profilePicFile = req.files.profilePic
+        //   const profilePictureUpload = await cloudinary.uploader.upload(profilePicFile.tempFilePath);
+        //   profilePic = profilePictureUpload.secure_url;
+        // }
 
         if (!username || !password || !email) {
           res.status(400).send('missing username or email or password');
