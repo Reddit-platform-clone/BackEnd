@@ -2,15 +2,33 @@ const moderationService = require('../services/moderationService');
 
 const moderationController = {
     approve: async (req, res) => {
-        res.json({ message: 'approved' })
+        try {
+            if (req.user.role != 'moderator') {
+                res.status(403).json({ message: 'user is not a moderator' });
+                return;
+            }
+            const communityName = req.params.subreddit;
+            const postId = req.body.postId;
+            const result = await moderationService.approve(communityName, postId);
+            res.status(200).json(result);
+        } catch(err) {
+            res.status(400).json({ message: err.message });
+        }
     },
 
     remove: async (req, res) => {
-        res.json({ message: 'removed' })
-    },
-
-    showComment: async (req, res) => {
-        res.json({ message: 'shown' })
+        try {
+            if (req.user.role != 'moderator') {
+                res.status(403).json({ message: 'user is not a moderator' });
+                return;
+            }
+            const communityName = req.params.subreddit;
+            const postId = req.body.postId;
+            const result = await moderationService.remove(communityName, postId);
+            res.status(200).json(result);
+        } catch(err) {
+            res.status(400).json({ message: err.message });
+        }
     },
 
     inviteToMod: async (req, res) => {
@@ -53,14 +71,6 @@ const moderationController = {
         }
     },
 
-    deleteBanner: async (req, res) => {
-        res.json({ message: 'banner deleted' })
-    },
-
-    deleteIcon: async (req, res) => {
-        res.json({ message: 'icon deleted' })
-    },
-
     createCommunity: async (req, res) => {
         try {
             const creator = req.user.username;
@@ -74,12 +84,20 @@ const moderationController = {
         }
     },
 
-    uploadSubredditIcon: async (req, res) => {
-        res.json({ message: 'icon uploaded' })
-    },
-
     getRecentlyEditedPosts: async (req, res) => {
-        res.json({ message: 'recent edits' })
+        try {
+            if (req.user.role != 'moderator') {
+                console.log(req.user.role)
+                res.status(403).json({ message: 'user is not a moderator' });
+                return;
+            }
+            const communityName = req.params.subreddit;
+            const result = await moderationService.getRecentlyEditedPosts(communityName);
+
+            res.status(200).json(result);
+        } catch (err) {
+            res.status(400).json({ message: err.message })
+        }
     },
 
     getModeratedSubreddits: async (req, res) => {
@@ -137,19 +155,83 @@ const moderationController = {
     },
 
     getReported: async (req, res) => {
-        res.json({ message: 'reported' })
+        try {
+            if (req.user.role != 'moderator') {
+                console.log(req.user.role)
+                res.status(403).json({ message: 'user is not a moderator' });
+                return;
+            }
+            const communityName = req.params.subreddit;
+            const result = await moderationService.getReported(communityName);
+
+            res.status(200).json(result);
+        } catch (err) {
+            res.status(400).json({ message: err.message })
+        }
     },
 
     getSpam: async (req, res) => {
-        res.json({ message: 'spam' })
+        try {
+            if (req.user.role != 'moderator') {
+                console.log(req.user.role)
+                res.status(403).json({ message: 'user is not a moderator' });
+                return;
+            }
+            const communityName = req.params.subreddit;
+            const result = await moderationService.getSpam(communityName);
+
+            res.status(200).json(result);
+        } catch (err) {
+            res.status(400).json({ message: err.message })
+        }
+    },
+
+    getRemoved: async (req, res) => {
+        try {
+            if (req.user.role != 'moderator') {
+                console.log(req.user.role)
+                res.status(403).json({ message: 'user is not a moderator' });
+                return;
+            }
+            const communityName = req.params.subreddit;
+            const result = await moderationService.getRemoved(communityName);
+
+            res.status(200).json(result);
+        } catch (err) {
+            res.status(400).json({ message: err.message })
+        }
     },
 
     getModQueue: async (req, res) => {
-        res.json({ message: 'modqueue' })
+        try {
+            if (req.user.role != 'moderator') {
+                console.log(req.user.role)
+                res.status(403).json({ message: 'user is not a moderator' });
+                return;
+            }
+            const communityName = req.params.subreddit;
+            const result = await moderationService.getModQueue(communityName);
+
+            res.status(200).json(result);
+        } catch (err) {
+            res.status(400).json({ message: err.message })
+        }
     },
 
     getUnmoderated: async (req, res) => {
-        res.json({ message: 'unmoderated' })
+        try {
+            if (req.user.role != 'moderator') {
+                console.log(req.user.role)
+                res.status(403).json({ message: 'user is not a moderator' });
+                return;
+            }
+            const communityName = req.params.subreddit;
+            const result = await moderationService.getUnmoderated(communityName);
+
+            res.status(200).json(result);
+        } catch (err) {
+            res.status(400).json({ message: err.message })
+        }
     },
 
     getCommunityLandingPage: async (req, res) => {
