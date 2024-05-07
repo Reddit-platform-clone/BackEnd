@@ -203,7 +203,7 @@ const moderationService = {
         }
     },
 
-    getUnmoderated: async (id) => {
+    getUnmoderated: async (communityName) => {
         // get items, that have not yet been approved
         try {
             const community = await communityModel.find({ communityName: communityName });
