@@ -449,8 +449,10 @@ singUp: async (username, email, password, profilePictureUpload) => {
       console.log(settings.oldPassword, settings.password)
     }
     
+    if (!settings.hasOwnProperty('oldPassword') && settings.hasOwnProperty('password')) profileSettings.password = await utils.hashPassword(settings.password);
+
     const userSettings = await settingsModel.findOneAndUpdate({ username: username }, settings, { new: true, upsert: true, runValidators: true });
-    const updatedProfile = await userModel.findOneAndUpdate({ username: username }, profileSettings, { new: true, upsert: true, runValidators: true })
+    const updatedProfile = await userModel.findOneAndUpdate({ username: username }, profileSettings, { new: true, upsert: true, runValidators: true });
 
     return { settings: userSettings, profile: updatedProfile };
   },
