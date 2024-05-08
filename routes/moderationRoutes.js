@@ -28,4 +28,5 @@ router.get(('/api/r/:subreddit/about/modqueue'), authMiddleware.checkUserRole, m
 router.get(('/api/r/:subreddit/about/unmoderated'), authMiddleware.checkUserRole, moderationController.getUnmoderated);
 router.patch(('/api/r/:subreddit/edit_community'), authMiddleware.checkUserRole, moderationController.editCommunity);
 
+router.post(('/r/:subreddit/api/respond_to_invitation'), authMiddleware.checkUserRole, moderationController.respondToInvitation);
 module.exports = router;

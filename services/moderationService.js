@@ -3,6 +3,7 @@ const modqueueModel = require('../models/modqueueModel.js');
 const userModel = require('../models/userModel.js');
 const pushNotificationService = require('./notificationsService.js');
 const postModel = require('../models/postModel.js');
+const { response } = require('../server.js');
 
 const moderationService = {
     approve: async (communityName, postId) => {
@@ -61,12 +62,13 @@ const moderationService = {
         const user = await userModel.findOne({ username: username, modInvitations: communityName });
         if (!user) throw new Error('User does not exist, or not invited to moderate the community');
         
+        if(community.members.includes(username)) community.members.pull(username);
         if(user.communityInvitations.includes(communityName)) user.communityInvitations.pull(communityName);
         user.modInvitations.pull(communityName);
         user.joinedCommunities.push(communityName);
-        await user.save();
-
         community.moderatorsUsernames.push(username);
+
+        await user.save();
         await community.save();
         
         return { message: `${username} is now a moderator in ${communityName}` };
@@ -307,6 +309,59 @@ const moderationService = {
             return { message: err.message };
         }
     }, 
+
+    respondToInvitation: async (username, responseDetails) => {
+        try {
+            if (responseDetails.responseType !== 'accept' && responseDetails.responseType !== 'reject' || responseDetails.typeOfInvitation !== 'moderation' && responseDetails.typeOfInvitation !== 'member') throw new Error('Please check the response details and resend the request');
+            const community = await communityModel.findOne({ communityName: responseDetails.communityName });
+            if (!community) throw new Error('Community does not exist');
+
+            const user = await userModel.findOne({ username: username });
+            if (!user) throw new Error('User does not exist');
+
+            if (responseDetails.typeOfInvitation === 'moderation') {
+                if (responseDetails.responseType === 'reject') {
+                    if (!user.modInvitations.includes(responseDetails.communityName)) throw new Error ('User was not invited for moderation');
+                    user.modInvitations.pull(responseDetails.communityName)
+                    await user.save();
+                    return { message: `${username} rejected invitation to be a moderator in r/${responseDetails.communityName}` };
+                }
+                if (!user.modInvitations.includes(responseDetails.communityName)) throw new Error('User is not invited for moderation');
+                if (community.moderatorsUsernames.includes(username)) throw new Error('User is already a moderator');
+                if(community.members.includes(username)) community.members.pull(username);
+                if(user.communityInvitations.includes(responseDetails.communityName)) user.communityInvitations.pull(responseDetails.communityName);
+                user.modInvitations.pull(responseDetails.communityName);
+                user.joinedCommunities.push(responseDetails.communityName);
+                community.moderatorsUsernames.push(username);
+        
+                await user.save();
+                await community.save();
+                return { message: `${username} is now a moderator in r/${responseDetails.communityName}` };
+            }
+
+            if (responseDetails.responseType === 'reject') {
+                if (!user.communityInvitations.includes(responseDetails.communityName)) throw new Error('User is not invited to join');
+                user.communityInvitations.pull(responseDetails.communityName);
+                if (user.modInvitations.includes(responseDetails.communityName)) user.modInvitations.pull(responseDetails.communityName);
+                await user.save();
+                return { message: `${username} rejected invitation to join r/${responseDetails.communityName}` };
+            }
+
+            if (!user.communityInvitations.includes(responseDetails.communityName)) throw new Error ('User is not invited to join');
+            if (community.members.includes(username)) throw new Error('User is already a member');
+            user.communityInvitations.pull(responseDetails.communityName);
+            user.joinedCommunities.push(responseDetails.communityName);
+            community.members.push(username);
+            
+            await user.save();
+            await community.save();
+            
+            return { message: `${username} has now joined ${responseDetails.communityName}` };
+
+        } catch (err) {
+            return { message: err.message };
+        }
+    }
 };
 
 module.exports = moderationService;

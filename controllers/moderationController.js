@@ -320,6 +320,24 @@ const moderationController = {
         } catch (err) {
             res.status(400).json({ message: err.message })
         }
+    },
+
+    respondToInvitation: async (req, res) => {
+        try {
+            if (req.user.role === 'not logged in') {
+                res.status(403).json({ message: 'User not logged in' });
+                return;
+            }
+            const username = req.user.username;
+            const communityName = req.params.subreddit;
+            let responseDetails = req.body;
+            responseDetails.communityName = communityName;
+
+            const result = await moderationService.respondToInvitation(username, responseDetails);
+            res.status(200).json(result);
+        } catch (err) {
+            res.json(400).status({ message: err.message });
+        }
     }
 };
 
