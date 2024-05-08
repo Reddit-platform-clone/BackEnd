@@ -56,6 +56,39 @@ const moderationController = {
         }
     },
 
+    inviteUser: async (req, res) => {
+        try{
+            if (req.user.role != 'member' && req.user.role != 'moderator') {
+                res.status(403).json({ message: 'You should be a member of the community to send invitatoins' });
+                return;
+            }
+            const communityName = req.params.subreddit;
+            const member = req.user.username;
+            const user = req.params.username;
+
+            const result = await moderationService.inviteUser(member, user, communityName);
+            res.status(200).json(result);
+        } catch (err) {
+            res.status(400).json({ message: err.message });
+        }
+    },
+
+    acceptInvitation: async (req, res) => {
+        try {
+            if (req.user.role === 'not logged in') {
+                res.status(403).json({ message: 'User not logged in' });
+                return;
+            }
+            const username = req.user.username;
+            const communityName = req.params.subreddit;
+
+            const result = await moderationService.acceptInvitation(username, communityName);
+            res.status(200).json(result);
+        } catch (err) {
+            res.json(400).status({ message: err.message });
+        }
+    },
+
     leaveModerator: async (req, res) => {
         try {
             if (req.user.role != 'moderator') {

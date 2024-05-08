@@ -68,7 +68,44 @@ const moderationService = {
         community.moderatorsUsernames.push(username);
         await community.save();
         
-        return { message: `${username} is now a moderator in ${communityName}` }
+        return { message: `${username} is now a moderator in ${communityName}` };
+    },
+
+    inviteUser: async (inviterUsername, usernameToInvite, communityName) => {
+        const community = await communityModel.findOne({ communityName: communityName });
+        if (!community) throw new Error('Community does not exist');
+        const member = await userModel.findOne({ username: inviterUsername });
+        const user = await userModel.findOne({ username: usernameToInvite });
+        if (!member || !user) throw new Error('User not found');
+        if (community.members.includes(usernameToInvite)) throw new Error('User is already a member');
+        if (user.communityInvitations.includes(communityName)) throw new Error ('User already has an invitation pending');
+
+        user.communityInvitations.push(communityName);
+        await user.save();
+        pushNotificationService.sendPushNotificationToToken(user.deviceToken, 'Sarakel', `${inviterUsername} invited you to join r/${communityName}`);
+        return { message: 'invitation sent successfully' };
+    },
+
+    acceptInvitation: async (username, communityName) => {
+        try {
+            const community = await communityModel.findOne({ communityName: communityName });
+            if (!community) throw new Error('Community does not exist');
+            if (community.members.includes(username)) throw new Error('User is already a member');
+            
+            const user = await userModel.findOne({ username: username, communityInvitations: communityName });
+            if (!user) throw new Error('User does not exist, or not invited to moderate the community');
+            
+            user.communityInvitations.pull(communityName);
+            user.joinedCommunities.push(communityName);
+            await user.save();
+    
+            community.members.push(username);
+            await community.save();
+            
+            return { message: `${username} has now joined ${communityName}` };
+        } catch (err) {
+            return { message: err.message };
+        }
     },
 
     leaveModerator: async (username, commununityName) => {

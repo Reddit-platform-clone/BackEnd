@@ -8,6 +8,8 @@ router.post(('/r/:subreddit/api/approve'), authMiddleware.checkUserRole, moderat
 router.post(('/r/:subreddit/api/remove'), authMiddleware.checkUserRole, moderationController.remove);
 router.post(('/r/:subreddit/api/invite/:username'), authMiddleware.authorizeationToken, moderationController.inviteToMod);
 router.post(('/r/:subreddit/api/accept_moderator_invite'), authMiddleware.authorizeationToken, moderationController.acceptModeratorInvite);
+router.post(('/r/:subreddit/api/invite_to_join/:username'), authMiddleware.checkUserRole, moderationController.inviteUser);
+router.post(('/r/:subreddit/api/accept_invite_to_join'), authMiddleware.checkUserRole, moderationController.acceptInvitation);
 router.post(('/r/:subreddit/api/leavemoderator'), authMiddleware.checkUserRole, moderationController.leaveModerator);
 router.post(('/api/site_admin'), authMiddleware.authorizeationToken, moderationController.createCommunity);
 router.post(('/r/:subreddit/api/ban/:username'), authMiddleware.checkUserRole, moderationController.ban);
