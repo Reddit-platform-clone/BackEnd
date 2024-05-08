@@ -457,6 +457,16 @@ const userController = {
     } catch (err) {
       res.status(400).json({ message: err.message });
     }
+  },
+
+  getInvitations: async (req, res) => {
+    try {
+      const username = req.user.username;
+      const result = await userService.getInvitations(username);
+      res.status(200).json(result);
+    } catch (err) {
+      res.status(400).json({ message: err.message });
+    }
   }
 };
 

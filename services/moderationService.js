@@ -61,6 +61,7 @@ const moderationService = {
         const user = await userModel.findOne({ username: username, modInvitations: communityName });
         if (!user) throw new Error('User does not exist, or not invited to moderate the community');
         
+        if(user.communityInvitations.includes(communityName)) user.communityInvitations.pull(communityName);
         user.modInvitations.pull(communityName);
         user.joinedCommunities.push(communityName);
         await user.save();

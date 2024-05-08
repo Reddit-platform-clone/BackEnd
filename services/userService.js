@@ -584,6 +584,13 @@ singUp: async (username, email, password, profilePictureUpload) => {
 
     const downvotedPostsIds = await Vote.find({ username: username, rank: -1, type: 'post' }, 'entityId -_id');
     return { downvotedPostsIds: downvotedPostsIds };    
+  },
+
+  getInvitations: async (username) => {
+    const user = await userModel.findOne({ username: username });
+    if (!user) throw new Error ('User does not exist');
+    if (user.modInvitations.length === 0 && user.communityInvitations.length === 0) return { message: 'User has no invitations pending' };
+    return { modInvitations: user.modInvitations, memberInvitations: user.communityInvitations };
   }
 };
 

@@ -44,4 +44,6 @@ router.patch('/api/deleteRecentlyViewedPosts',authMiddleware.authorizeationToken
 router.get('/api/user/:username/upvotedids', authMiddleware.authorizeationToken, userController.upvotedPostsIds);
 router.get('/api/user/:username/downvotedids', authMiddleware.authorizeationToken, userController.downvotedPostsIds);
 
+router.get('/api/v1/me/invites', authMiddleware.authorizeationToken, userController.getInvitations);
+
 module.exports = router;
