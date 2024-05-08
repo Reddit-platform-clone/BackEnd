@@ -322,6 +322,40 @@ const moderationController = {
         }
     },
 
+    mute: async (req, res) => {
+        try {
+            if (req.user.role != 'moderator') {
+                console.log(req.user.role)
+                res.status(403).json({ message: 'user is not a moderator' });
+                return;
+            }
+            const communityName = req.params.subreddit;
+            const usernameToMute = req.params.username;
+            const result = await moderationService.mute(communityName, usernameToMute);
+
+            res.status(200).json(result);
+        } catch (err) {
+            res.status(400).json({ message: err.message })
+        }
+    },
+
+    unmute: async (req, res) => {
+        try {
+            if (req.user.role != 'moderator') {
+                console.log(req.user.role)
+                res.status(403).json({ message: 'user is not a moderator' });
+                return;
+            }
+            const communityName = req.params.subreddit;
+            const usernameToUnmute = req.params.username;
+            const result = await moderationService.unmute(communityName, usernameToUnmute);
+
+            res.status(200).json(result);
+        } catch (err) {
+            res.status(400).json({ message: err.message })
+        }
+    },
+
     respondToInvitation: async (req, res) => {
         try {
             if (req.user.role === 'not logged in') {

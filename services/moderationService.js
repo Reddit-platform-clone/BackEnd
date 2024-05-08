@@ -310,6 +310,41 @@ const moderationService = {
         }
     }, 
 
+    mute: async (communityName, userToMute) => {
+        try {
+            const community = await communityModel.findOne({ communityName: communityName});
+            if (!community) throw new Error('Community does not exist');
+    
+            const user = await userModel.findOne({ username: userToMute });
+            if(!user) throw new Error('User does not exist');
+    
+            community.muted.push(userToMute);
+            await community.save();
+    
+            return { success: true, message: 'User muted successfully'};
+        } catch (err) {
+            return { message: err.message };
+        }
+    }, 
+
+    unmute: async (communityName, userToUnmute) => {
+        try {
+            const community = await communityModel.findOne({ communityName: communityName});
+            if (!community) throw new Error('Community does not exist');
+    
+            const user = await userModel.findOne({ username: userToUnmute });
+            if(!user) throw new Error('User does not exist');
+    
+            if (!community.muted.includes(userToUnmute)) throw new Error('User is not muted');
+            community.muted.pull(userToUnmute);
+            await community.save();
+    
+            return { success: true, message: 'User unmuted successfully'};
+        } catch (err) {
+            return { message: err.message };
+        }
+    }, 
+
     respondToInvitation: async (username, responseDetails) => {
         try {
             if (responseDetails.responseType !== 'accept' && responseDetails.responseType !== 'reject' || responseDetails.typeOfInvitation !== 'moderation' && responseDetails.typeOfInvitation !== 'member') throw new Error('Please check the response details and resend the request');

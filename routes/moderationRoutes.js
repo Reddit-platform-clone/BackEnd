@@ -14,6 +14,8 @@ router.post(('/r/:subreddit/api/leavemoderator'), authMiddleware.checkUserRole, 
 router.post(('/api/site_admin'), authMiddleware.authorizeationToken, moderationController.createCommunity);
 router.post(('/r/:subreddit/api/ban/:username'), authMiddleware.checkUserRole, moderationController.ban);
 router.delete(('/r/:subreddit/api/unban/:username'), authMiddleware.checkUserRole, moderationController.unban);
+router.post(('/r/:subreddit/api/mute/:username'), authMiddleware.checkUserRole, moderationController.mute);
+router.delete(('/r/:subreddit/api/unmute/:username'), authMiddleware.checkUserRole, moderationController.unmute);
 
 router.get(('/api/r/:subreddit'), authMiddleware.checkUserRole, moderationController.getCommunityLandingPage);
 router.get(('/api/r/:subreddit/about/edited'), authMiddleware.checkUserRole, moderationController.getRecentlyEditedPosts);
