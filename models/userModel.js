@@ -110,6 +110,11 @@ const userSchema = {
     default: []
   },
 
+  communityInvitations: {
+    type: [String],
+    default: []
+  },
+
   resetPasswordToken: String,
   resetPasswordTokenExpires: Date
 };

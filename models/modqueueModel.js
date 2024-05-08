@@ -21,7 +21,7 @@ const modqueueSchema = new mongoose.Schema({
     modStatus: {
         type: String,
         required: true,
-        enum: ['reported', 'removed', 'approved', 'edited', 'unmoderated']
+        enum: ['reported', 'removed', 'approved', 'edited', 'unmoderated', 'spam']
     },
     reason: {
         type: String,

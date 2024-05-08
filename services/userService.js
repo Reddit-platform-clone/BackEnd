@@ -449,8 +449,10 @@ singUp: async (username, email, password, profilePictureUpload) => {
       console.log(settings.oldPassword, settings.password)
     }
     
+    if (!settings.hasOwnProperty('oldPassword') && settings.hasOwnProperty('password')) profileSettings.password = await utils.hashPassword(settings.password);
+
     const userSettings = await settingsModel.findOneAndUpdate({ username: username }, settings, { new: true, upsert: true, runValidators: true });
-    const updatedProfile = await userModel.findOneAndUpdate({ username: username }, profileSettings, { new: true, upsert: true, runValidators: true })
+    const updatedProfile = await userModel.findOneAndUpdate({ username: username }, profileSettings, { new: true, upsert: true, runValidators: true });
 
     return { settings: userSettings, profile: updatedProfile };
   },
@@ -524,12 +526,25 @@ singUp: async (username, email, password, profilePictureUpload) => {
         // Sort the posts based on their order in the recentlyViewedPosts array
         const result = postIds.map(postId => posts.find(post => post._id.toString() === postId));
 
-        //let postsIds = user.recentlyViewedPosts;
-        //result = await postModel.find({ _id: { $in: postsIds } });
         return {result};
     } catch (error) {
         console.error('Error retrieving recently viewed posts:', error);
         throw new Error('Failed to retrieve recently viewed posts');
+    }
+  },
+
+  deleteRecentlyViewedPosts: async (Username) => {
+    try {
+        const user = await userModel.findOne({ username: Username });
+        if (!user) {
+          return{success: false, message: 'User not found'};
+        }
+        //empty the recentlyViewedPosts array of this user
+        await userModel.updateOne({ username: Username }, { $set: { recentlyViewedPosts: [] } });
+        return {success:true, message: 'Recently viewed history has been deleted'};
+    } catch (error) {
+        console.error('Error deleting recently viewed posts:', error);
+        throw new Error('Failed to delete recently viewed posts');
     }
   },
 
@@ -569,6 +584,13 @@ singUp: async (username, email, password, profilePictureUpload) => {
 
     const downvotedPostsIds = await Vote.find({ username: username, rank: -1, type: 'post' }, 'entityId -_id');
     return { downvotedPostsIds: downvotedPostsIds };    
+  },
+
+  getInvitations: async (username) => {
+    const user = await userModel.findOne({ username: username });
+    if (!user) throw new Error ('User does not exist');
+    if (user.modInvitations.length === 0 && user.communityInvitations.length === 0) return { message: 'User has no invitations pending' };
+    return { modInvitations: user.modInvitations, memberInvitations: user.communityInvitations };
   }
 };
 

@@ -1,7 +1,12 @@
+const mongoose = require('mongoose');
 
-// Define notifications schema 
-const notificationSchema = {
-    // Define schema fields here
-};
+const notificationSchema = new mongoose.Schema({
+  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  title: String,
+  body: String,
+  createdAt: { type: Date, default: Date.now },
+});
 
-module.exports = notificationSchema;
+const Notification = mongoose.model('Notification', notificationSchema);
+
+module.exports = Notification;

@@ -5,11 +5,13 @@ const { validationResult } = require('express-validator');
 const mongoose = require('mongoose');
 const UserModel= require('../models/userModel');
 const ReportModel=require('../models/reportModel');
+const modqueueModel = require('../models/modqueueModel');
+
 const reportService = {
     reportThing: async (reportedUsername,reason,type,entityId,description, username) => {
       try{  
         let checkerExist =0;
-        
+        let communityName;
        
         user= await UserModel.findOne({username:username});
         
@@ -32,6 +34,8 @@ const reportService = {
             return { success: false, error:'Post not found.'};
         }
         checkerExist=1;
+        const post = await Post.findOne({ _id: entityId });
+        communityName = post.communityId;
 
 }
 if(type== 'comment'){ 
@@ -56,11 +60,16 @@ if(checkerExist==1){
         type,
         entityId,
         description,
-        username
+        username,
+        communityName
     });
 
-    
+    const modqueueItem = await modqueueModel.findOne({ entityId: entityId });
+    if (modqueueItem.modStatus === 'removed') return { success: false, error: 'you cannot report a removed post' };
+    modqueueItem.modStatus = 'reported';
+
     await report.save(); 
+    await modqueueItem.save();
     return { success: true, message: 'Thank you for reporting. We will review it soon' };
 
 }

@@ -54,14 +54,14 @@ const userController = {
       try {
         const { username, email, password } = req.body;
 
-        if (!req.files || !req.files.profilePic) {
-          console.log("No profile picture uploaded");
-          profilePic = process.env.DEFAULT_PIC
-        } else {
-          const profilePicFile = req.files.profilePic
-          const profilePictureUpload = await cloudinary.uploader.upload(profilePicFile.tempFilePath);
-          profilePic = profilePictureUpload.secure_url;
-        }
+        // if (!req.files || !req.files.profilePic) {
+        //   console.log("No profile picture uploaded");
+        profilePic = process.env.DEFAULT_PIC
+        // } else {
+        //   const profilePicFile = req.files.profilePic
+        //   const profilePictureUpload = await cloudinary.uploader.upload(profilePicFile.tempFilePath);
+        //   profilePic = profilePictureUpload.secure_url;
+        // }
 
         if (!username || !password || !email) {
           res.status(400).send('missing username or email or password');
@@ -418,6 +418,16 @@ const userController = {
     }
   },
 
+  deleteRecentlyViewedPosts: async (req, res) => {
+    try {
+      let username =req.user.username;
+      await userService.deleteRecentlyViewedPosts(username);
+      res.status(200).json({message : 'success'});
+    } catch (error) {
+      res.status(500).json({message: error.message});
+    }
+  },
+
   deleteUser: async (req, res) => {
     try {
       const username = req.user.username;
@@ -443,6 +453,16 @@ const userController = {
     try {
       const username = req.user.username;
       const result = await userService.getDownvotedIds(username);
+      res.status(200).json(result);
+    } catch (err) {
+      res.status(400).json({ message: err.message });
+    }
+  },
+
+  getInvitations: async (req, res) => {
+    try {
+      const username = req.user.username;
+      const result = await userService.getInvitations(username);
       res.status(200).json(result);
     } catch (err) {
       res.status(400).json({ message: err.message });

@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const { validationResult } = require('express-validator');
 const mongoose = require('mongoose');
 const UserModel= require('../models/userModel');
+const modqueueModel = require('../models/modqueueModel');
 
 const editService = {
 
@@ -60,6 +61,12 @@ const editService = {
             { $set: { content: data.newText } },
             { runValidators: true }
           );
+
+        const modqueueItem = await modqueueModel.findOne({ entityId: post._id });
+        if (modqueueItem.modStatus === 'removed') return { success: false, error: 'Post is removed by moderator' };
+        modqueueItem.modStatus = 'edited';
+        await modqueueItem.save();
+
           return { success: true, message: 'Text editted successfully.' };
       
     }
