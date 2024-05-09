@@ -84,6 +84,8 @@ else{
   check.save();
 }
       
+const notificationMessage = `${username}: ${messageData.content}`;
+    pushNotificationService.sendPushNotificationToToken(receiver.deviceToken, 'Sarakel',notificationMessage )
 
     return { success: true, message: 'Message sent successfully.' };
   } catch (error) {

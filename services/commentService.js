@@ -19,8 +19,15 @@ const commentService = {
             return { success: false, errors: errors.array() };
         }
         
-       if(data.rr=='reply' && !data.commentData.replyToID){
-        return { success: false, error: `replyToID  is missing.` };
+       if(data.rr=='reply' ){
+        if(!data.commentData.replyToID){return { success: false, error: `replyToID  is missing.` };}
+        else{
+             checkcomment= await Comment.findOne({_id:data.commentData.replyToID})
+             
+            if(!checkcomment){
+                return { success: false, error: `replyToID  is worng.` };
+            }
+        }
        }
       
        
@@ -30,7 +37,7 @@ const commentService = {
       
             return { success: false, error: `Sender  does not exist.` };
         }
-        const postExists= await Post.exists({_id:data.commentData.postID , isLocked:false});
+        const postExists= await Post.findOne({_id:data.commentData.postID , isLocked:false});
         
         if (!postExists) {
             
@@ -38,7 +45,7 @@ const commentService = {
             return { success: false, error: `Post  does not exist or Locked.` };
         }
        if (data.commentData.replyToID){
-        const commentExists= await Comment.exists({_id:data.commentData.replyToID});
+        const commentExists= await Comment.findOne({_id:data.commentData.replyToID});
         if(!commentExists){
             return { success: false, error: `Comment  does not exist.` };
         }
@@ -88,6 +95,7 @@ const commentService = {
                     mention.save();
                     savedmention.push(checkUser);
                     const notificationMessage = `${senderExists.username}: Mentioned you in a post`;
+                    
                     pushNotificationService.sendPushNotificationToToken(userChecker.deviceToken, 'Sarakel',notificationMessage )
                   
                     
@@ -104,6 +112,23 @@ const commentService = {
             }
             
         }
+        
+        if(data.rr=='reply' && data.commentData.replyToID){
+           
+            const notificationMessage = `${data.username}: Replied to  your comment`;
+            if(checkcomment.userID  !==data.username ){
+                console.log(checkcomment.userID)
+                checku= await UserModel.findOne({username:checkcomment.userID})
+                pushNotificationService.sendPushNotificationToToken(checku.deviceToken, 'Sarakel',notificationMessage )
+            }
+
+           
+        }
+        const notificationMessages = `${data.username}: commented to  your post`;
+        const postuser= await UserModel.findOne({username:postExists.username})
+        console.log(postuser)
+
+        pushNotificationService.sendPushNotificationToToken(postuser.deviceToken, 'Sarakel',notificationMessages )
 
         return { success: true, message: 'comment sent successfully.' };
 
