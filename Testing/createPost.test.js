@@ -14,7 +14,7 @@ describe('createPostService - createPost', () => {
 
     it('should create a post successfully', async () => {
         const mockUser = { username: 'testUser', deviceToken: 'mockDeviceToken', blockedUsers: [] };
-        const mockCommunity = { communityName: 'testCommunity', posts: [], save: jest.fn() };
+        const mockCommunity = { communityName: 'testCommunity', posts: [], banned: [],save: jest.fn() };
 
         User.findOne = jest.fn().mockResolvedValue(mockUser);
         Community.findOne = jest.fn().mockResolvedValue(mockCommunity);
