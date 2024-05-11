@@ -22,14 +22,6 @@ const reportProfileSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     },
-    entityId:{
-        type:String,
-        required:true
-    },
-    type:{
-        type:String,
-        required:true
-    }
 });
 
 

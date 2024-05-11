@@ -37,7 +37,7 @@ const userSchema = {
 
   friends: {
     type: [String],
-    default: []
+    default: ['Red_Cat_39']
   },
 
   blockedUsers: {
