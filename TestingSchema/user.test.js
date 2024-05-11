@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-
+require('dotenv').config();
 const User = require('../models/userModel');
 const e = require('express');
 const exp = require('constants');

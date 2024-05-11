@@ -4,6 +4,7 @@ const Post = require('../models/postModel');
 // Mock the subreddit model methods
 jest.mock('../models/postModel', () => ({
     find: jest.fn(),
+    sort: jest.fn(),
 }));
 
 describe('Testing listing endpoints', () => {

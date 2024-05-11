@@ -52,7 +52,6 @@ describe('Community services', () => {
         Community.findOne.mockResolvedValue(mockCommunity);
 
         const result = await communityService.leave('testUser', 'testCommunity');
-        console.log(result);
         expect(result.success).toBe(true);
         expect(result.message).toBe('User left community successfully');
         expect(mockUser.joinedCommunities).not.toContain('testCommunity');
